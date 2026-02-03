@@ -162,19 +162,13 @@ namespace NOrganizze
 
             // Override base URL if specified
             if (!string.IsNullOrEmpty(requestOptions?.BaseUrl))
-            {
                 uri = $"{requestOptions.BaseUrl.TrimEnd('/')}/{path.TrimStart('/')}";
-            }
 
             var request = new HttpRequestMessage(method, uri);
 
             // Override auth if specified
-            if (!string.IsNullOrEmpty(requestOptions?.BasicAuthUsername))
-            {
-                var authValue = Convert.ToBase64String(
-                    Encoding.ASCII.GetBytes($"{requestOptions.BasicAuthUsername}:{requestOptions.BasicAuthPassword ?? ""}"));
-                request.Headers.Authorization = new AuthenticationHeaderValue("Basic", authValue);
-            }
+            if (requestOptions?.CredentialsProvider != null)
+                request.Headers.Authorization = new AuthenticationHeaderValue("Basic", requestOptions.CredentialsProvider().ToBasicAuthHeaderValue());
 
             // Override user agent if specified
             if (!string.IsNullOrEmpty(requestOptions?.UserAgent))
