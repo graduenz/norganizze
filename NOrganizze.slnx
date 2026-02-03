@@ -2,5 +2,6 @@
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
   </Folder>
+  <Project Path="NOrganizze.Tests/NOrganizze.Tests.csproj" Id="da7c44e8-1947-48ab-9aed-138398b7a557" />
   <Project Path="NOrganizze/NOrganizze.csproj" />
 </Solution>
