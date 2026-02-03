@@ -1,6 +1,8 @@
 ﻿using NOrganizze.Accounts;
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace NOrganizze.Tests.Accounts
@@ -8,39 +10,73 @@ namespace NOrganizze.Tests.Accounts
     public class AccountServiceTests
     {
         private readonly NOrganizzeClientFixture _fixture;
+        private readonly ITestContextAccessor _testContextAccessor;
 
-        public AccountServiceTests(NOrganizzeClientFixture fixture)
+        public AccountServiceTests(NOrganizzeClientFixture fixture, ITestContextAccessor testContextAccessor)
         {
             _fixture = fixture;
+            _testContextAccessor = testContextAccessor;
         }
 
         [Fact]
         public void Test_AccountService_Sync()
         {
             var guid = Guid.NewGuid();
+            var client = _fixture.Client;
 
-            var account = _fixture.Client.Accounts.Create(BuildAccountCreateOptions(guid, "new account"));
+            var account = client.Accounts.Create(BuildAccountCreateOptions(guid, "new account"));
             AssertAccountProperties(account, guid, "new account");
 
-            account = _fixture.Client.Accounts.Get(account.Id);
+            account = client.Accounts.Get(account.Id);
             AssertAccountProperties(account, guid, "new account");
 
-            account = _fixture.Client.Accounts.Update(account.Id, new AccountUpdateOptions
+            account = client.Accounts.Update(account.Id, new AccountUpdateOptions
             {
                 Name = $"Test Account {guid}",
                 Description = "updated account",
                 Default = false
             });
 
-            var accounts = _fixture.Client.Accounts.List();
-            Assert.NotEmpty(accounts);
+            var accounts = client.Accounts.List();
             account = accounts.Single(m => m.Id == account.Id);
             AssertAccountProperties(account, guid, "updated account");
 
-            account = _fixture.Client.Accounts.Delete(account.Id);
+            account = client.Accounts.Delete(account.Id);
             AssertAccountProperties(account, guid, "updated account");
 
-            accounts = _fixture.Client.Accounts.List();
+            accounts = client.Accounts.List();
+            Assert.DoesNotContain(accounts, m => m.Id == account.Id);
+        }
+
+        [Fact]
+        public async Task Test_AccountService_Async()
+        {
+            var guid = Guid.NewGuid();
+            var client = _fixture.Client;
+            RequestOptions requestOptions = null;
+            var cancellationToken = _testContextAccessor.Current.CancellationToken;
+
+            var account = await client.Accounts.CreateAsync(BuildAccountCreateOptions(guid, "new account"), requestOptions, cancellationToken);
+            AssertAccountProperties(account, guid, "new account");
+
+            account = await client.Accounts.GetAsync(account.Id, requestOptions, cancellationToken);
+            AssertAccountProperties(account, guid, "new account");
+
+            account = await client.Accounts.UpdateAsync(account.Id, new AccountUpdateOptions
+            {
+                Name = $"Test Account {guid}",
+                Description = "updated account",
+                Default = false
+            }, requestOptions, cancellationToken);
+
+            var accounts = await client.Accounts.ListAsync(requestOptions, cancellationToken);
+            account = accounts.Single(m => m.Id == account.Id);
+            AssertAccountProperties(account, guid, "updated account");
+
+            account = await client.Accounts.DeleteAsync(account.Id, requestOptions, cancellationToken);
+            AssertAccountProperties(account, guid, "updated account");
+
+            accounts = await client.Accounts.ListAsync(requestOptions, cancellationToken);
             Assert.DoesNotContain(accounts, m => m.Id == account.Id);
         }
 
