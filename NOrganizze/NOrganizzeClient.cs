@@ -29,18 +29,18 @@ namespace NOrganizze
         private readonly JsonSerializerSettings _jsonSettings;
 #endif
 
-        public Func<string> ResolveApiKey { get; }
+        public Func<Credentials> CredentialsProvider { get; }
         public string BaseUrl { get; }
 
         public UserService Users { get; }
         public AccountService Accounts { get; }
 
-        public NOrganizzeClient(HttpClient httpClient, Func<string> resolveApiKey, string baseUrl = OrganizzeRestV2Url)
+        public NOrganizzeClient(HttpClient httpClient, Func<Credentials> credentialsProvider, string baseUrl = OrganizzeRestV2Url)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _disposeHttpClient = false;
 
-            ResolveApiKey = resolveApiKey ?? throw new ArgumentNullException(nameof(resolveApiKey));
+            CredentialsProvider = credentialsProvider ?? throw new ArgumentNullException(nameof(credentialsProvider));
             BaseUrl = baseUrl ?? throw new ArgumentNullException(nameof(baseUrl));
 
 #if NET8_0_OR_GREATER
@@ -64,19 +64,19 @@ namespace NOrganizze
             Accounts = new AccountService(this);
         }
 
-        public NOrganizzeClient(HttpClient httpClient, string apiKey, string baseUrl = OrganizzeRestV2Url)
-            : this(httpClient, () => apiKey, baseUrl)
+        public NOrganizzeClient(HttpClient httpClient, string email, string apiKey, string baseUrl = OrganizzeRestV2Url)
+            : this(httpClient, () => new Credentials(email, apiKey), baseUrl)
         {
         }
 
-        public NOrganizzeClient(Func<string> resolveApiKey, string baseUrl = OrganizzeRestV2Url)
-            : this(new HttpClient(), resolveApiKey, baseUrl)
+        public NOrganizzeClient(Func<Credentials> credentialsProvider, string baseUrl = OrganizzeRestV2Url)
+            : this(new HttpClient(), credentialsProvider, baseUrl)
         {
             _disposeHttpClient = true;
         }
 
-        public NOrganizzeClient(string apiKey, string baseUrl = OrganizzeRestV2Url)
-            : this(() => apiKey, baseUrl)
+        public NOrganizzeClient(string email, string apiKey, string baseUrl = OrganizzeRestV2Url)
+            : this(() => new Credentials(email, apiKey), baseUrl)
         {
         }
 
@@ -87,8 +87,7 @@ namespace NOrganizze
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("NOrganizze/.NET");
 
-            var authValue = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{ResolveApiKey()}:X"));
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authValue);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", CredentialsProvider().ToBasicAuthHeaderValue());
         }
 
         internal T Request<T>(

@@ -16,11 +16,12 @@ namespace NOrganizze.Tests
         public void Test_ResolveApiKey()
         {
             // Act
-            var apiKey = _fixture.Client.ResolveApiKey();
+            var credentials = _fixture.Client.CredentialsProvider();
 
             // Assert
-            Assert.Equal(40, apiKey.Length);
-            Assert.True(apiKey.All(c => char.IsLetterOrDigit(c)));
+            Assert.Matches(@"^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$", credentials.Email);
+            Assert.Equal(40, credentials.ApiKey.Length);
+            Assert.True(credentials.ApiKey.All(c => char.IsLetterOrDigit(c)));
         }
     }
 }

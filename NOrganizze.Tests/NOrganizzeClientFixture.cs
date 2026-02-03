@@ -9,18 +9,21 @@ namespace NOrganizze.Tests
 {
     public class NOrganizzeClientFixture : IDisposable
     {
-        private static string ResolveApiKey()
+        private static Credentials ResolveCredentials()
         {
             var configuration = new ConfigurationBuilder()
                 .AddUserSecrets<NOrganizzeClientFixture>()
                 .Build();
-
-            return configuration["Organizze:ApiKey"];
+            
+            return new Credentials(
+                configuration["Organizze:Email"],
+                configuration["Organizze:ApiKey"]
+            );
         }
 
         public NOrganizzeClientFixture()
         {
-            Client = new NOrganizzeClient(ResolveApiKey);
+            Client = new NOrganizzeClient(ResolveCredentials);
         }
 
         public NOrganizzeClient Client { get; }
