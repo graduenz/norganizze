@@ -1,0 +1,1315 @@
+openapi: 3.0.3
+info:
+  title: Organizze API
+  description: |
+    A API do Organizze possibilita que aplicações se comuniquem com a sua conta no sistema.
+    Esta é a primeira versão da API, ainda em versão beta.
+    
+    ## Autenticação
+    A autenticação é feita via HTTP Basic Auth:
+    - **Username**: Email da conta do Organizze
+    - **Password**: Token de acesso (obtido em https://app.organizze.com.br/configuracoes/api-keys)
+    
+    ## Requisitos
+    - Todas as requisições devem usar HTTPS
+    - Header `User-Agent` é obrigatório (formato: "Nome (email@exemplo.com)")
+    - Todas as respostas são em JSON com charset UTF-8
+  version: 2.0.0
+  contact:
+    name: Organizze
+    url: https://www.organizze.com.br
+
+servers:
+  - url: https://api.organizze.com.br/rest/v2
+    description: Production server
+
+security:
+  - basicAuth: []
+
+tags:
+  - name: Users
+    description: Operações relacionadas a usuários
+  - name: Accounts
+    description: Gerenciamento de contas bancárias
+  - name: Categories
+    description: Gerenciamento de categorias
+  - name: Credit Cards
+    description: Gerenciamento de cartões de crédito
+  - name: Invoices
+    description: Faturas de cartões de crédito
+  - name: Transactions
+    description: Movimentações financeiras
+  - name: Transfers
+    description: Transferências entre contas
+  - name: Budgets
+    description: Metas financeiras
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: |
+        Username: Email da conta do Organizze
+        Password: Token de acesso da API
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 3
+        name:
+          type: string
+          example: "Esdras Mayrink"
+        email:
+          type: string
+          format: email
+          example: "falecom@email.com.br"
+        role:
+          type: string
+          example: "admin"
+
+    Account:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        archived:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        default:
+          type: boolean
+        type:
+          type: string
+          enum: [checking, savings, other]
+
+    AccountCreate:
+      type: object
+      required:
+        - name
+        - type
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: [checking, savings, other]
+        description:
+          type: string
+        default:
+          type: boolean
+
+    AccountUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        default:
+          type: boolean
+
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        color:
+          type: string
+          description: Hex color without #
+          example: "438b83"
+        parent_id:
+          type: integer
+          nullable: true
+
+    CategoryCreate:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+
+    CategoryUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        color:
+          type: string
+
+    CategoryDelete:
+      type: object
+      properties:
+        replacement_id:
+          type: integer
+          description: ID da categoria que substituirá a excluída
+
+    CreditCard:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        card_network:
+          type: string
+          enum: [visa, mastercard, amex, elo, hipercard, diners]
+          nullable: true
+        closing_day:
+          type: integer
+          minimum: 1
+          maximum: 31
+        due_day:
+          type: integer
+          minimum: 1
+          maximum: 31
+        limit_cents:
+          type: integer
+          description: Limite em centavos (0 para sem limite)
+        kind:
+          type: string
+          enum: [credit_card]
+        archived:
+          type: boolean
+        default:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    CreditCardCreate:
+      type: object
+      required:
+        - name
+        - due_day
+        - closing_day
+      properties:
+        name:
+          type: string
+        card_network:
+          type: string
+          enum: [visa, mastercard, amex, elo, hipercard, diners]
+        due_day:
+          type: integer
+          minimum: 1
+          maximum: 31
+        closing_day:
+          type: integer
+          minimum: 1
+          maximum: 31
+        limit_cents:
+          type: integer
+          default: 0
+
+    CreditCardUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        due_day:
+          type: integer
+        closing_day:
+          type: integer
+        update_invoices_since:
+          type: string
+          format: date
+          description: Atualiza faturas a partir desta data
+
+    Invoice:
+      type: object
+      properties:
+        id:
+          type: integer
+        date:
+          type: string
+          format: date
+        starting_date:
+          type: string
+          format: date
+        closing_date:
+          type: string
+          format: date
+        amount_cents:
+          type: integer
+        payment_amount_cents:
+          type: integer
+        balance_cents:
+          type: integer
+        previous_balance_cents:
+          type: integer
+        credit_card_id:
+          type: integer
+
+    InvoiceDetail:
+      allOf:
+        - $ref: '#/components/schemas/Invoice'
+        - type: object
+          properties:
+            transactions:
+              type: array
+              items:
+                $ref: '#/components/schemas/Transaction'
+            payments:
+              type: array
+              items:
+                $ref: '#/components/schemas/Transaction'
+
+    Tag:
+      type: object
+      properties:
+        name:
+          type: string
+
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: integer
+        description:
+          type: string
+        date:
+          type: string
+          format: date
+        paid:
+          type: boolean
+        amount_cents:
+          type: integer
+          description: Valor em centavos (negativo para despesas)
+        total_installments:
+          type: integer
+        installment:
+          type: integer
+        recurring:
+          type: boolean
+        account_id:
+          type: integer
+        account_type:
+          type: string
+          enum: [Account, CreditCard]
+        category_id:
+          type: integer
+        contact_id:
+          type: integer
+          nullable: true
+        notes:
+          type: string
+        attachments_count:
+          type: integer
+        credit_card_id:
+          type: integer
+          nullable: true
+        credit_card_invoice_id:
+          type: integer
+          nullable: true
+        paid_credit_card_id:
+          type: integer
+          nullable: true
+        paid_credit_card_invoice_id:
+          type: integer
+          nullable: true
+        oposite_transaction_id:
+          type: integer
+          nullable: true
+        oposite_account_id:
+          type: integer
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+
+    TransactionCreate:
+      type: object
+      required:
+        - description
+        - date
+      properties:
+        description:
+          type: string
+        date:
+          type: string
+          format: date
+        notes:
+          type: string
+        amount_cents:
+          type: integer
+        category_id:
+          type: integer
+        account_id:
+          type: integer
+        paid:
+          type: boolean
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+        recurrence_attributes:
+          $ref: '#/components/schemas/RecurrenceAttributes'
+        installments_attributes:
+          $ref: '#/components/schemas/InstallmentsAttributes'
+
+    RecurrenceAttributes:
+      type: object
+      required:
+        - periodicity
+      properties:
+        periodicity:
+          type: string
+          enum: [monthly, yearly, weekly, biweekly, bimonthly, trimonthly]
+
+    InstallmentsAttributes:
+      type: object
+      required:
+        - periodicity
+        - total
+      properties:
+        periodicity:
+          type: string
+          enum: [monthly, yearly, weekly, biweekly, bimonthly, trimonthly]
+        total:
+          type: integer
+          minimum: 2
+
+    TransactionUpdate:
+      type: object
+      properties:
+        description:
+          type: string
+        date:
+          type: string
+          format: date
+        notes:
+          type: string
+        amount_cents:
+          type: integer
+        category_id:
+          type: integer
+        paid:
+          type: boolean
+        update_future:
+          type: boolean
+          description: Atualiza movimentações futuras (para recorrentes/parceladas)
+        update_all:
+          type: boolean
+          description: Atualiza todas as ocorrências (para recorrentes/parceladas)
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+
+    TransactionDelete:
+      type: object
+      properties:
+        update_future:
+          type: boolean
+        update_all:
+          type: boolean
+
+    Transfer:
+      allOf:
+        - $ref: '#/components/schemas/Transaction'
+        - type: object
+          properties:
+            recurrence_id:
+              type: integer
+              nullable: true
+            attachments:
+              type: array
+              items:
+                type: object
+
+    TransferCreate:
+      type: object
+      required:
+        - credit_account_id
+        - debit_account_id
+        - amount_cents
+        - date
+      properties:
+        credit_account_id:
+          type: integer
+          description: Conta de origem (débito)
+        debit_account_id:
+          type: integer
+          description: Conta de destino (crédito)
+        amount_cents:
+          type: integer
+          minimum: 1
+        date:
+          type: string
+          format: date
+        paid:
+          type: boolean
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+
+    TransferUpdate:
+      type: object
+      properties:
+        description:
+          type: string
+        notes:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+
+    Budget:
+      type: object
+      properties:
+        amount_in_cents:
+          type: integer
+        category_id:
+          type: integer
+        date:
+          type: string
+          format: date
+        activity_type:
+          type: integer
+        total:
+          type: integer
+        predicted_total:
+          type: integer
+        percentage:
+          type: string
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+
+  parameters:
+    StartDate:
+      name: start_date
+      in: query
+      description: Data inicial para filtro (YYYY-MM-DD)
+      schema:
+        type: string
+        format: date
+      example: "2015-09-01"
+
+    EndDate:
+      name: end_date
+      in: query
+      description: Data final para filtro (YYYY-MM-DD)
+      schema:
+        type: string
+        format: date
+      example: "2015-09-30"
+
+    AccountId:
+      name: account_id
+      in: query
+      description: ID da conta bancária para filtrar
+      schema:
+        type: integer
+
+  responses:
+    Unauthorized:
+      description: Não autorizado - email ou token incorretos
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "Não autorizado"
+
+    UnprocessableEntity:
+      description: Entidade não processável - validação falhou
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+paths:
+  /users/{id}:
+    get:
+      tags:
+        - Users
+      summary: Detalhar usuário
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /accounts:
+    get:
+      tags:
+        - Accounts
+      summary: Listar contas bancárias
+      responses:
+        '200':
+          description: Lista de contas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      tags:
+        - Accounts
+      summary: Criar conta bancária
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountCreate'
+      responses:
+        '201':
+          description: Conta criada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
+  /accounts/{id}:
+    get:
+      tags:
+        - Accounts
+      summary: Detalhar conta bancária
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    put:
+      tags:
+        - Accounts
+      summary: Atualizar conta bancária
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountUpdate'
+      responses:
+        '200':
+          description: Conta atualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
+    delete:
+      tags:
+        - Accounts
+      summary: Excluir conta bancária
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Conta excluída
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /categories:
+    get:
+      tags:
+        - Categories
+      summary: Listar categorias
+      responses:
+        '200':
+          description: Lista de categorias
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      tags:
+        - Categories
+      summary: Criar categoria
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryCreate'
+      responses:
+        '201':
+          description: Categoria criada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
+  /categories/{id}:
+    get:
+      tags:
+        - Categories
+      summary: Detalhar categoria
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    put:
+      tags:
+        - Categories
+      summary: Atualizar categoria
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryUpdate'
+      responses:
+        '200':
+          description: Categoria atualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
+    delete:
+      tags:
+        - Categories
+      summary: Excluir categoria
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryDelete'
+      responses:
+        '200':
+          description: Categoria excluída
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /credit_cards:
+    get:
+      tags:
+        - Credit Cards
+      summary: Listar cartões de crédito
+      responses:
+        '200':
+          description: Lista de cartões
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CreditCard'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      tags:
+        - Credit Cards
+      summary: Criar cartão de crédito
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditCardCreate'
+      responses:
+        '201':
+          description: Cartão criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditCard'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
+  /credit_cards/{id}:
+    get:
+      tags:
+        - Credit Cards
+      summary: Detalhar cartão de crédito
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditCard'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    put:
+      tags:
+        - Credit Cards
+      summary: Atualizar cartão de crédito
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditCardUpdate'
+      responses:
+        '200':
+          description: Cartão atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditCard'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
+    delete:
+      tags:
+        - Credit Cards
+      summary: Excluir cartão de crédito
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Cartão excluído
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditCard'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /credit_cards/{creditCardId}/invoices:
+    get:
+      tags:
+        - Invoices
+      summary: Listar faturas de um cartão
+      description: Lista faturas do ano atual por padrão. Use start_date e end_date para outros períodos.
+      parameters:
+        - name: creditCardId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - $ref: '#/components/parameters/StartDate'
+        - $ref: '#/components/parameters/EndDate'
+      responses:
+        '200':
+          description: Lista de faturas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Invoice'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /credit_cards/{creditCardId}/invoices/{invoiceId}:
+    get:
+      tags:
+        - Invoices
+      summary: Detalhar fatura
+      parameters:
+        - name: creditCardId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: invoiceId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detalhes da fatura
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceDetail'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /credit_cards/{creditCardId}/invoices/{invoiceId}/payments:
+    get:
+      tags:
+        - Invoices
+      summary: Pagamento de fatura
+      description: Registra ou consulta pagamento de uma fatura
+      parameters:
+        - name: creditCardId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: invoiceId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Pagamento registrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /transactions:
+    get:
+      tags:
+        - Transactions
+      summary: Listar movimentações
+      description: |
+        Lista movimentações do mês atual por padrão. 
+        O período é sempre processado como mês completo.
+      parameters:
+        - $ref: '#/components/parameters/StartDate'
+        - $ref: '#/components/parameters/EndDate'
+        - $ref: '#/components/parameters/AccountId'
+      responses:
+        '200':
+          description: Lista de movimentações
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      tags:
+        - Transactions
+      summary: Criar movimentação
+      description: |
+        Cria uma movimentação simples, recorrente (fixa) ou parcelada.
+        - Para movimentação simples: apenas campos básicos
+        - Para recorrente (fixa): incluir recurrence_attributes
+        - Para parcelada: incluir installments_attributes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionCreate'
+      responses:
+        '201':
+          description: Movimentação criada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
+  /transactions/{id}:
+    get:
+      tags:
+        - Transactions
+      summary: Detalhar movimentação
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    put:
+      tags:
+        - Transactions
+      summary: Atualizar movimentação
+      description: |
+        Para movimentações fixas ou parceladas:
+        - update_future: true - atualiza esta e as próximas
+        - update_all: true - atualiza todas (cuidado com o saldo!)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionUpdate'
+      responses:
+        '200':
+          description: Movimentação atualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
+    delete:
+      tags:
+        - Transactions
+      summary: Excluir movimentação
+      description: |
+        Para movimentações fixas ou parceladas, use o body para definir escopo:
+        - update_future: true - exclui esta e as próximas
+        - update_all: true - exclui todas
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionDelete'
+      responses:
+        '200':
+          description: Movimentação excluída
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /transfers:
+    get:
+      tags:
+        - Transfers
+      summary: Listar transferências
+      responses:
+        '200':
+          description: Lista de transferências
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transfer'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      tags:
+        - Transfers
+      summary: Criar transferência
+      description: |
+        Cria uma transferência entre duas contas bancárias.
+        Apenas contas bancárias são permitidas (não aceita cartões de crédito).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferCreate'
+      responses:
+        '201':
+          description: Transferência criada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transfer'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
+  /transfers/{id}:
+    get:
+      tags:
+        - Transfers
+      summary: Detalhar transferência
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transfer'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    put:
+      tags:
+        - Transfers
+      summary: Atualizar transferência
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferUpdate'
+      responses:
+        '200':
+          description: Transferência atualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transfer'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
+    delete:
+      tags:
+        - Transfers
+      summary: Excluir transferência
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Transferência excluída
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Transfer'
+                  - type: object
+                    properties:
+                      deleted:
+                        type: boolean
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /budgets:
+    get:
+      tags:
+        - Budgets
+      summary: Listar metas
+      description: |
+        Lista metas do mês atual por padrão.
+        - Para ano inteiro: /budgets/2018
+        - Para mês específico: /budgets/2018/08
+      responses:
+        '200':
+          description: Lista de metas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Budget'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /budgets/{year}:
+    get:
+      tags:
+        - Budgets
+      summary: Listar metas do ano
+      parameters:
+        - name: year
+          in: path
+          required: true
+          schema:
+            type: integer
+          example: 2018
+      responses:
+        '200':
+          description: Lista de metas do ano
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Budget'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /budgets/{year}/{month}:
+    get:
+      tags:
+        - Budgets
+      summary: Listar metas do mês
+      parameters:
+        - name: year
+          in: path
+          required: true
+          schema:
+            type: integer
+          example: 2018
+        - name: month
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 12
+          example: 8
+      responses:
+        '200':
+          description: Lista de metas do mês
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Budget'
+        '401':
+          $ref: '#/components/responses/Unauthorized'

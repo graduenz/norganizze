@@ -1,0 +1,258 @@
+using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using NOrganizze.Accounts;
+using NOrganizze.Users;
+
+#if NET8_0_OR_GREATER
+using System.Text.Json;
+using System.Text.Json.Serialization;
+#else
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+#endif
+
+namespace NOrganizze
+{
+    public class NOrganizzeClient : IDisposable
+    {
+        public const string OrganizzeRestV2Url = "https://api.organizze.com.br/rest/v2";
+
+        private readonly HttpClient _httpClient;
+        private readonly bool _disposeHttpClient;
+#if NET8_0_OR_GREATER
+        private readonly JsonSerializerOptions _jsonOptions;
+#else
+        private readonly JsonSerializerSettings _jsonSettings;
+#endif
+
+        public Func<string> ResolveApiKey { get; }
+        public string BaseUrl { get; }
+
+        public UserService Users { get; }
+        public AccountService Accounts { get; }
+
+        public NOrganizzeClient(HttpClient httpClient, Func<string> resolveApiKey, string baseUrl = OrganizzeRestV2Url)
+        {
+            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            _disposeHttpClient = false;
+
+            ResolveApiKey = resolveApiKey ?? throw new ArgumentNullException(nameof(resolveApiKey));
+            BaseUrl = baseUrl ?? throw new ArgumentNullException(nameof(baseUrl));
+
+#if NET8_0_OR_GREATER
+            _jsonOptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                PropertyNameCaseInsensitive = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            };
+#else
+            _jsonSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                NullValueHandling = NullValueHandling.Ignore
+            };
+#endif
+
+            ConfigureHttpClient();
+
+            Users = new UserService(this);
+            Accounts = new AccountService(this);
+        }
+
+        public NOrganizzeClient(HttpClient httpClient, string apiKey, string baseUrl = OrganizzeRestV2Url)
+            : this(httpClient, () => apiKey, baseUrl)
+        {
+        }
+
+        public NOrganizzeClient(Func<string> resolveApiKey, string baseUrl = OrganizzeRestV2Url)
+            : this(new HttpClient(), resolveApiKey, baseUrl)
+        {
+            _disposeHttpClient = true;
+        }
+
+        public NOrganizzeClient(string apiKey, string baseUrl = OrganizzeRestV2Url)
+            : this(() => apiKey, baseUrl)
+        {
+        }
+
+        private void ConfigureHttpClient()
+        {
+            _httpClient.BaseAddress = new Uri(BaseUrl);
+            _httpClient.DefaultRequestHeaders.Accept.Clear();
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("NOrganizze/.NET");
+
+            var authValue = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{ResolveApiKey()}:X"));
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authValue);
+        }
+
+        internal T Request<T>(
+            HttpMethod method,
+            string path,
+            object content = null,
+            RequestOptions requestOptions = null)
+        {
+            var request = BuildRequest(method, path, content, requestOptions);
+
+#if NET8_0_OR_GREATER
+            using var response = _httpClient.Send(request);
+#else
+            using var response = _httpClient.SendAsync(request).ConfigureAwait(false).GetAwaiter().GetResult();
+#endif
+
+            return HandleResponseAsync<T>(response, CancellationToken.None).GetAwaiter().GetResult();
+        }
+
+        internal async Task<T> RequestAsync<T>(
+            HttpMethod method,
+            string path,
+            object content = null,
+            RequestOptions requestOptions = null,
+            CancellationToken cancellationToken = default)
+        {
+            var request = BuildRequest(method, path, content, requestOptions);
+
+            using var response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+
+            return await HandleResponseAsync<T>(response, cancellationToken).ConfigureAwait(false);
+        }
+
+        internal void Request(
+            HttpMethod method,
+            string path,
+            object content = null,
+            RequestOptions requestOptions = null)
+        {
+            var request = BuildRequest(method, path, content, requestOptions);
+
+#if NET8_0_OR_GREATER
+            using var response = _httpClient.Send(request);
+#else
+            using var response = _httpClient.SendAsync(request).ConfigureAwait(false).GetAwaiter().GetResult();
+#endif
+
+            EnsureSuccessAsync(response, CancellationToken.None).ConfigureAwait(false).GetAwaiter().GetResult();
+        }
+
+        internal async Task RequestAsync(
+            HttpMethod method,
+            string path,
+            object content = null,
+            RequestOptions requestOptions = null,
+            CancellationToken cancellationToken = default)
+        {
+            var request = BuildRequest(method, path, content, requestOptions);
+
+            using var response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+
+            await EnsureSuccessAsync(response, cancellationToken).ConfigureAwait(false);
+        }
+
+        private HttpRequestMessage BuildRequest(
+            HttpMethod method,
+            string path,
+            object content,
+            RequestOptions requestOptions)
+        {
+            var uri = path.StartsWith("http") ? path : $"{BaseUrl.TrimEnd('/')}/{path.TrimStart('/')}";
+
+            // Override base URL if specified
+            if (!string.IsNullOrEmpty(requestOptions?.BaseUrl))
+            {
+                uri = $"{requestOptions.BaseUrl.TrimEnd('/')}/{path.TrimStart('/')}";
+            }
+
+            var request = new HttpRequestMessage(method, uri);
+
+            // Override auth if specified
+            if (!string.IsNullOrEmpty(requestOptions?.BasicAuthUsername))
+            {
+                var authValue = Convert.ToBase64String(
+                    Encoding.ASCII.GetBytes($"{requestOptions.BasicAuthUsername}:{requestOptions.BasicAuthPassword ?? ""}"));
+                request.Headers.Authorization = new AuthenticationHeaderValue("Basic", authValue);
+            }
+
+            // Override user agent if specified
+            if (!string.IsNullOrEmpty(requestOptions?.UserAgent))
+            {
+                request.Headers.UserAgent.Clear();
+                request.Headers.UserAgent.ParseAdd(requestOptions.UserAgent);
+            }
+
+            // Add content if present
+            if (content != null)
+            {
+#if NET8_0_OR_GREATER
+                var json = JsonSerializer.Serialize(content, _jsonOptions);
+#else
+                var json = JsonConvert.SerializeObject(content, _jsonSettings);
+#endif
+                request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            }
+
+            return request;
+        }
+
+        private async Task<T> HandleResponseAsync<T>(HttpResponseMessage response, CancellationToken cancellationToken)
+        {
+            await EnsureSuccessAsync(response, cancellationToken).ConfigureAwait(false);
+
+#if NET8_0_OR_GREATER
+            var responseContent = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+#else
+            var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+#endif
+
+            if (string.IsNullOrWhiteSpace(responseContent))
+                return default;
+
+#if NET8_0_OR_GREATER
+            return JsonSerializer.Deserialize<T>(responseContent, _jsonOptions);
+#else
+            return JsonConvert.DeserializeObject<T>(responseContent, _jsonSettings);
+#endif
+        }
+
+        private static async Task EnsureSuccessAsync(HttpResponseMessage response, CancellationToken cancellationToken)
+        {
+            if (!response.IsSuccessStatusCode)
+                await ThrowApiExceptionAsync(response, cancellationToken).ConfigureAwait(false);
+        }
+
+        private static async Task ThrowApiExceptionAsync(HttpResponseMessage response, CancellationToken cancellationToken)
+        {
+#if NET8_0_OR_GREATER
+            var content = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+#else
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+#endif
+
+            throw new NOrganizzeException(
+                $"API request failed with status {(int)response.StatusCode}: {response.ReasonPhrase}",
+                response.StatusCode,
+                content);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposing)
+                return;
+
+            if (_disposeHttpClient)
+            {
+                _httpClient?.Dispose();
+            }
+        }
+    }
+}
