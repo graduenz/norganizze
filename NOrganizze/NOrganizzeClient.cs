@@ -32,8 +32,14 @@ namespace NOrganizze
         public Func<Credentials> CredentialsProvider { get; }
         public string BaseUrl { get; }
 
-        public UserService Users { get; }
-        public AccountService Accounts { get; }
+        public Users.UserService Users { get; }
+        public Accounts.AccountService Accounts { get; }
+        public Categories.CategoryService Categories { get; }
+        public CreditCards.CreditCardService CreditCards { get; }
+        public Invoices.InvoiceService Invoices { get; }
+        public Transactions.TransactionService Transactions { get; }
+        public Transfers.TransferService Transfers { get; }
+        public Budgets.BudgetService Budgets { get; }
 
         public NOrganizzeClient(HttpClient httpClient, Func<Credentials> credentialsProvider, string baseUrl = OrganizzeRestV2Url)
         {
@@ -60,8 +66,14 @@ namespace NOrganizze
 
             ConfigureHttpClient();
 
-            Users = new UserService(this);
-            Accounts = new AccountService(this);
+            Users = new Users.UserService(this);
+            Accounts = new Accounts.AccountService(this);
+            Categories = new Categories.CategoryService(this);
+            CreditCards = new CreditCards.CreditCardService(this);
+            Invoices = new Invoices.InvoiceService(this);
+            Transactions = new Transactions.TransactionService(this);
+            Transfers = new Transfers.TransferService(this);
+            Budgets = new Budgets.BudgetService(this);
         }
 
         public NOrganizzeClient(HttpClient httpClient, string email, string apiKey, string baseUrl = OrganizzeRestV2Url)

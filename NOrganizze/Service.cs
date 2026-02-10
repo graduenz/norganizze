@@ -1,6 +1,10 @@
+using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+#if NETSTANDARD2_0 || NET472
+using System.Net;
+#endif
 
 namespace NOrganizze
 {
@@ -75,6 +79,30 @@ namespace NOrganizze
             CancellationToken cancellationToken = default)
         {
             return Client.RequestAsync<T>(HttpMethod.Delete, path, null, requestOptions, cancellationToken);
+        }
+
+        protected void Delete(
+            string path,
+            RequestOptions requestOptions = null)
+        {
+            Client.Request(HttpMethod.Delete, path, null, requestOptions);
+        }
+
+        protected Task DeleteAsync(
+            string path,
+            RequestOptions requestOptions = null,
+            CancellationToken cancellationToken = default)
+        {
+            return Client.RequestAsync(HttpMethod.Delete, path, null, requestOptions, cancellationToken);
+        }
+
+        protected static string UrlEncode(string value)
+        {
+#if NETSTANDARD2_0 || NET472
+            return WebUtility.UrlEncode(value);
+#else
+            return Uri.EscapeDataString(value);
+#endif
         }
     }
 }
