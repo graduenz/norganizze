@@ -18,7 +18,7 @@ namespace NOrganizze.Tests.Accounts
         }
 
         [Fact]
-        public void Test_AccountService_Sync()
+        public void Test_AccountService_CrudOperations_Sync()
         {
             var guid = Guid.NewGuid();
             var client = _fixture.Client;
@@ -48,7 +48,7 @@ namespace NOrganizze.Tests.Accounts
         }
 
         [Fact]
-        public async Task Test_AccountService_Async()
+        public async Task Test_AccountService_CrudOperations_Async()
         {
             var guid = Guid.NewGuid();
             var client = _fixture.Client;
