@@ -1,4 +1,4 @@
-﻿using NOrganizze.Accounts;
+using NOrganizze.Accounts;
 using System;
 using System.Linq;
 using System.Threading;

@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using NOrganizze.Tests;
 using System;
 using Xunit;
@@ -14,7 +14,7 @@ namespace NOrganizze.Tests
             var configuration = new ConfigurationBuilder()
                 .AddUserSecrets<NOrganizzeClientFixture>()
                 .Build();
-            
+
             return new Credentials(
                 configuration["Organizze:Email"],
                 configuration["Organizze:ApiKey"]
