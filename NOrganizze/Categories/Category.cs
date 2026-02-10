@@ -1,4 +1,3 @@
-using System;
 #if NET8_0_OR_GREATER
 using JsonPropertyAttribute = System.Text.Json.Serialization.JsonPropertyNameAttribute;
 #else
