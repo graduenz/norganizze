@@ -20,10 +20,13 @@ namespace NOrganizze.Tests.Budgets
         [Fact]
         public void Test_BudgetService_List_Sync()
         {
+            // Arrange
             var client = _fixture.Client;
 
+            // Act
             var budgets = client.Budgets.List();
 
+            // Assert
             Assert.NotNull(budgets);
             if (budgets.Count > 0)
             {
@@ -35,12 +38,15 @@ namespace NOrganizze.Tests.Budgets
         [Fact]
         public async Task Test_BudgetService_List_Async()
         {
+            // Arrange
             var client = _fixture.Client;
             RequestOptions requestOptions = null;
             var cancellationToken = _testContextAccessor.Current.CancellationToken;
 
+            // Act
             var budgets = await client.Budgets.ListAsync(requestOptions, cancellationToken);
 
+            // Assert
             Assert.NotNull(budgets);
             if (budgets.Count > 0)
             {
@@ -52,11 +58,14 @@ namespace NOrganizze.Tests.Budgets
         [Fact]
         public void Test_BudgetService_ListByYear_Sync()
         {
+            // Arrange
             var client = _fixture.Client;
             var year = DateTime.Now.Year;
 
+            // Act
             var budgets = client.Budgets.ListByYear(year);
 
+            // Assert
             Assert.NotNull(budgets);
             if (budgets.Count > 0)
             {
@@ -69,13 +78,16 @@ namespace NOrganizze.Tests.Budgets
         [Fact]
         public async Task Test_BudgetService_ListByYear_Async()
         {
+            // Arrange
             var client = _fixture.Client;
             var year = DateTime.Now.Year;
             RequestOptions requestOptions = null;
             var cancellationToken = _testContextAccessor.Current.CancellationToken;
 
+            // Act
             var budgets = await client.Budgets.ListByYearAsync(year, requestOptions, cancellationToken);
 
+            // Assert
             Assert.NotNull(budgets);
             if (budgets.Count > 0)
             {
@@ -88,13 +100,16 @@ namespace NOrganizze.Tests.Budgets
         [Fact]
         public void Test_BudgetService_ListByMonth_Sync()
         {
+            // Arrange
             var client = _fixture.Client;
             var now = DateTime.Now;
             var year = now.Year;
             var month = now.Month;
 
+            // Act
             var budgets = client.Budgets.ListByMonth(year, month);
 
+            // Assert
             Assert.NotNull(budgets);
             if (budgets.Count > 0)
             {
@@ -108,6 +123,7 @@ namespace NOrganizze.Tests.Budgets
         [Fact]
         public async Task Test_BudgetService_ListByMonth_Async()
         {
+            // Arrange
             var client = _fixture.Client;
             var now = DateTime.Now;
             var year = now.Year;
@@ -115,8 +131,10 @@ namespace NOrganizze.Tests.Budgets
             RequestOptions requestOptions = null;
             var cancellationToken = _testContextAccessor.Current.CancellationToken;
 
+            // Act
             var budgets = await client.Budgets.ListByMonthAsync(year, month, requestOptions, cancellationToken);
 
+            // Assert
             Assert.NotNull(budgets);
             if (budgets.Count > 0)
             {
@@ -130,13 +148,16 @@ namespace NOrganizze.Tests.Budgets
         [Fact]
         public void Test_BudgetService_ListByMonth_PreviousMonth_Sync()
         {
+            // Arrange
             var client = _fixture.Client;
             var previousMonth = DateTime.Now.AddMonths(-1);
             var year = previousMonth.Year;
             var month = previousMonth.Month;
 
+            // Act
             var budgets = client.Budgets.ListByMonth(year, month);
 
+            // Assert
             Assert.NotNull(budgets);
             if (budgets.Count > 0)
             {
@@ -150,6 +171,7 @@ namespace NOrganizze.Tests.Budgets
         [Fact]
         public async Task Test_BudgetService_ListByMonth_PreviousMonth_Async()
         {
+            // Arrange
             var client = _fixture.Client;
             var previousMonth = DateTime.Now.AddMonths(-1);
             var year = previousMonth.Year;
@@ -157,8 +179,10 @@ namespace NOrganizze.Tests.Budgets
             RequestOptions requestOptions = null;
             var cancellationToken = _testContextAccessor.Current.CancellationToken;
 
+            // Act
             var budgets = await client.Budgets.ListByMonthAsync(year, month, requestOptions, cancellationToken);
 
+            // Assert
             Assert.NotNull(budgets);
             if (budgets.Count > 0)
             {
