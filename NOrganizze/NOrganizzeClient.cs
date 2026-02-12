@@ -92,12 +92,14 @@ namespace NOrganizze
 
         private void ConfigureHttpClient()
         {
+            var credentials = CredentialsProvider();
+
             _httpClient.BaseAddress = new Uri(BaseUrl);
             _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("NOrganizze/.NET");
+            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(credentials.ToUserAgentHeaderValue());
 
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", CredentialsProvider().ToBasicAuthHeaderValue());
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", credentials.ToBasicAuthHeaderValue());
         }
 
         internal T Request<T>(
