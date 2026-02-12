@@ -10,8 +10,6 @@ namespace NOrganizze.Categories
     {
         [JsonProperty("name")]
         public string Name { get; set; }
-
-        [JsonProperty("color")]
-        public string Color { get; set; }
     }
 }
+

@@ -31,14 +31,12 @@ namespace NOrganizze.Tests.Categories
 
             category = client.Categories.Update(category.Id, new CategoryUpdateOptions
             {
-                Name = $"Test Category {guid}",
-                Color = "ff0000"
+                Name = $"Test Category {guid}"
             });
 
             var categories = client.Categories.List();
             category = categories.Single(m => m.Id == category.Id);
             AssertCategoryProperties(category, guid);
-            Assert.Equal("ff0000", category.Color);
 
             category = client.Categories.Delete(category.Id);
             AssertCategoryProperties(category, guid);
@@ -63,14 +61,12 @@ namespace NOrganizze.Tests.Categories
 
             category = await client.Categories.UpdateAsync(category.Id, new CategoryUpdateOptions
             {
-                Name = $"Test Category {guid}",
-                Color = "ff0000"
+                Name = $"Test Category {guid}"
             }, requestOptions, cancellationToken);
 
             var categories = await client.Categories.ListAsync(requestOptions, cancellationToken);
             category = categories.Single(m => m.Id == category.Id);
             AssertCategoryProperties(category, guid);
-            Assert.Equal("ff0000", category.Color);
 
             category = await client.Categories.DeleteAsync(category.Id, null, requestOptions, cancellationToken);
             AssertCategoryProperties(category, guid);
