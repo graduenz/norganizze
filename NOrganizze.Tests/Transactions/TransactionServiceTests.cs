@@ -10,6 +10,8 @@ namespace NOrganizze.Tests.Transactions
 {
     public class TransactionServiceTests
     {
+        private const string TemporaryTestAccountDescription = "Temporary test account";
+
         private readonly NOrganizzeClientFixture _fixture;
         private readonly ITestContextAccessor _testContextAccessor;
 
@@ -114,13 +116,14 @@ namespace NOrganizze.Tests.Transactions
 
             // Assert
             Assert.NotNull(transactions);
-            if (transactions.Any())
+            if (transactions.Count != 0)
             {
-                foreach (var transaction in transactions)
+                var dates = transactions.Select(transaction => transaction.Date).ToArray();
+                Assert.All(dates, date =>
                 {
-                    Assert.True(transaction.Date >= options.StartDate);
-                    Assert.True(transaction.Date <= options.EndDate);
-                }
+                    Assert.True(date >= options.StartDate);
+                    Assert.True(date <= options.EndDate);
+                });
             }
         }
 
@@ -143,13 +146,14 @@ namespace NOrganizze.Tests.Transactions
 
             // Assert
             Assert.NotNull(transactions);
-            if (transactions.Any())
+            if (transactions.Count != 0)
             {
-                foreach (var transaction in transactions)
+                var dates = transactions.Select(transaction => transaction.Date).ToArray();
+                Assert.All(dates, date =>
                 {
-                    Assert.True(transaction.Date >= options.StartDate);
-                    Assert.True(transaction.Date <= options.EndDate);
-                }
+                    Assert.True(date >= options.StartDate);
+                    Assert.True(date <= options.EndDate);
+                });
             }
         }
 
@@ -238,7 +242,7 @@ namespace NOrganizze.Tests.Transactions
             {
                 Name = $"Test Account {guid}",
                 Type = AccountType.Checking,
-                Description = "Temporary test account"
+                Description = TemporaryTestAccountDescription
             });
         }
 
@@ -248,7 +252,7 @@ namespace NOrganizze.Tests.Transactions
             {
                 Name = $"Test Account {guid}",
                 Type = AccountType.Checking,
-                Description = "Temporary test account"
+                Description = TemporaryTestAccountDescription
             }, requestOptions, cancellationToken);
         }
 

@@ -44,7 +44,7 @@ namespace NOrganizze.Tests.Accounts
             AssertAccountProperties(account, guid, UpdatedAccountDescription);
 
             account = client.Accounts.Delete(account.Id);
-            AssertAccountProperties(account, guid, "updated account");
+            AssertAccountProperties(account, guid, UpdatedAccountDescription);
 
             accounts = client.Accounts.List();
             Assert.DoesNotContain(accounts, m => m.Id == account.Id);
@@ -76,7 +76,7 @@ namespace NOrganizze.Tests.Accounts
             AssertAccountProperties(account, guid, UpdatedAccountDescription);
 
             account = await client.Accounts.DeleteAsync(account.Id, requestOptions, cancellationToken);
-            AssertAccountProperties(account, guid, "updated account");
+            AssertAccountProperties(account, guid, UpdatedAccountDescription);
 
             accounts = await client.Accounts.ListAsync(requestOptions, cancellationToken);
             Assert.DoesNotContain(accounts, m => m.Id == account.Id);
@@ -90,8 +90,8 @@ namespace NOrganizze.Tests.Accounts
             Assert.False(account.Default);
             Assert.False(account.Archived);
             Assert.True(account.Id > 0);
-            Assert.True(account.CreatedAt <= DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc));
-            Assert.True(account.UpdatedAt <= DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc));
+            Assert.True(account.CreatedAt <= DateTime.UtcNow);
+            Assert.True(account.UpdatedAt <= DateTime.UtcNow);
         }
 
         private static AccountCreateOptions BuildAccountCreateOptions(Guid guid, string description) => new AccountCreateOptions

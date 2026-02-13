@@ -1,5 +1,6 @@
 using NOrganizze.Invoices;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -100,10 +101,8 @@ namespace NOrganizze.Tests.Invoices
             Assert.NotNull(invoices);
             if (invoices.Count > 0)
             {
-                foreach (var invoice in invoices)
-                {
-                    Assert.Equal(currentYear, invoice.Date.Year);
-                }
+                var years = invoices.Select(invoice => invoice.Date.Year).ToArray();
+                Assert.All(years, year => Assert.Equal(currentYear, year));
             }
         }
 
@@ -136,10 +135,8 @@ namespace NOrganizze.Tests.Invoices
             Assert.NotNull(invoices);
             if (invoices.Count > 0)
             {
-                foreach (var invoice in invoices)
-                {
-                    Assert.Equal(currentYear, invoice.Date.Year);
-                }
+                var years = invoices.Select(invoice => invoice.Date.Year).ToArray();
+                Assert.All(years, year => Assert.Equal(currentYear, year));
             }
         }
 

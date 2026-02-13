@@ -10,6 +10,8 @@ namespace NOrganizze.Tests.Transfers
 {
     public class TransferServiceTests
     {
+        private const string TemporaryTestAccountDescription = "Temporary test account";
+
         private readonly NOrganizzeClientFixture _fixture;
         private readonly ITestContextAccessor _testContextAccessor;
 
@@ -174,7 +176,7 @@ namespace NOrganizze.Tests.Transfers
             {
                 Name = $"Test Account {guid} {suffix}",
                 Type = AccountType.Checking,
-                Description = "Temporary test account"
+                Description = TemporaryTestAccountDescription
             });
         }
 
@@ -184,7 +186,7 @@ namespace NOrganizze.Tests.Transfers
             {
                 Name = $"Test Account {guid} {suffix}",
                 Type = AccountType.Checking,
-                Description = "Temporary test account"
+                Description = TemporaryTestAccountDescription
             }, requestOptions, cancellationToken);
         }
 

@@ -7,7 +7,7 @@ using Xunit;
 
 namespace NOrganizze.Tests
 {
-    public class NOrganizzeClientFixture : IDisposable
+    public sealed class NOrganizzeClientFixture : IDisposable
     {
         private static Credentials ResolveCredentials()
         {

@@ -59,7 +59,7 @@ namespace NOrganizze.Tests.Budgets
         {
             // Arrange
             var client = _fixture.Client;
-            var year = DateTime.Now.Year;
+            var year = DateTime.UtcNow.Year;
 
             // Act
             var budgets = client.Budgets.ListByYear(year);
@@ -79,7 +79,7 @@ namespace NOrganizze.Tests.Budgets
         {
             // Arrange
             var client = _fixture.Client;
-            var year = DateTime.Now.Year;
+            var year = DateTime.UtcNow.Year;
             RequestOptions requestOptions = null;
             var cancellationToken = _testContextAccessor.Current.CancellationToken;
 
@@ -101,7 +101,7 @@ namespace NOrganizze.Tests.Budgets
         {
             // Arrange
             var client = _fixture.Client;
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
             var year = now.Year;
             var month = now.Month;
 
@@ -124,7 +124,7 @@ namespace NOrganizze.Tests.Budgets
         {
             // Arrange
             var client = _fixture.Client;
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
             var year = now.Year;
             var month = now.Month;
             RequestOptions requestOptions = null;
@@ -149,7 +149,7 @@ namespace NOrganizze.Tests.Budgets
         {
             // Arrange
             var client = _fixture.Client;
-            var previousMonth = DateTime.Now.AddMonths(-1);
+            var previousMonth = DateTime.UtcNow.AddMonths(-1);
             var year = previousMonth.Year;
             var month = previousMonth.Month;
 
@@ -172,7 +172,7 @@ namespace NOrganizze.Tests.Budgets
         {
             // Arrange
             var client = _fixture.Client;
-            var previousMonth = DateTime.Now.AddMonths(-1);
+            var previousMonth = DateTime.UtcNow.AddMonths(-1);
             var year = previousMonth.Year;
             var month = previousMonth.Month;
             RequestOptions requestOptions = null;
