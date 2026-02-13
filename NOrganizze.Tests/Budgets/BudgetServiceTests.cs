@@ -1,6 +1,5 @@
 using NOrganizze.Budgets;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -30,7 +29,7 @@ namespace NOrganizze.Tests.Budgets
             Assert.NotNull(budgets);
             if (budgets.Count > 0)
             {
-                var budget = budgets.First();
+                var budget = budgets[0];
                 AssertBudgetProperties(budget);
             }
         }
@@ -50,7 +49,7 @@ namespace NOrganizze.Tests.Budgets
             Assert.NotNull(budgets);
             if (budgets.Count > 0)
             {
-                var budget = budgets.First();
+                var budget = budgets[0];
                 AssertBudgetProperties(budget);
             }
         }
@@ -69,7 +68,7 @@ namespace NOrganizze.Tests.Budgets
             Assert.NotNull(budgets);
             if (budgets.Count > 0)
             {
-                var budget = budgets.First();
+                var budget = budgets[0];
                 AssertBudgetProperties(budget);
                 Assert.Equal(year, budget.Date.Year);
             }
@@ -91,7 +90,7 @@ namespace NOrganizze.Tests.Budgets
             Assert.NotNull(budgets);
             if (budgets.Count > 0)
             {
-                var budget = budgets.First();
+                var budget = budgets[0];
                 AssertBudgetProperties(budget);
                 Assert.Equal(year, budget.Date.Year);
             }
@@ -113,7 +112,7 @@ namespace NOrganizze.Tests.Budgets
             Assert.NotNull(budgets);
             if (budgets.Count > 0)
             {
-                var budget = budgets.First();
+                var budget = budgets[0];
                 AssertBudgetProperties(budget);
                 Assert.Equal(year, budget.Date.Year);
                 Assert.Equal(month, budget.Date.Month);
@@ -138,7 +137,7 @@ namespace NOrganizze.Tests.Budgets
             Assert.NotNull(budgets);
             if (budgets.Count > 0)
             {
-                var budget = budgets.First();
+                var budget = budgets[0];
                 AssertBudgetProperties(budget);
                 Assert.Equal(year, budget.Date.Year);
                 Assert.Equal(month, budget.Date.Month);
@@ -161,7 +160,7 @@ namespace NOrganizze.Tests.Budgets
             Assert.NotNull(budgets);
             if (budgets.Count > 0)
             {
-                var budget = budgets.First();
+                var budget = budgets[0];
                 AssertBudgetProperties(budget);
                 Assert.Equal(year, budget.Date.Year);
                 Assert.Equal(month, budget.Date.Month);
@@ -186,7 +185,7 @@ namespace NOrganizze.Tests.Budgets
             Assert.NotNull(budgets);
             if (budgets.Count > 0)
             {
-                var budget = budgets.First();
+                var budget = budgets[0];
                 AssertBudgetProperties(budget);
                 Assert.Equal(year, budget.Date.Year);
                 Assert.Equal(month, budget.Date.Month);

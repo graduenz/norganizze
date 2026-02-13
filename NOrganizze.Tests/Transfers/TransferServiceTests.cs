@@ -164,7 +164,7 @@ namespace NOrganizze.Tests.Transfers
             CreditAccountId = fromAccountId,
             DebitAccountId = toAccountId,
             AmountCents = 5000,
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             Paid = false
         };
 

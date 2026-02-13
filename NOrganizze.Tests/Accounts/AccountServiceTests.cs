@@ -8,6 +8,9 @@ namespace NOrganizze.Tests.Accounts
 {
     public class AccountServiceTests
     {
+        private const string NewAccountDescription = "New account";
+        private const string UpdatedAccountDescription = "Updated account";
+
         private readonly NOrganizzeClientFixture _fixture;
         private readonly ITestContextAccessor _testContextAccessor;
 
@@ -23,22 +26,22 @@ namespace NOrganizze.Tests.Accounts
             var guid = Guid.NewGuid();
             var client = _fixture.Client;
 
-            var account = client.Accounts.Create(BuildAccountCreateOptions(guid, "new account"));
-            AssertAccountProperties(account, guid, "new account");
+            var account = client.Accounts.Create(BuildAccountCreateOptions(guid, NewAccountDescription));
+            AssertAccountProperties(account, guid, NewAccountDescription);
 
             account = client.Accounts.Get(account.Id);
-            AssertAccountProperties(account, guid, "new account");
+            AssertAccountProperties(account, guid, NewAccountDescription);
 
             account = client.Accounts.Update(account.Id, new AccountUpdateOptions
             {
                 Name = $"Test Account {guid}",
-                Description = "updated account",
+                Description = UpdatedAccountDescription,
                 Default = false
             });
 
             var accounts = client.Accounts.List();
             account = accounts.Single(m => m.Id == account.Id);
-            AssertAccountProperties(account, guid, "updated account");
+            AssertAccountProperties(account, guid, UpdatedAccountDescription);
 
             account = client.Accounts.Delete(account.Id);
             AssertAccountProperties(account, guid, "updated account");
@@ -55,22 +58,22 @@ namespace NOrganizze.Tests.Accounts
             RequestOptions requestOptions = null;
             var cancellationToken = _testContextAccessor.Current.CancellationToken;
 
-            var account = await client.Accounts.CreateAsync(BuildAccountCreateOptions(guid, "new account"), requestOptions, cancellationToken);
-            AssertAccountProperties(account, guid, "new account");
+            var account = await client.Accounts.CreateAsync(BuildAccountCreateOptions(guid, NewAccountDescription), requestOptions, cancellationToken);
+            AssertAccountProperties(account, guid, NewAccountDescription);
 
             account = await client.Accounts.GetAsync(account.Id, requestOptions, cancellationToken);
-            AssertAccountProperties(account, guid, "new account");
+            AssertAccountProperties(account, guid, NewAccountDescription);
 
             account = await client.Accounts.UpdateAsync(account.Id, new AccountUpdateOptions
             {
                 Name = $"Test Account {guid}",
-                Description = "updated account",
+                Description = UpdatedAccountDescription,
                 Default = false
             }, requestOptions, cancellationToken);
 
             var accounts = await client.Accounts.ListAsync(requestOptions, cancellationToken);
             account = accounts.Single(m => m.Id == account.Id);
-            AssertAccountProperties(account, guid, "updated account");
+            AssertAccountProperties(account, guid, UpdatedAccountDescription);
 
             account = await client.Accounts.DeleteAsync(account.Id, requestOptions, cancellationToken);
             AssertAccountProperties(account, guid, "updated account");
@@ -87,8 +90,8 @@ namespace NOrganizze.Tests.Accounts
             Assert.False(account.Default);
             Assert.False(account.Archived);
             Assert.True(account.Id > 0);
-            Assert.True(account.CreatedAt <= DateTime.UtcNow);
-            Assert.True(account.UpdatedAt <= DateTime.UtcNow);
+            Assert.True(account.CreatedAt <= DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc));
+            Assert.True(account.UpdatedAt <= DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc));
         }
 
         private static AccountCreateOptions BuildAccountCreateOptions(Guid guid, string description) => new AccountCreateOptions

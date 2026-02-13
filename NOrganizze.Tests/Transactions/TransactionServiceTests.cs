@@ -102,11 +102,11 @@ namespace NOrganizze.Tests.Transactions
         {
             // Arrange
             var client = _fixture.Client;
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
             var options = new TransactionListOptions
             {
-                StartDate = new DateTime(now.Year, now.Month, 1),
-                EndDate = new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month))
+                StartDate = new DateTime(now.Year, now.Month, 1, 0, 0, 0, DateTimeKind.Utc),
+                EndDate = new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month), 23, 59, 59, DateTimeKind.Utc)
             };
 
             // Act
@@ -131,11 +131,11 @@ namespace NOrganizze.Tests.Transactions
             var client = _fixture.Client;
             RequestOptions requestOptions = null;
             var cancellationToken = _testContextAccessor.Current.CancellationToken;
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
             var options = new TransactionListOptions
             {
-                StartDate = new DateTime(now.Year, now.Month, 1),
-                EndDate = new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month))
+                StartDate = new DateTime(now.Year, now.Month, 1, 0, 0, 0, DateTimeKind.Utc),
+                EndDate = new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month), 23, 59, 59, DateTimeKind.Utc)
             };
 
             // Act
@@ -225,7 +225,7 @@ namespace NOrganizze.Tests.Transactions
         private static TransactionCreateOptions BuildTransactionCreateOptions(Guid guid, int accountId, int categoryId) => new TransactionCreateOptions
         {
             Description = $"Test Transaction {guid}",
-            Date = DateTime.Now,
+            Date = DateTime.UtcNow,
             AmountCents = -10000,
             AccountId = accountId,
             CategoryId = categoryId,

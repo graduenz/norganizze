@@ -1,6 +1,5 @@
 using NOrganizze.Invoices;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -24,22 +23,22 @@ namespace NOrganizze.Tests.Invoices
             var client = _fixture.Client;
             var creditCards = client.CreditCards.List();
 
-            if (!creditCards.Any())
+            if (creditCards.Count == 0)
             {
                 // Skip test if no credit cards exist
                 return;
             }
 
-            var creditCardId = creditCards.First().Id;
+            var creditCardId = creditCards[0].Id;
 
             // Act
             var invoices = client.Invoices.List(creditCardId);
 
             // Assert
             Assert.NotNull(invoices);
-            if (invoices.Any())
+            if (invoices.Count > 0)
             {
-                var invoice = invoices.First();
+                var invoice = invoices[0];
                 AssertInvoiceProperties(invoice);
                 Assert.Equal(creditCardId, invoice.CreditCardId);
             }
@@ -54,21 +53,21 @@ namespace NOrganizze.Tests.Invoices
             var cancellationToken = _testContextAccessor.Current.CancellationToken;
             var creditCards = await client.CreditCards.ListAsync(requestOptions, cancellationToken);
 
-            if (!creditCards.Any())
+            if (creditCards.Count == 0)
             {
                 return;
             }
 
-            var creditCardId = creditCards.First().Id;
+            var creditCardId = creditCards[0].Id;
 
             // Act
             var invoices = await client.Invoices.ListAsync(creditCardId, null, requestOptions, cancellationToken);
 
             // Assert
             Assert.NotNull(invoices);
-            if (invoices.Any())
+            if (invoices.Count > 0)
             {
-                var invoice = invoices.First();
+                var invoice = invoices[0];
                 AssertInvoiceProperties(invoice);
                 Assert.Equal(creditCardId, invoice.CreditCardId);
             }
@@ -81,16 +80,17 @@ namespace NOrganizze.Tests.Invoices
             var client = _fixture.Client;
             var creditCards = client.CreditCards.List();
 
-            if (!creditCards.Any())
+            if (creditCards.Count == 0)
             {
                 return;
             }
 
-            var creditCardId = creditCards.First().Id;
+            var creditCardId = creditCards[0].Id;
+            var currentYear = DateTime.UtcNow.Year;
             var options = new InvoiceListOptions
             {
-                StartDate = new DateTime(DateTime.Now.Year, 1, 1),
-                EndDate = new DateTime(DateTime.Now.Year, 12, 31)
+                StartDate = new DateTime(currentYear, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                EndDate = new DateTime(currentYear, 12, 31, 23, 59, 59, DateTimeKind.Utc)
             };
 
             // Act
@@ -98,11 +98,11 @@ namespace NOrganizze.Tests.Invoices
 
             // Assert
             Assert.NotNull(invoices);
-            if (invoices.Any())
+            if (invoices.Count > 0)
             {
                 foreach (var invoice in invoices)
                 {
-                    Assert.Equal(DateTime.Now.Year, invoice.Date.Year);
+                    Assert.Equal(currentYear, invoice.Date.Year);
                 }
             }
         }
@@ -116,16 +116,17 @@ namespace NOrganizze.Tests.Invoices
             var cancellationToken = _testContextAccessor.Current.CancellationToken;
             var creditCards = await client.CreditCards.ListAsync(requestOptions, cancellationToken);
 
-            if (!creditCards.Any())
+            if (creditCards.Count == 0)
             {
                 return;
             }
 
-            var creditCardId = creditCards.First().Id;
+            var creditCardId = creditCards[0].Id;
+            var currentYear = DateTime.UtcNow.Year;
             var options = new InvoiceListOptions
             {
-                StartDate = new DateTime(DateTime.Now.Year, 1, 1),
-                EndDate = new DateTime(DateTime.Now.Year, 12, 31)
+                StartDate = new DateTime(currentYear, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                EndDate = new DateTime(currentYear, 12, 31, 23, 59, 59, DateTimeKind.Utc)
             };
 
             // Act
@@ -133,11 +134,11 @@ namespace NOrganizze.Tests.Invoices
 
             // Assert
             Assert.NotNull(invoices);
-            if (invoices.Any())
+            if (invoices.Count > 0)
             {
                 foreach (var invoice in invoices)
                 {
-                    Assert.Equal(DateTime.Now.Year, invoice.Date.Year);
+                    Assert.Equal(currentYear, invoice.Date.Year);
                 }
             }
         }
@@ -149,20 +150,20 @@ namespace NOrganizze.Tests.Invoices
             var client = _fixture.Client;
             var creditCards = client.CreditCards.List();
 
-            if (!creditCards.Any())
+            if (creditCards.Count == 0)
             {
                 return;
             }
 
-            var creditCardId = creditCards.First().Id;
+            var creditCardId = creditCards[0].Id;
             var invoices = client.Invoices.List(creditCardId);
 
-            if (!invoices.Any())
+            if (invoices.Count == 0)
             {
                 return;
             }
 
-            var invoiceId = invoices.First().Id;
+            var invoiceId = invoices[0].Id;
 
             // Act
             var invoiceDetail = client.Invoices.Get(creditCardId, invoiceId);
@@ -184,20 +185,20 @@ namespace NOrganizze.Tests.Invoices
             var cancellationToken = _testContextAccessor.Current.CancellationToken;
             var creditCards = await client.CreditCards.ListAsync(requestOptions, cancellationToken);
 
-            if (!creditCards.Any())
+            if (creditCards.Count == 0)
             {
                 return;
             }
 
-            var creditCardId = creditCards.First().Id;
+            var creditCardId = creditCards[0].Id;
             var invoices = await client.Invoices.ListAsync(creditCardId, null, requestOptions, cancellationToken);
 
-            if (!invoices.Any())
+            if (invoices.Count == 0)
             {
                 return;
             }
 
-            var invoiceId = invoices.First().Id;
+            var invoiceId = invoices[0].Id;
 
             // Act
             var invoiceDetail = await client.Invoices.GetAsync(creditCardId, invoiceId, requestOptions, cancellationToken);
