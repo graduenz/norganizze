@@ -11,6 +11,8 @@ namespace NOrganizze.Tests.Transfers
     public class TransferServiceTests
     {
         private const string TemporaryTestAccountDescription = "Temporary test account";
+        private const string UpdatedTransfer = "Updated transfer";
+        private const string UpdatedNotes = "Updated notes";
 
         private readonly NOrganizzeClientFixture _fixture;
         private readonly ITestContextAccessor _testContextAccessor;
@@ -30,22 +32,22 @@ namespace NOrganizze.Tests.Transfers
             var fromAccount = GetOrCreateTestAccount(client, guid, "From");
             var toAccount = GetOrCreateTestAccount(client, guid, "To");
 
-            var transfer = client.Transfers.Create(BuildTransferCreateOptions(guid, fromAccount.Id, toAccount.Id));
-            AssertTransferProperties(transfer, guid, fromAccount.Id, toAccount.Id);
+            var transfer = client.Transfers.Create(BuildTransferCreateOptions(fromAccount.Id, toAccount.Id));
+            AssertTransferProperties(transfer);
 
             transfer = client.Transfers.Get(transfer.Id);
-            AssertTransferProperties(transfer, guid, fromAccount.Id, toAccount.Id);
+            AssertTransferProperties(transfer);
 
             transfer = client.Transfers.Update(transfer.Id, new TransferUpdateOptions
             {
-                Description = $"Updated Transfer {guid}",
-                Notes = "Updated notes"
+                Description = $"{UpdatedTransfer} {guid}",
+                Notes = UpdatedNotes
             });
 
             var transfers = client.Transfers.List();
             transfer = transfers.Single(m => m.Id == transfer.Id);
-            Assert.Equal($"Updated Transfer {guid}", transfer.Description);
-            Assert.Equal("Updated notes", transfer.Notes);
+            Assert.Equal($"{UpdatedTransfer} {guid}", transfer.Description);
+            Assert.Equal(UpdatedNotes, transfer.Notes);
 
             transfer = client.Transfers.Delete(transfer.Id);
             Assert.NotNull(transfer);
@@ -68,22 +70,22 @@ namespace NOrganizze.Tests.Transfers
             var fromAccount = await GetOrCreateTestAccountAsync(client, guid, "From", requestOptions, cancellationToken);
             var toAccount = await GetOrCreateTestAccountAsync(client, guid, "To", requestOptions, cancellationToken);
 
-            var transfer = await client.Transfers.CreateAsync(BuildTransferCreateOptions(guid, fromAccount.Id, toAccount.Id), requestOptions, cancellationToken);
-            AssertTransferProperties(transfer, guid, fromAccount.Id, toAccount.Id);
+            var transfer = await client.Transfers.CreateAsync(BuildTransferCreateOptions(fromAccount.Id, toAccount.Id), requestOptions, cancellationToken);
+            AssertTransferProperties(transfer);
 
             transfer = await client.Transfers.GetAsync(transfer.Id, requestOptions, cancellationToken);
-            AssertTransferProperties(transfer, guid, fromAccount.Id, toAccount.Id);
+            AssertTransferProperties(transfer);
 
             transfer = await client.Transfers.UpdateAsync(transfer.Id, new TransferUpdateOptions
             {
-                Description = $"Updated Transfer {guid}",
-                Notes = "Updated notes"
+                Description = $"{UpdatedTransfer} {guid}",
+                Notes = UpdatedNotes
             }, requestOptions, cancellationToken);
 
             var transfers = await client.Transfers.ListAsync(requestOptions, cancellationToken);
             transfer = transfers.Single(m => m.Id == transfer.Id);
-            Assert.Equal($"Updated Transfer {guid}", transfer.Description);
-            Assert.Equal("Updated notes", transfer.Notes);
+            Assert.Equal($"{UpdatedTransfer} {guid}", transfer.Description);
+            Assert.Equal(UpdatedNotes, transfer.Notes);
 
             transfer = await client.Transfers.DeleteAsync(transfer.Id, requestOptions, cancellationToken);
             Assert.NotNull(transfer);
@@ -103,7 +105,7 @@ namespace NOrganizze.Tests.Transfers
             var client = _fixture.Client;
             var fromAccount = GetOrCreateTestAccount(client, guid, "From");
             var toAccount = GetOrCreateTestAccount(client, guid, "To");
-            var options = BuildTransferCreateOptions(guid, fromAccount.Id, toAccount.Id);
+            var options = BuildTransferCreateOptions(fromAccount.Id, toAccount.Id);
             options.Tags = new System.Collections.Generic.List<Tag>
             {
                 new Tag { Name = "transfer-test" },
@@ -132,7 +134,7 @@ namespace NOrganizze.Tests.Transfers
             var cancellationToken = _testContextAccessor.Current.CancellationToken;
             var fromAccount = await GetOrCreateTestAccountAsync(client, guid, "From", requestOptions, cancellationToken);
             var toAccount = await GetOrCreateTestAccountAsync(client, guid, "To", requestOptions, cancellationToken);
-            var options = BuildTransferCreateOptions(guid, fromAccount.Id, toAccount.Id);
+            var options = BuildTransferCreateOptions(fromAccount.Id, toAccount.Id);
             options.Tags = new System.Collections.Generic.List<Tag>
             {
                 new Tag { Name = "transfer-test" },
@@ -151,7 +153,7 @@ namespace NOrganizze.Tests.Transfers
             await CleanupTestDataAsync(client, fromAccount.Id, toAccount.Id, requestOptions, cancellationToken);
         }
 
-        private static void AssertTransferProperties(Transfer transfer, Guid guid, int fromAccountId, int toAccountId)
+        private static void AssertTransferProperties(Transfer transfer)
         {
             Assert.NotNull(transfer);
             Assert.True(transfer.Id > 0);
@@ -161,7 +163,7 @@ namespace NOrganizze.Tests.Transfers
             Assert.True(transfer.UpdatedAt <= DateTime.UtcNow);
         }
 
-        private static TransferCreateOptions BuildTransferCreateOptions(Guid guid, int fromAccountId, int toAccountId) => new TransferCreateOptions
+        private static TransferCreateOptions BuildTransferCreateOptions(int fromAccountId, int toAccountId) => new TransferCreateOptions
         {
             CreditAccountId = fromAccountId,
             DebitAccountId = toAccountId,
