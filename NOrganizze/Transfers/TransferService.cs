@@ -6,58 +6,60 @@ namespace NOrganizze.Transfers
 {
     public class TransferService : Service
     {
+        private const string Transfers = "transfers";
+
         public TransferService(NOrganizzeClient client) : base(client)
         {
         }
 
         public List<Transfer> List(RequestOptions requestOptions = null)
         {
-            return Get<List<Transfer>>("transfers", requestOptions);
+            return Get<List<Transfer>>(Transfers, requestOptions);
         }
 
         public Task<List<Transfer>> ListAsync(RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
-            return GetAsync<List<Transfer>>("transfers", requestOptions, cancellationToken);
+            return GetAsync<List<Transfer>>(Transfers, requestOptions, cancellationToken);
         }
 
         public Transfer Get(int id, RequestOptions requestOptions = null)
         {
-            return Get<Transfer>($"transfers/{id}", requestOptions);
+            return Get<Transfer>($"{Transfers}/{id}", requestOptions);
         }
 
         public Task<Transfer> GetAsync(int id, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
-            return GetAsync<Transfer>($"transfers/{id}", requestOptions, cancellationToken);
+            return GetAsync<Transfer>($"{Transfers}/{id}", requestOptions, cancellationToken);
         }
 
         public Transfer Create(TransferCreateOptions options, RequestOptions requestOptions = null)
         {
-            return Post<Transfer>("transfers", options, requestOptions);
+            return Post<Transfer>(Transfers, options, requestOptions);
         }
 
         public Task<Transfer> CreateAsync(TransferCreateOptions options, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
-            return PostAsync<Transfer>("transfers", options, requestOptions, cancellationToken);
+            return PostAsync<Transfer>(Transfers, options, requestOptions, cancellationToken);
         }
 
         public Transfer Update(int id, TransferUpdateOptions options, RequestOptions requestOptions = null)
         {
-            return Put<Transfer>($"transfers/{id}", options, requestOptions);
+            return Put<Transfer>($"{Transfers}/{id}", options, requestOptions);
         }
 
         public Task<Transfer> UpdateAsync(int id, TransferUpdateOptions options, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
-            return PutAsync<Transfer>($"transfers/{id}", options, requestOptions, cancellationToken);
+            return PutAsync<Transfer>($"{Transfers}/{id}", options, requestOptions, cancellationToken);
         }
 
         public Transfer Delete(int id, RequestOptions requestOptions = null)
         {
-            return Delete<Transfer>($"transfers/{id}", requestOptions);
+            return Delete<Transfer>($"{Transfers}/{id}", requestOptions);
         }
 
         public Task<Transfer> DeleteAsync(int id, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
-            return DeleteAsync<Transfer>($"transfers/{id}", requestOptions, cancellationToken);
+            return DeleteAsync<Transfer>($"{Transfers}/{id}", requestOptions, cancellationToken);
         }
     }
 }

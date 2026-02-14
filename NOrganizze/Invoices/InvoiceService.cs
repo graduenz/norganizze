@@ -7,6 +7,10 @@ namespace NOrganizze.Invoices
 {
     public class InvoiceService : Service
     {
+        private const string CreditCards = "credit_cards";
+        private const string Invoices = "invoices";
+        private const string Payments = "payments";
+
         public InvoiceService(NOrganizzeClient client) : base(client)
         {
         }
@@ -25,7 +29,7 @@ namespace NOrganizze.Invoices
 
         private static string BuildListPath(int creditCardId, InvoiceListOptions options)
         {
-            var path = $"credit_cards/{creditCardId}/invoices";
+            var path = $"{CreditCards}/{creditCardId}/{Invoices}";
             if (options != null)
             {
                 var queryParams = new List<string>();
@@ -43,22 +47,22 @@ namespace NOrganizze.Invoices
 
         public InvoiceDetail Get(int creditCardId, int invoiceId, RequestOptions requestOptions = null)
         {
-            return Get<InvoiceDetail>($"credit_cards/{creditCardId}/invoices/{invoiceId}", requestOptions);
+            return Get<InvoiceDetail>($"{CreditCards}/{creditCardId}/{Invoices}/{invoiceId}", requestOptions);
         }
 
         public Task<InvoiceDetail> GetAsync(int creditCardId, int invoiceId, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
-            return GetAsync<InvoiceDetail>($"credit_cards/{creditCardId}/invoices/{invoiceId}", requestOptions, cancellationToken);
+            return GetAsync<InvoiceDetail>($"{CreditCards}/{creditCardId}/{Invoices}/{invoiceId}", requestOptions, cancellationToken);
         }
 
         public Transaction GetPayment(int creditCardId, int invoiceId, RequestOptions requestOptions = null)
         {
-            return Get<Transaction>($"credit_cards/{creditCardId}/invoices/{invoiceId}/payments", requestOptions);
+            return Get<Transaction>($"{CreditCards}/{creditCardId}/{Invoices}/{invoiceId}/{Payments}", requestOptions);
         }
 
         public Task<Transaction> GetPaymentAsync(int creditCardId, int invoiceId, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
-            return GetAsync<Transaction>($"credit_cards/{creditCardId}/invoices/{invoiceId}/payments", requestOptions, cancellationToken);
+            return GetAsync<Transaction>($"{CreditCards}/{creditCardId}/{Invoices}/{invoiceId}/{Payments}", requestOptions, cancellationToken);
         }
     }
 }

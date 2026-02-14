@@ -7,58 +7,60 @@ namespace NOrganizze.Categories
 {
     public class CategoryService : Service
     {
+        private const string Categories = "categories";
+
         public CategoryService(NOrganizzeClient client) : base(client)
         {
         }
 
         public List<Category> List(RequestOptions requestOptions = null)
         {
-            return Get<List<Category>>("categories", requestOptions);
+            return Get<List<Category>>(Categories, requestOptions);
         }
 
         public Task<List<Category>> ListAsync(RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
-            return GetAsync<List<Category>>("categories", requestOptions, cancellationToken);
+            return GetAsync<List<Category>>(Categories, requestOptions, cancellationToken);
         }
 
         public Category Get(int id, RequestOptions requestOptions = null)
         {
-            return Get<Category>($"categories/{id}", requestOptions);
+            return Get<Category>($"{Categories}/{id}", requestOptions);
         }
 
         public Task<Category> GetAsync(int id, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
-            return GetAsync<Category>($"categories/{id}", requestOptions, cancellationToken);
+            return GetAsync<Category>($"{Categories}/{id}", requestOptions, cancellationToken);
         }
 
         public Category Create(CategoryCreateOptions options, RequestOptions requestOptions = null)
         {
-            return Post<Category>("categories", options, requestOptions);
+            return Post<Category>(Categories, options, requestOptions);
         }
 
         public Task<Category> CreateAsync(CategoryCreateOptions options, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
-            return PostAsync<Category>("categories", options, requestOptions, cancellationToken);
+            return PostAsync<Category>(Categories, options, requestOptions, cancellationToken);
         }
 
         public Category Update(int id, CategoryUpdateOptions options, RequestOptions requestOptions = null)
         {
-            return Put<Category>($"categories/{id}", options, requestOptions);
+            return Put<Category>($"{Categories}/{id}", options, requestOptions);
         }
 
         public Task<Category> UpdateAsync(int id, CategoryUpdateOptions options, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
-            return PutAsync<Category>($"categories/{id}", options, requestOptions, cancellationToken);
+            return PutAsync<Category>($"{Categories}/{id}", options, requestOptions, cancellationToken);
         }
 
         public Category Delete(int id, CategoryDeleteOptions options = null, RequestOptions requestOptions = null)
         {
-            return Client.Request<Category>(HttpMethod.Delete, $"categories/{id}", options, requestOptions);
+            return Client.Request<Category>(HttpMethod.Delete, $"{Categories}/{id}", options, requestOptions);
         }
 
         public Task<Category> DeleteAsync(int id, CategoryDeleteOptions options = null, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
-            return Client.RequestAsync<Category>(HttpMethod.Delete, $"categories/{id}", options, requestOptions, cancellationToken);
+            return Client.RequestAsync<Category>(HttpMethod.Delete, $"{Categories}/{id}", options, requestOptions, cancellationToken);
         }
     }
 }
