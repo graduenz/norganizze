@@ -122,20 +122,6 @@ namespace NOrganizze
             return HandleResponseAsync<T>(response, CancellationToken.None).GetAwaiter().GetResult();
         }
 
-        internal async Task<T> RequestAsync<T>(
-            HttpMethod method,
-            string path,
-            object content = null,
-            RequestOptions requestOptions = null,
-            CancellationToken cancellationToken = default)
-        {
-            var request = BuildRequest(method, path, content, requestOptions);
-
-            using var response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
-
-            return await HandleResponseAsync<T>(response, cancellationToken).ConfigureAwait(false);
-        }
-
         internal void Request(
             HttpMethod method,
             string path,
@@ -151,6 +137,20 @@ namespace NOrganizze
 #endif
 
             EnsureSuccessAsync(response, CancellationToken.None).ConfigureAwait(false).GetAwaiter().GetResult();
+        }
+
+        internal async Task<T> RequestAsync<T>(
+            HttpMethod method,
+            string path,
+            object content = null,
+            RequestOptions requestOptions = null,
+            CancellationToken cancellationToken = default)
+        {
+            var request = BuildRequest(method, path, content, requestOptions);
+
+            using var response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+
+            return await HandleResponseAsync<T>(response, cancellationToken).ConfigureAwait(false);
         }
 
         internal async Task RequestAsync(

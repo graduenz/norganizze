@@ -73,19 +73,19 @@ namespace NOrganizze
             return Client.Request<T>(HttpMethod.Delete, path, null, requestOptions);
         }
 
+        protected void Delete(
+            string path,
+            RequestOptions requestOptions = null)
+        {
+            Client.Request(HttpMethod.Delete, path, null, requestOptions);
+        }
+
         protected Task<T> DeleteAsync<T>(
             string path,
             RequestOptions requestOptions = null,
             CancellationToken cancellationToken = default)
         {
             return Client.RequestAsync<T>(HttpMethod.Delete, path, null, requestOptions, cancellationToken);
-        }
-
-        protected void Delete(
-            string path,
-            RequestOptions requestOptions = null)
-        {
-            Client.Request(HttpMethod.Delete, path, null, requestOptions);
         }
 
         protected Task DeleteAsync(
