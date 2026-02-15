@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -17,6 +18,8 @@ namespace NOrganizze
 {
     public class NOrganizzeClient : IDisposable
     {
+        [SuppressMessage("SonarQube", "S1075:URIs should not be hardcoded",
+            Justification = "This is a configurable default value for the official Organizze API endpoint. Users can override it via constructor parameters.")]
         public const string OrganizzeRestV2Url = "https://api.organizze.com.br/rest/v2";
 
         private readonly HttpClient _httpClient;
