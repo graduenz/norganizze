@@ -65,10 +65,10 @@ namespace NOrganizze.Transactions
         public long? PaidCreditCardInvoiceId { get; set; }
 
         [JsonProperty("oposite_transaction_id")]
-        public long? OpositeTransactionId { get; set; }
+        public long? OppositeTransactionId { get; set; }
 
         [JsonProperty("oposite_account_id")]
-        public long? OpositeAccountId { get; set; }
+        public long? OppositeAccountId { get; set; }
 
         [JsonProperty("created_at")]
         public DateTime CreatedAt { get; set; }
