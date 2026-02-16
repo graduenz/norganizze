@@ -33,14 +33,13 @@ jobs:
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
       - name: Pack NuGet package
-        run: dotnet pack NOrganizze/NOrganizze.csproj --configuration Release --no-build --output nupkgs /p:PackageVersion=0.0.1
-        # run: dotnet pack NOrganizze/NOrganizze.csproj --configuration Release --no-build --output nupkgs /p:PackageVersion=${{ steps.get_version.outputs.VERSION }}
+        run: dotnet pack NOrganizze/NOrganizze.csproj --configuration Release --no-build --output nupkgs /p:PackageVersion=${{ steps.get_version.outputs.VERSION }}
 
-      # - name: Push to NuGet
-      #   run: dotnet nuget push nupkgs/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+      - name: Push to NuGet
+        run: dotnet nuget push nupkgs/*.nupkg --source https://api.nuget.org/v3/index.json --skip-duplicate
 
-      # - name: Upload NuGet package as artifact
-      #   uses: actions/upload-artifact@v6
-      #   with:
-      #     name: nuget-package
-      #     path: nupkgs/*.nupkg
+      - name: Upload NuGet package as artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: nuget-package
+          path: nupkgs/*.nupkg
