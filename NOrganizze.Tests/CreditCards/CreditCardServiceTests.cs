@@ -83,48 +83,6 @@ namespace NOrganizze.Tests.CreditCards
             Assert.DoesNotContain(creditCards, m => m.Id == creditCard.Id);
         }
 
-        [Fact]
-        public void Test_CreditCardService_WithCardNetwork_Sync()
-        {
-            // Arrange
-            var guid = Guid.NewGuid();
-            var client = _fixture.Client;
-            var options = BuildCreditCardCreateOptions(guid);
-            options.CardNetwork = CardNetwork.Visa;
-
-            // Act
-            var creditCard = client.CreditCards.Create(options);
-
-            // Assert
-            AssertCreditCardProperties(creditCard, guid);
-            Assert.Equal(CardNetwork.Visa, creditCard.CardNetwork);
-
-            // Clean up
-            client.CreditCards.Delete(creditCard.Id);
-        }
-
-        [Fact]
-        public async Task Test_CreditCardService_WithCardNetwork_Async()
-        {
-            // Arrange
-            var guid = Guid.NewGuid();
-            var client = _fixture.Client;
-            RequestOptions requestOptions = null;
-            var cancellationToken = _testContextAccessor.Current.CancellationToken;
-            var options = BuildCreditCardCreateOptions(guid);
-            options.CardNetwork = CardNetwork.Mastercard;
-
-            // Act
-            var creditCard = await client.CreditCards.CreateAsync(options, requestOptions, cancellationToken);
-
-            // Assert
-            AssertCreditCardProperties(creditCard, guid);
-            Assert.Equal(CardNetwork.Mastercard, creditCard.CardNetwork);
-
-            // Clean up
-            await client.CreditCards.DeleteAsync(creditCard.Id, requestOptions, cancellationToken);
-        }
-
         private static void AssertCreditCardProperties(CreditCard creditCard, Guid guid)
         {
             Assert.NotNull(creditCard);

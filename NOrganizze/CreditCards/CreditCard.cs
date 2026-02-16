@@ -30,7 +30,7 @@ namespace NOrganizze.CreditCards
         [JsonProperty("limit_cents")]
         public int LimitCents { get; set; }
 
-        [JsonProperty("kind")]
+        [JsonProperty("type")]
         public string Kind { get; set; }
 
         [JsonProperty("archived")]
