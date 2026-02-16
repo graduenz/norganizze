@@ -157,7 +157,7 @@ namespace NOrganizze.Tests.Transfers
         {
             Assert.NotNull(transfer);
             Assert.True(transfer.Id > 0);
-            Assert.Equal(5000, transfer.AmountCents);
+            Assert.Equal(-5000, transfer.AmountCents);
             Assert.False(transfer.Paid);
             Assert.True(transfer.CreatedAt <= DateTime.UtcNow);
             Assert.True(transfer.UpdatedAt <= DateTime.UtcNow);
