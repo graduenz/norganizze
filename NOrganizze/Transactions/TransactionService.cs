@@ -45,12 +45,12 @@ namespace NOrganizze.Transactions
             return path;
         }
 
-        public Transaction Get(int id, RequestOptions requestOptions = null)
+        public Transaction Get(long id, RequestOptions requestOptions = null)
         {
             return Get<Transaction>($"{Transactions}/{id}", requestOptions);
         }
 
-        public Task<Transaction> GetAsync(int id, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
+        public Task<Transaction> GetAsync(long id, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
             return GetAsync<Transaction>($"{Transactions}/{id}", requestOptions, cancellationToken);
         }
@@ -65,22 +65,22 @@ namespace NOrganizze.Transactions
             return PostAsync<Transaction>(Transactions, options, requestOptions, cancellationToken);
         }
 
-        public Transaction Update(int id, TransactionUpdateOptions options, RequestOptions requestOptions = null)
+        public Transaction Update(long id, TransactionUpdateOptions options, RequestOptions requestOptions = null)
         {
             return Put<Transaction>($"{Transactions}/{id}", options, requestOptions);
         }
 
-        public Task<Transaction> UpdateAsync(int id, TransactionUpdateOptions options, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
+        public Task<Transaction> UpdateAsync(long id, TransactionUpdateOptions options, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
             return PutAsync<Transaction>($"{Transactions}/{id}", options, requestOptions, cancellationToken);
         }
 
-        public Transaction Delete(int id, TransactionDeleteOptions options = null, RequestOptions requestOptions = null)
+        public Transaction Delete(long id, TransactionDeleteOptions options = null, RequestOptions requestOptions = null)
         {
             return Client.Request<Transaction>(HttpMethod.Delete, $"{Transactions}/{id}", options, requestOptions);
         }
 
-        public Task<Transaction> DeleteAsync(int id, TransactionDeleteOptions options = null, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
+        public Task<Transaction> DeleteAsync(long id, TransactionDeleteOptions options = null, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
             return Client.RequestAsync<Transaction>(HttpMethod.Delete, $"{Transactions}/{id}", options, requestOptions, cancellationToken);
         }

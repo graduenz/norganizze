@@ -29,7 +29,7 @@ namespace NOrganizze.Transactions
         public int? AmountCents { get; set; }
 
         [JsonProperty("category_id")]
-        public int? CategoryId { get; set; }
+        public long? CategoryId { get; set; }
 
         [JsonProperty("paid")]
         public bool? Paid { get; set; }

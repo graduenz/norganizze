@@ -13,7 +13,7 @@ namespace NOrganizze.Budgets
         public int AmountInCents { get; set; }
 
         [JsonProperty("category_id")]
-        public int CategoryId { get; set; }
+        public long CategoryId { get; set; }
 
         [JsonProperty("date")]
         public DateTime Date { get; set; }

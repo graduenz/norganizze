@@ -163,7 +163,7 @@ namespace NOrganizze.Tests.Transfers
             Assert.True(transfer.UpdatedAt <= DateTime.UtcNow);
         }
 
-        private static TransferCreateOptions BuildTransferCreateOptions(int fromAccountId, int toAccountId) => new TransferCreateOptions
+        private static TransferCreateOptions BuildTransferCreateOptions(long fromAccountId, long toAccountId) => new TransferCreateOptions
         {
             CreditAccountId = fromAccountId,
             DebitAccountId = toAccountId,
@@ -192,13 +192,13 @@ namespace NOrganizze.Tests.Transfers
             }, requestOptions, cancellationToken);
         }
 
-        private static void CleanupTestData(NOrganizzeClient client, int fromAccountId, int toAccountId)
+        private static void CleanupTestData(NOrganizzeClient client, long fromAccountId, long toAccountId)
         {
             client.Accounts.Delete(fromAccountId);
             client.Accounts.Delete(toAccountId);
         }
 
-        private static async Task CleanupTestDataAsync(NOrganizzeClient client, int fromAccountId, int toAccountId, RequestOptions requestOptions, System.Threading.CancellationToken cancellationToken)
+        private static async Task CleanupTestDataAsync(NOrganizzeClient client, long fromAccountId, long toAccountId, RequestOptions requestOptions, System.Threading.CancellationToken cancellationToken)
         {
             await client.Accounts.DeleteAsync(fromAccountId, requestOptions, cancellationToken);
             await client.Accounts.DeleteAsync(toAccountId, requestOptions, cancellationToken);

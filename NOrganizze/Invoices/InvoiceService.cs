@@ -15,19 +15,19 @@ namespace NOrganizze.Invoices
         {
         }
 
-        public List<Invoice> List(int creditCardId, InvoiceListOptions options = null, RequestOptions requestOptions = null)
+        public List<Invoice> List(long creditCardId, InvoiceListOptions options = null, RequestOptions requestOptions = null)
         {
             var path = BuildListPath(creditCardId, options);
             return Get<List<Invoice>>(path, requestOptions);
         }
 
-        public Task<List<Invoice>> ListAsync(int creditCardId, InvoiceListOptions options = null, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
+        public Task<List<Invoice>> ListAsync(long creditCardId, InvoiceListOptions options = null, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
             var path = BuildListPath(creditCardId, options);
             return GetAsync<List<Invoice>>(path, requestOptions, cancellationToken);
         }
 
-        private static string BuildListPath(int creditCardId, InvoiceListOptions options)
+        private static string BuildListPath(long creditCardId, InvoiceListOptions options)
         {
             var path = $"{CreditCards}/{creditCardId}/{Invoices}";
             if (options != null)
@@ -45,22 +45,22 @@ namespace NOrganizze.Invoices
             return path;
         }
 
-        public InvoiceDetail Get(int creditCardId, int invoiceId, RequestOptions requestOptions = null)
+        public InvoiceDetail Get(long creditCardId, long invoiceId, RequestOptions requestOptions = null)
         {
             return Get<InvoiceDetail>($"{CreditCards}/{creditCardId}/{Invoices}/{invoiceId}", requestOptions);
         }
 
-        public Task<InvoiceDetail> GetAsync(int creditCardId, int invoiceId, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
+        public Task<InvoiceDetail> GetAsync(long creditCardId, long invoiceId, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
             return GetAsync<InvoiceDetail>($"{CreditCards}/{creditCardId}/{Invoices}/{invoiceId}", requestOptions, cancellationToken);
         }
 
-        public Transaction GetPayment(int creditCardId, int invoiceId, RequestOptions requestOptions = null)
+        public Transaction GetPayment(long creditCardId, long invoiceId, RequestOptions requestOptions = null)
         {
             return Get<Transaction>($"{CreditCards}/{creditCardId}/{Invoices}/{invoiceId}/{Payments}", requestOptions);
         }
 
-        public Task<Transaction> GetPaymentAsync(int creditCardId, int invoiceId, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
+        public Task<Transaction> GetPaymentAsync(long creditCardId, long invoiceId, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
             return GetAsync<Transaction>($"{CreditCards}/{creditCardId}/{Invoices}/{invoiceId}/{Payments}", requestOptions, cancellationToken);
         }

@@ -10,7 +10,7 @@ namespace NOrganizze.Invoices
     public class Invoice
     {
         [JsonProperty("id")]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         [JsonProperty("date")]
         public DateTime Date { get; set; }
@@ -34,6 +34,6 @@ namespace NOrganizze.Invoices
         public int PreviousBalanceCents { get; set; }
 
         [JsonProperty("credit_card_id")]
-        public int CreditCardId { get; set; }
+        public long CreditCardId { get; set; }
     }
 }

@@ -11,12 +11,12 @@ namespace NOrganizze.Users
         {
         }
 
-        public User Get(int id, RequestOptions requestOptions = null)
+        public User Get(long id, RequestOptions requestOptions = null)
         {
             return Get<User>($"{Users}/{id}", requestOptions);
         }
 
-        public async Task<User> GetAsync(int id, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
+        public async Task<User> GetAsync(long id, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
             return await GetAsync<User>($"{Users}/{id}", requestOptions, cancellationToken);
         }

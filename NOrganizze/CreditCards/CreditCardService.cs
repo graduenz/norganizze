@@ -22,12 +22,12 @@ namespace NOrganizze.CreditCards
             return GetAsync<List<CreditCard>>(CreditCards, requestOptions, cancellationToken);
         }
 
-        public CreditCard Get(int id, RequestOptions requestOptions = null)
+        public CreditCard Get(long id, RequestOptions requestOptions = null)
         {
             return Get<CreditCard>($"{CreditCards}/{id}", requestOptions);
         }
 
-        public Task<CreditCard> GetAsync(int id, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
+        public Task<CreditCard> GetAsync(long id, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
             return GetAsync<CreditCard>($"{CreditCards}/{id}", requestOptions, cancellationToken);
         }
@@ -42,22 +42,22 @@ namespace NOrganizze.CreditCards
             return PostAsync<CreditCard>(CreditCards, options, requestOptions, cancellationToken);
         }
 
-        public CreditCard Update(int id, CreditCardUpdateOptions options, RequestOptions requestOptions = null)
+        public CreditCard Update(long id, CreditCardUpdateOptions options, RequestOptions requestOptions = null)
         {
             return Put<CreditCard>($"{CreditCards}/{id}", options, requestOptions);
         }
 
-        public Task<CreditCard> UpdateAsync(int id, CreditCardUpdateOptions options, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
+        public Task<CreditCard> UpdateAsync(long id, CreditCardUpdateOptions options, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
             return PutAsync<CreditCard>($"{CreditCards}/{id}", options, requestOptions, cancellationToken);
         }
 
-        public CreditCard Delete(int id, RequestOptions requestOptions = null)
+        public CreditCard Delete(long id, RequestOptions requestOptions = null)
         {
             return Delete<CreditCard>($"{CreditCards}/{id}", requestOptions);
         }
 
-        public Task<CreditCard> DeleteAsync(int id, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
+        public Task<CreditCard> DeleteAsync(long id, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
             return DeleteAsync<CreditCard>($"{CreditCards}/{id}", requestOptions, cancellationToken);
         }

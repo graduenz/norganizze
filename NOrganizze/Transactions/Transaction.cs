@@ -11,7 +11,7 @@ namespace NOrganizze.Transactions
     public class Transaction
     {
         [JsonProperty("id")]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         [JsonProperty("description")]
         public string Description { get; set; }
@@ -35,16 +35,16 @@ namespace NOrganizze.Transactions
         public bool Recurring { get; set; }
 
         [JsonProperty("account_id")]
-        public int AccountId { get; set; }
+        public long AccountId { get; set; }
 
         [JsonProperty("account_type")]
         public string AccountType { get; set; }
 
         [JsonProperty("category_id")]
-        public int CategoryId { get; set; }
+        public long CategoryId { get; set; }
 
         [JsonProperty("contact_id")]
-        public int? ContactId { get; set; }
+        public long? ContactId { get; set; }
 
         [JsonProperty("notes")]
         public string Notes { get; set; }
@@ -53,22 +53,22 @@ namespace NOrganizze.Transactions
         public int AttachmentsCount { get; set; }
 
         [JsonProperty("credit_card_id")]
-        public int? CreditCardId { get; set; }
+        public long? CreditCardId { get; set; }
 
         [JsonProperty("credit_card_invoice_id")]
-        public int? CreditCardInvoiceId { get; set; }
+        public long? CreditCardInvoiceId { get; set; }
 
         [JsonProperty("paid_credit_card_id")]
-        public int? PaidCreditCardId { get; set; }
+        public long? PaidCreditCardId { get; set; }
 
         [JsonProperty("paid_credit_card_invoice_id")]
-        public int? PaidCreditCardInvoiceId { get; set; }
+        public long? PaidCreditCardInvoiceId { get; set; }
 
         [JsonProperty("oposite_transaction_id")]
-        public int? OpositeTransactionId { get; set; }
+        public long? OpositeTransactionId { get; set; }
 
         [JsonProperty("oposite_account_id")]
-        public int? OpositeAccountId { get; set; }
+        public long? OpositeAccountId { get; set; }
 
         [JsonProperty("created_at")]
         public DateTime CreatedAt { get; set; }

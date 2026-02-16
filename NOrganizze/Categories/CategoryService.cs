@@ -23,12 +23,12 @@ namespace NOrganizze.Categories
             return GetAsync<List<Category>>(Categories, requestOptions, cancellationToken);
         }
 
-        public Category Get(int id, RequestOptions requestOptions = null)
+        public Category Get(long id, RequestOptions requestOptions = null)
         {
             return Get<Category>($"{Categories}/{id}", requestOptions);
         }
 
-        public Task<Category> GetAsync(int id, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
+        public Task<Category> GetAsync(long id, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
             return GetAsync<Category>($"{Categories}/{id}", requestOptions, cancellationToken);
         }
@@ -43,22 +43,22 @@ namespace NOrganizze.Categories
             return PostAsync<Category>(Categories, options, requestOptions, cancellationToken);
         }
 
-        public Category Update(int id, CategoryUpdateOptions options, RequestOptions requestOptions = null)
+        public Category Update(long id, CategoryUpdateOptions options, RequestOptions requestOptions = null)
         {
             return Put<Category>($"{Categories}/{id}", options, requestOptions);
         }
 
-        public Task<Category> UpdateAsync(int id, CategoryUpdateOptions options, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
+        public Task<Category> UpdateAsync(long id, CategoryUpdateOptions options, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
             return PutAsync<Category>($"{Categories}/{id}", options, requestOptions, cancellationToken);
         }
 
-        public Category Delete(int id, CategoryDeleteOptions options = null, RequestOptions requestOptions = null)
+        public Category Delete(long id, CategoryDeleteOptions options = null, RequestOptions requestOptions = null)
         {
             return Client.Request<Category>(HttpMethod.Delete, $"{Categories}/{id}", options, requestOptions);
         }
 
-        public Task<Category> DeleteAsync(int id, CategoryDeleteOptions options = null, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
+        public Task<Category> DeleteAsync(long id, CategoryDeleteOptions options = null, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
             return Client.RequestAsync<Category>(HttpMethod.Delete, $"{Categories}/{id}", options, requestOptions, cancellationToken);
         }

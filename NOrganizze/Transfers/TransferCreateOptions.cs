@@ -13,10 +13,10 @@ namespace NOrganizze.Transfers
     public class TransferCreateOptions
     {
         [JsonProperty("credit_account_id")]
-        public int CreditAccountId { get; set; }
+        public long CreditAccountId { get; set; }
 
         [JsonProperty("debit_account_id")]
-        public int DebitAccountId { get; set; }
+        public long DebitAccountId { get; set; }
 
         [JsonProperty("amount_cents")]
         public int AmountCents { get; set; }

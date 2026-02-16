@@ -213,7 +213,7 @@ namespace NOrganizze.Tests.Transactions
             await CleanupTestDataAsync(client, account.Id, category.Id, requestOptions, cancellationToken);
         }
 
-        private static void AssertTransactionProperties(Transaction transaction, Guid guid, int accountId, int categoryId)
+        private static void AssertTransactionProperties(Transaction transaction, Guid guid, long accountId, long categoryId)
         {
             Assert.NotNull(transaction);
             Assert.Equal($"Test Transaction {guid}", transaction.Description);
@@ -226,7 +226,7 @@ namespace NOrganizze.Tests.Transactions
             Assert.True(transaction.UpdatedAt <= DateTime.UtcNow);
         }
 
-        private static TransactionCreateOptions BuildTransactionCreateOptions(Guid guid, int accountId, int categoryId) => new TransactionCreateOptions
+        private static TransactionCreateOptions BuildTransactionCreateOptions(Guid guid, long accountId, long categoryId) => new TransactionCreateOptions
         {
             Description = $"Test Transaction {guid}",
             Date = DateTime.UtcNow,
@@ -272,13 +272,13 @@ namespace NOrganizze.Tests.Transactions
             }, requestOptions, cancellationToken);
         }
 
-        private static void CleanupTestData(NOrganizzeClient client, int accountId, int categoryId)
+        private static void CleanupTestData(NOrganizzeClient client, long accountId, long categoryId)
         {
             client.Accounts.Delete(accountId);
             client.Categories.Delete(categoryId);
         }
 
-        private static async Task CleanupTestDataAsync(NOrganizzeClient client, int accountId, int categoryId, RequestOptions requestOptions, System.Threading.CancellationToken cancellationToken)
+        private static async Task CleanupTestDataAsync(NOrganizzeClient client, long accountId, long categoryId, RequestOptions requestOptions, System.Threading.CancellationToken cancellationToken)
         {
             await client.Accounts.DeleteAsync(accountId, requestOptions, cancellationToken);
             await client.Categories.DeleteAsync(categoryId, null, requestOptions, cancellationToken);

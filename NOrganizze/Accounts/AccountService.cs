@@ -22,12 +22,12 @@ namespace NOrganizze.Accounts
             return GetAsync<List<Account>>(Accounts, requestOptions, cancellationToken);
         }
 
-        public Account Get(int id, RequestOptions requestOptions = null)
+        public Account Get(long id, RequestOptions requestOptions = null)
         {
             return Get<Account>($"{Accounts}/{id}", requestOptions);
         }
 
-        public Task<Account> GetAsync(int id, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
+        public Task<Account> GetAsync(long id, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
             return GetAsync<Account>($"{Accounts}/{id}", requestOptions, cancellationToken);
         }
@@ -42,22 +42,22 @@ namespace NOrganizze.Accounts
             return PostAsync<Account>(Accounts, options, requestOptions, cancellationToken);
         }
 
-        public Account Update(int id, AccountUpdateOptions options, RequestOptions requestOptions = null)
+        public Account Update(long id, AccountUpdateOptions options, RequestOptions requestOptions = null)
         {
             return Put<Account>($"{Accounts}/{id}", options, requestOptions);
         }
 
-        public Task<Account> UpdateAsync(int id, AccountUpdateOptions options, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
+        public Task<Account> UpdateAsync(long id, AccountUpdateOptions options, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
             return PutAsync<Account>($"{Accounts}/{id}", options, requestOptions, cancellationToken);
         }
 
-        public Account Delete(int id, RequestOptions requestOptions = null)
+        public Account Delete(long id, RequestOptions requestOptions = null)
         {
             return Delete<Account>($"{Accounts}/{id}", requestOptions);
         }
 
-        public Task<Account> DeleteAsync(int id, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
+        public Task<Account> DeleteAsync(long id, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
             return DeleteAsync<Account>($"{Accounts}/{id}", requestOptions, cancellationToken);
         }

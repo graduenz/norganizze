@@ -9,7 +9,7 @@ namespace NOrganizze.Categories
     public class Category
     {
         [JsonProperty("id")]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -18,6 +18,6 @@ namespace NOrganizze.Categories
         public string Color { get; set; }
 
         [JsonProperty("parent_id")]
-        public int? ParentId { get; set; }
+        public long? ParentId { get; set; }
     }
 }

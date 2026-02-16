@@ -9,6 +9,6 @@ namespace NOrganizze.Categories
     public class CategoryDeleteOptions
     {
         [JsonProperty("replacement_id")]
-        public int? ReplacementId { get; set; }
+        public long? ReplacementId { get; set; }
     }
 }

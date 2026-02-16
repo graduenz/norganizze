@@ -6,6 +6,6 @@ namespace NOrganizze.Transactions
     {
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public int? AccountId { get; set; }
+        public long? AccountId { get; set; }
     }
 }
