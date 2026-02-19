@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NOrganizze\NOrganizze.csproj" />
+    <ProjectReference Include="..\..\src\NOrganizze\NOrganizze.csproj" />
   </ItemGroup>
 
 </Project>
