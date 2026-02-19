@@ -1,4 +1,4 @@
-# 💵 NOrganizze
+# NOrganizze
 
 [![NuGet](https://img.shields.io/nuget/v/NOrganizze)](https://www.nuget.org/packages/NOrganizze)
 [![NuGet](https://img.shields.io/nuget/dt/NOrganizze?color=blue)](https://www.nuget.org/packages/NOrganizze)
