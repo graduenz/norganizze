@@ -1,27 +1,35 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFrameworks>net8.0;net9.0;net10.0;netstandard2.0;net472</TargetFrameworks>
-		<LangVersion>8</LangVersion>
-		<PackageId>NOrganizze</PackageId>
-		<Version>0.1.0</Version>
-		<Authors>Guilherme Raduenz</Authors>
-		<Description>Strongly-typed .NET client for the Organizze API</Description>
-		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-		<PackageProjectUrl>https://github.com/graduenz/norganizze</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/graduenz/norganizze</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageTags>organizze;api;client;financial;finance</PackageTags>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-	</PropertyGroup>
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net9.0;net10.0;netstandard2.0;net472</TargetFrameworks>
+    <LangVersion>8</LangVersion>
+    <PackageId>NOrganizze</PackageId>
+    <Version>0.1.2</Version>
+    <Authors>Guilherme Raduenz</Authors>
+    <Description>Strongly-typed .NET client for the Organizze API</Description>
+    <PackageProjectUrl>https://github.com/graduenz/norganizze</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/graduenz/norganizze</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>organizze;api;client;financial;finance</PackageTags>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'net472'">
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-	</ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'net472'">
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+  </ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-		<Reference Include="System.Net.Http" />
-	</ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath=""/>
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+    <None Include="..\..\logo\logo-bg-transparent.png" Pack="true" Visible="false" PackagePath="" />
+  </ItemGroup>
 
 </Project>
