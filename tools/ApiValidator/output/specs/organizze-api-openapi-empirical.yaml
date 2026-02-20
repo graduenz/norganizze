@@ -6,7 +6,7 @@ info:
     Empirically generated OpenAPI specification from actual API responses
 
 
-    Generated on: 2026-02-20 01:35:56 (UTC)
+    Generated on: 2026-02-20 01:41:00 (UTC)
 servers:
 - url: https://api.organizze.com.br/rest/v2
   description: Production server

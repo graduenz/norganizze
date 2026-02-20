@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.RegularExpressions;
 using ApiValidator.Models;
 using Newtonsoft.Json.Linq;
 using YamlDotNet.Serialization;
@@ -167,9 +168,9 @@ public class OpenApiGenerator
     {
         var parameters = new List<object>();
         var templatePath = NormalizePathToTemplate(path);
-        var matches = System.Text.RegularExpressions.Regex.Matches(templatePath, @"\{([^}]+)\}");
+        var matches = Regex.Matches(templatePath, @"\{([^}]+)\}", RegexOptions.None, TimeSpan.FromSeconds(1));
 
-        foreach (System.Text.RegularExpressions.Match match in matches)
+        foreach (Match match in matches)
         {
             var paramName = match.Groups[1].Value;
             var paramType = paramName == "year" || paramName == "month" ? "integer" : "integer";

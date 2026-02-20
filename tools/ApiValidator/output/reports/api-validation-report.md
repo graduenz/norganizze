@@ -1,6 +1,6 @@
 # NOrganizze API Validation Report
 
-**Generated:** 2026-02-20 01:35:56 (UTC)
+**Generated:** 2026-02-20 01:41:00 (UTC)
 **Email:** graduenz@gmail.com
 **User Agent:** NOrganizze API Validator (graduenz@gmail.com)
 
@@ -19,79 +19,79 @@
 
 | Status | Method | Path | Attempts | Time (ms) | Validation |
 |--------|--------|------|----------|-----------|------------|
-| ✅ | GET | `/accounts` | 1 | 253 | ✅ |
-| ✅ | POST | `/accounts` | 1 | 176 | ✅ |
-| ✅ | POST | `/accounts` | 1 | 169 | ✅ |
-| ✅ | GET | `/accounts/9696530` | 1 | 162 | ✅ |
-| ✅ | PUT | `/accounts/9696638` | 1 | 169 | ✅ |
-| ✅ | DELETE | `/accounts/9696638` | 1 | 170 | ✅ |
-| ✅ | DELETE | `/accounts/9696639` | 1 | 169 | ✅ |
+| ✅ | GET | `/accounts` | 1 | 264 | ✅ |
+| ✅ | POST | `/accounts` | 1 | 177 | ✅ |
+| ✅ | POST | `/accounts` | 1 | 165 | ✅ |
+| ✅ | GET | `/accounts/9696530` | 1 | 161 | ✅ |
+| ✅ | PUT | `/accounts/9696655` | 1 | 170 | ✅ |
+| ✅ | DELETE | `/accounts/9696655` | 1 | 172 | ✅ |
+| ✅ | DELETE | `/accounts/9696656` | 1 | 170 | ✅ |
 
 ### Budgets
 
 | Status | Method | Path | Attempts | Time (ms) | Validation |
 |--------|--------|------|----------|-----------|------------|
-| ✅ | GET | `/budgets` | 1 | 162 | ✅ |
-| ✅ | GET | `/budgets/2026` | 1 | 157 | ✅ |
-| ✅ | GET | `/budgets/2026/2` | 1 | 160 | ✅ |
+| ✅ | GET | `/budgets` | 1 | 160 | ✅ |
+| ✅ | GET | `/budgets/2026` | 1 | 154 | ✅ |
+| ✅ | GET | `/budgets/2026/2` | 1 | 155 | ✅ |
 
 ### Categories
 
 | Status | Method | Path | Attempts | Time (ms) | Validation |
 |--------|--------|------|----------|-----------|------------|
-| ✅ | GET | `/categories` | 1 | 217 | ✅ |
-| ✅ | POST | `/categories` | 1 | 224 | ✅ |
-| ✅ | GET | `/categories/159682739` | 1 | 158 | ✅ |
-| ✅ | PUT | `/categories/159690874` | 1 | 221 | ✅ |
-| ✅ | DELETE | `/categories/159690874` | 1 | 174 | ✅ |
+| ✅ | GET | `/categories` | 1 | 219 | ✅ |
+| ✅ | POST | `/categories` | 1 | 216 | ✅ |
+| ✅ | GET | `/categories/159682739` | 1 | 155 | ✅ |
+| ✅ | PUT | `/categories/159691123` | 1 | 212 | ✅ |
+| ✅ | DELETE | `/categories/159691123` | 1 | 171 | ✅ |
 
 ### CreditCards
 
 | Status | Method | Path | Attempts | Time (ms) | Validation |
 |--------|--------|------|----------|-----------|------------|
 | ✅ | GET | `/credit_cards` | 1 | 163 | ✅ |
-| ✅ | POST | `/credit_cards` | 1 | 247 | ✅ |
-| ✅ | GET | `/credit_cards/2336160` | 1 | 158 | ✅ |
-| ✅ | PUT | `/credit_cards/2336191` | 1 | 172 | ✅ |
-| ✅ | DELETE | `/credit_cards/2336191` | 1 | 217 | ✅ |
+| ✅ | POST | `/credit_cards` | 1 | 246 | ✅ |
+| ✅ | GET | `/credit_cards/2336160` | 1 | 156 | ✅ |
+| ✅ | PUT | `/credit_cards/2336197` | 1 | 165 | ✅ |
+| ✅ | DELETE | `/credit_cards/2336197` | 1 | 221 | ✅ |
 
 ### Invoices
 
 | Status | Method | Path | Attempts | Time (ms) | Validation |
 |--------|--------|------|----------|-----------|------------|
-| ✅ | GET | `/credit_cards/2336191/invoices` | 1 | 164 | ✅ |
-| ✅ | GET | `/credit_cards/2336191/invoices/312` | 1 | 159 | ✅ |
-| ❌ | GET | `/credit_cards/2336191/invoices/312/payments` | 3 | 2255 | ❌ |
+| ✅ | GET | `/credit_cards/2336197/invoices` | 1 | 160 | ✅ |
+| ✅ | GET | `/credit_cards/2336197/invoices/312` | 1 | 158 | ✅ |
+| ❌ | GET | `/credit_cards/2336197/invoices/312/payments` | 3 | 2253 | ❌ |
 
 ### Transactions
 
 | Status | Method | Path | Attempts | Time (ms) | Validation |
 |--------|--------|------|----------|-----------|------------|
-| ✅ | GET | `/transactions` | 1 | 190 | ✅ |
-| ✅ | POST | `/transactions` | 1 | 193 | ✅ |
-| ✅ | POST | `/transactions (installments)` | 1 | 208 | ✅ |
-| ✅ | POST | `/transactions (recurring)` | 1 | 311 | ✅ |
-| ✅ | GET | `/transactions/3148634922` | 1 | 160 | ✅ |
-| ✅ | PUT | `/transactions/3148634922` | 1 | 189 | ✅ |
-| ✅ | DELETE | `/transactions/3148634922` | 1 | 179 | ✅ |
-| ✅ | DELETE | `/transactions/3148634924` | 1 | 219 | ✅ |
-| ✅ | DELETE | `/transactions/3148635052` | 1 | 177 | ✅ |
+| ✅ | GET | `/transactions` | 1 | 187 | ✅ |
+| ✅ | POST | `/transactions` | 1 | 187 | ✅ |
+| ✅ | POST | `/transactions (installments)` | 1 | 216 | ✅ |
+| ✅ | POST | `/transactions (recurring)` | 1 | 324 | ✅ |
+| ✅ | GET | `/transactions/3148636171` | 1 | 160 | ✅ |
+| ✅ | PUT | `/transactions/3148636171` | 1 | 188 | ✅ |
+| ✅ | DELETE | `/transactions/3148636171` | 1 | 177 | ✅ |
+| ✅ | DELETE | `/transactions/3148636172` | 1 | 212 | ✅ |
+| ✅ | DELETE | `/transactions/3148636300` | 1 | 179 | ✅ |
 
 ### Transfers
 
 | Status | Method | Path | Attempts | Time (ms) | Validation |
 |--------|--------|------|----------|-----------|------------|
 | ✅ | GET | `/transfers` | 1 | 174 | ✅ |
-| ✅ | POST | `/transfers` | 1 | 217 | ✅ |
-| ✅ | GET | `/transfers/3148635056` | 1 | 163 | ✅ |
-| ✅ | PUT | `/transfers/3148635056` | 1 | 212 | ✅ |
-| ✅ | DELETE | `/transfers/3148635056` | 1 | 192 | ✅ |
+| ✅ | POST | `/transfers` | 1 | 222 | ✅ |
+| ✅ | GET | `/transfers/3148636304` | 1 | 162 | ✅ |
+| ✅ | PUT | `/transfers/3148636304` | 1 | 208 | ✅ |
+| ✅ | DELETE | `/transfers/3148636304` | 1 | 186 | ✅ |
 
 ### Users
 
 | Status | Method | Path | Attempts | Time (ms) | Validation |
 |--------|--------|------|----------|-----------|------------|
-| ❌ | GET | `/users/{id}` | 3 | 2616 | ❌ |
+| ❌ | GET | `/users/{id}` | 3 | 2583 | ❌ |
 
 ## Failed Endpoints
 
@@ -104,7 +104,7 @@ These endpoints failed to execute successfully:
 **Validation Errors:**
 - Cannot determine user ID - skipping user endpoint
 
-### GET /credit_cards/2336191/invoices/312/payments
+### GET /credit_cards/2336197/invoices/312/payments
 
 **Error:** The JSON value could not be converted to NOrganizze.Transactions.Transaction. Path: $ | LineNumber: 0 | BytePositionInLine: 1.
 
@@ -121,9 +121,9 @@ Comparison between documented OpenAPI spec and empirical observations:
 
 ## Performance Statistics
 
-- **Average Response Time:** 189ms
-- **Min Response Time:** 157ms
-- **Max Response Time:** 311ms
+- **Average Response Time:** 188ms
+- **Min Response Time:** 154ms
+- **Max Response Time:** 324ms
 
 - **Endpoints Requiring Retry:** 0
 
