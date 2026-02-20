@@ -1,0 +1,862 @@
+{
+  "metadata": {
+    "timestamp": "2026-02-20T01:35:56.9609467Z",
+    "email": "graduenz@gmail.com",
+    "userAgent": "NOrganizze API Validator (graduenz@gmail.com)",
+    "totalEndpointsTested": 38
+  },
+  "endpoints": [
+    {
+      "service": "Users",
+      "method": "GET",
+      "path": "/users/{id}",
+      "success": false,
+      "attempts": 3,
+      "statusCode": 0,
+      "responseTimeMs": 2616,
+      "validation": {
+        "passed": false,
+        "errors": [
+          "Cannot determine user ID - skipping user endpoint"
+        ],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": null,
+      "errorMessage": "Cannot determine user ID - skipping user endpoint"
+    },
+    {
+      "service": "Accounts",
+      "method": "GET",
+      "path": "/accounts",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 253,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "[{\u0022id\u0022:9696530,\u0022name\u0022:\u0022API Validator Test Account (Updated)\u0022,\u0022description\u0022:\u0022Updated by validator\u0022,\u0022archived\u0022:false,\u0022created_at\u0022:\u00222026-02-19T22:10:20-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:10:22-03:00\u0022,\u0022default\u0022:false,\u0022type\u0022:\u0022checking\u0022},{\u0022id\u0022:9696531,\u0022name\u0022:\u0022API Validator Test Account 2\u0022,\u0022description\u0022:\u0022Created by API validator - safe to delete\u0022,\u0022archived\u0022:false,\u0022created_at\u0022:\u00222026-02-19T22:10:20-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:10:20-03:00\u0022,\u0022default\u0022:false,\u0022type\u0022:\u0022savings\u0022}]",
+      "errorMessage": null
+    },
+    {
+      "service": "Accounts",
+      "method": "GET",
+      "path": "/accounts/9696530",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 162,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022id\u0022:9696530,\u0022name\u0022:\u0022API Validator Test Account (Updated)\u0022,\u0022description\u0022:\u0022Updated by validator\u0022,\u0022archived\u0022:false,\u0022created_at\u0022:\u00222026-02-19T22:10:20-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:10:22-03:00\u0022,\u0022default\u0022:false,\u0022type\u0022:\u0022checking\u0022}",
+      "errorMessage": null
+    },
+    {
+      "service": "Categories",
+      "method": "GET",
+      "path": "/categories",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 217,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "[{\u0022id\u0022:159682739,\u0022name\u0022:\u0022Bares e restaurantes\u0022,\u0022color\u0022:\u00224B20C0\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159682740,\u0022name\u0022:\u0022Roupas\u0022,\u0022color\u0022:\u0022BA3709\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159682741,\u0022name\u0022:\u0022D\\u00EDvidas e empr\\u00E9stimos\u0022,\u0022color\u0022:\u0022FF9696\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159682742,\u0022name\u0022:\u0022Investimentos\u0022,\u0022color\u0022:\u002218624D\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159682743,\u0022name\u0022:\u0022Educa\\u00E7\\u00E3o\u0022,\u0022color\u0022:\u00224255BD\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159682744,\u0022name\u0022:\u0022Lazer e hobbies\u0022,\u0022color\u0022:\u002242924F\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159682745,\u0022name\u0022:\u0022Fam\\u00EDlia e filhos\u0022,\u0022color\u0022:\u002264D877\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159682746,\u0022name\u0022:\u0022Alimenta\\u00E7\\u00E3o\u0022,\u0022color\u0022:\u0022EC61A2\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159682747,\u0022name\u0022:\u0022Presentes e doa\\u00E7\\u00F5es\u0022,\u0022color\u0022:\u00224255BD\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159682748,\u0022name\u0022:\u0022Mercado\u0022,\u0022color\u0022:\u0022F9845D\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159682749,\u0022name\u0022:\u0022Sa\\u00FAde\u0022,\u0022color\u0022:\u00225096DC\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159682750,\u0022name\u0022:\u0022Casa\u0022,\u0022color\u0022:\u00225096DC\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159682751,\u0022name\u0022:\u0022Investimentos\u0022,\u0022color\u0022:\u0022EF84B2\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159682752,\u0022name\u0022:\u0022Pagamento de fatura\u0022,\u0022color\u0022:\u0022D72638\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159682753,\u0022name\u0022:\u0022Empr\\u00E9stimos\u0022,\u0022color\u0022:\u002237CCA2\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159682754,\u0022name\u0022:\u0022Outros\u0022,\u0022color\u0022:\u0022AFAFAF\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159682755,\u0022name\u0022:\u0022Outras receitas\u0022,\u0022color\u0022:\u00228CDEC0\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159682756,\u0022name\u0022:\u0022Cuidados pessoais\u0022,\u0022color\u0022:\u0022FF6669\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159682757,\u0022name\u0022:\u0022Pets\u0022,\u0022color\u0022:\u0022FBA52C\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159682758,\u0022name\u0022:\u0022Sal\\u00E1rio\u0022,\u0022color\u0022:\u002237CCA2\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159682759,\u0022name\u0022:\u0022Compras\u0022,\u0022color\u0022:\u0022C13E7C\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159682760,\u0022name\u0022:\u0022Assinaturas e servi\\u00E7os\u0022,\u0022color\u0022:\u00227253C8\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159682761,\u0022name\u0022:\u0022Impostos e Taxas\u0022,\u0022color\u0022:\u0022F9AE9E\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159682762,\u0022name\u0022:\u0022Transfer\\u00EAncias\u0022,\u0022color\u0022:\u0022129E3F\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159682763,\u0022name\u0022:\u0022Transporte\u0022,\u0022color\u0022:\u002279A9E1\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159682764,\u0022name\u0022:\u0022Viagem\u0022,\u0022color\u0022:\u0022FF6669\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159682765,\u0022name\u0022:\u0022Trabalho\u0022,\u0022color\u0022:\u00224255BD\u0022,\u0022parent_id\u0022:null},{\u0022id\u0022:159689448,\u0022name\u0022:\u0022API Validator Test Category (Updated)\u0022,\u0022color\u0022:\u00225f74b0\u0022,\u0022parent_id\u0022:null}]",
+      "errorMessage": null
+    },
+    {
+      "service": "Categories",
+      "method": "GET",
+      "path": "/categories/159682739",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 158,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022id\u0022:159682739,\u0022name\u0022:\u0022Bares e restaurantes\u0022,\u0022color\u0022:\u00224B20C0\u0022,\u0022parent_id\u0022:null}",
+      "errorMessage": null
+    },
+    {
+      "service": "CreditCards",
+      "method": "GET",
+      "path": "/credit_cards",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 163,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "[{\u0022id\u0022:2336160,\u0022name\u0022:\u0022API Validator Test Card (Updated)\u0022,\u0022description\u0022:null,\u0022card_network\u0022:\u0022visa\u0022,\u0022closing_day\u0022:5,\u0022due_day\u0022:10,\u0022limit_cents\u0022:100000,\u0022type\u0022:\u0022credit_card\u0022,\u0022archived\u0022:false,\u0022default\u0022:false,\u0022created_at\u0022:\u00222026-02-19T22:10:20-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:10:23-03:00\u0022}]",
+      "errorMessage": null
+    },
+    {
+      "service": "CreditCards",
+      "method": "GET",
+      "path": "/credit_cards/2336160",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 158,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022id\u0022:2336160,\u0022name\u0022:\u0022API Validator Test Card (Updated)\u0022,\u0022description\u0022:null,\u0022card_network\u0022:\u0022visa\u0022,\u0022closing_day\u0022:5,\u0022due_day\u0022:10,\u0022limit_cents\u0022:100000,\u0022type\u0022:\u0022credit_card\u0022,\u0022archived\u0022:false,\u0022default\u0022:false,\u0022created_at\u0022:\u00222026-02-19T22:10:20-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:10:23-03:00\u0022}",
+      "errorMessage": null
+    },
+    {
+      "service": "Budgets",
+      "method": "GET",
+      "path": "/budgets",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 162,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "[{\u0022amount_in_cents\u0022:100000,\u0022category_id\u0022:159682739,\u0022date\u0022:\u00222026-02-01T00:00:00\u0022,\u0022activity_type\u0022:0,\u0022total\u0022:0,\u0022predicted_total\u0022:0,\u0022percentage\u0022:\u00220.0\u0022}]",
+      "errorMessage": null
+    },
+    {
+      "service": "Budgets",
+      "method": "GET",
+      "path": "/budgets/2026",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 157,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "[{\u0022amount_in_cents\u0022:100000,\u0022category_id\u0022:159682739,\u0022date\u0022:\u00222026-02-01T00:00:00\u0022,\u0022activity_type\u0022:0,\u0022total\u0022:0,\u0022predicted_total\u0022:0,\u0022percentage\u0022:\u00220.0\u0022}]",
+      "errorMessage": null
+    },
+    {
+      "service": "Budgets",
+      "method": "GET",
+      "path": "/budgets/2026/2",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 160,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "[{\u0022amount_in_cents\u0022:100000,\u0022category_id\u0022:159682739,\u0022date\u0022:\u00222026-02-01T00:00:00\u0022,\u0022activity_type\u0022:0,\u0022total\u0022:0,\u0022predicted_total\u0022:0,\u0022percentage\u0022:\u00220.0\u0022}]",
+      "errorMessage": null
+    },
+    {
+      "service": "Accounts",
+      "method": "POST",
+      "path": "/accounts",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 176,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022id\u0022:9696638,\u0022name\u0022:\u0022API Validator Test Account\u0022,\u0022description\u0022:\u0022Created by API validator - safe to delete\u0022,\u0022archived\u0022:false,\u0022created_at\u0022:\u00222026-02-19T22:35:40-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:35:40-03:00\u0022,\u0022default\u0022:false,\u0022type\u0022:\u0022checking\u0022}",
+      "errorMessage": null
+    },
+    {
+      "service": "Accounts",
+      "method": "POST",
+      "path": "/accounts",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 169,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022id\u0022:9696639,\u0022name\u0022:\u0022API Validator Test Account 2\u0022,\u0022description\u0022:\u0022Created by API validator - safe to delete\u0022,\u0022archived\u0022:false,\u0022created_at\u0022:\u00222026-02-19T22:35:40-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:35:40-03:00\u0022,\u0022default\u0022:false,\u0022type\u0022:\u0022savings\u0022}",
+      "errorMessage": null
+    },
+    {
+      "service": "Categories",
+      "method": "POST",
+      "path": "/categories",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 224,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022id\u0022:159690874,\u0022name\u0022:\u0022API Validator Test Category\u0022,\u0022color\u0022:\u0022a7cb34\u0022,\u0022parent_id\u0022:null}",
+      "errorMessage": null
+    },
+    {
+      "service": "CreditCards",
+      "method": "POST",
+      "path": "/credit_cards",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 247,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022id\u0022:2336191,\u0022name\u0022:\u0022API Validator Test Card\u0022,\u0022description\u0022:null,\u0022card_network\u0022:\u0022visa\u0022,\u0022closing_day\u0022:5,\u0022due_day\u0022:10,\u0022limit_cents\u0022:100000,\u0022type\u0022:\u0022credit_card\u0022,\u0022archived\u0022:false,\u0022default\u0022:false,\u0022created_at\u0022:\u00222026-02-19T22:35:40-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:35:40-03:00\u0022}",
+      "errorMessage": null
+    },
+    {
+      "service": "Transactions",
+      "method": "GET",
+      "path": "/transactions",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 190,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "[{\u0022id\u0022:3148628696,\u0022description\u0022:\u0022API Validator Test Transaction (Updated)\u0022,\u0022date\u0022:\u00222026-02-19T00:00:00\u0022,\u0022paid\u0022:true,\u0022amount_cents\u0022:-5000,\u0022total_installments\u0022:1,\u0022installment\u0022:1,\u0022recurring\u0022:false,\u0022account_id\u0022:9696530,\u0022account_type\u0022:null,\u0022category_id\u0022:159689448,\u0022contact_id\u0022:null,\u0022notes\u0022:\u0022Updated notes\u0022,\u0022attachments_count\u0022:0,\u0022credit_card_id\u0022:null,\u0022credit_card_invoice_id\u0022:null,\u0022paid_credit_card_id\u0022:null,\u0022paid_credit_card_invoice_id\u0022:null,\u0022oposite_transaction_id\u0022:null,\u0022oposite_account_id\u0022:null,\u0022created_at\u0022:\u00222026-02-19T22:10:21-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:10:23-03:00\u0022,\u0022tags\u0022:[]},{\u0022id\u0022:3148628697,\u0022description\u0022:\u0022API Validator Recurring\u0022,\u0022date\u0022:\u00222026-02-19T00:00:00\u0022,\u0022paid\u0022:true,\u0022amount_cents\u0022:-1000,\u0022total_installments\u0022:1,\u0022installment\u0022:1,\u0022recurring\u0022:true,\u0022account_id\u0022:9696530,\u0022account_type\u0022:null,\u0022category_id\u0022:159689448,\u0022contact_id\u0022:null,\u0022notes\u0022:null,\u0022attachments_count\u0022:0,\u0022credit_card_id\u0022:null,\u0022credit_card_invoice_id\u0022:null,\u0022paid_credit_card_id\u0022:null,\u0022paid_credit_card_invoice_id\u0022:null,\u0022oposite_transaction_id\u0022:null,\u0022oposite_account_id\u0022:null,\u0022created_at\u0022:\u00222026-02-19T22:10:21-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:10:21-03:00\u0022,\u0022tags\u0022:[]},{\u0022id\u0022:3148628826,\u0022description\u0022:\u0022API Validator Installments\u0022,\u0022date\u0022:\u00222026-02-19T00:00:00\u0022,\u0022paid\u0022:true,\u0022amount_cents\u0022:-2000,\u0022total_installments\u0022:3,\u0022installment\u0022:1,\u0022recurring\u0022:false,\u0022account_id\u0022:9696530,\u0022account_type\u0022:null,\u0022category_id\u0022:159689448,\u0022contact_id\u0022:null,\u0022notes\u0022:null,\u0022attachments_count\u0022:0,\u0022credit_card_id\u0022:null,\u0022credit_card_invoice_id\u0022:null,\u0022paid_credit_card_id\u0022:null,\u0022paid_credit_card_invoice_id\u0022:null,\u0022oposite_transaction_id\u0022:null,\u0022oposite_account_id\u0022:null,\u0022created_at\u0022:\u00222026-02-19T22:10:21-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:10:21-03:00\u0022,\u0022tags\u0022:[]},{\u0022id\u0022:3148628830,\u0022description\u0022:\u0022API Validator Test Transfer (Updated)\u0022,\u0022date\u0022:\u00222026-02-19T00:00:00\u0022,\u0022paid\u0022:true,\u0022amount_cents\u0022:-1000,\u0022total_installments\u0022:1,\u0022installment\u0022:1,\u0022recurring\u0022:false,\u0022account_id\u0022:9696530,\u0022account_type\u0022:null,\u0022category_id\u0022:159682762,\u0022contact_id\u0022:null,\u0022notes\u0022:\u0022Updated transfer notes\u0022,\u0022attachments_count\u0022:0,\u0022credit_card_id\u0022:null,\u0022credit_card_invoice_id\u0022:null,\u0022paid_credit_card_id\u0022:null,\u0022paid_credit_card_invoice_id\u0022:null,\u0022oposite_transaction_id\u0022:3148628831,\u0022oposite_account_id\u0022:9696531,\u0022created_at\u0022:\u00222026-02-19T22:10:22-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:10:23-03:00\u0022,\u0022tags\u0022:[]},{\u0022id\u0022:3148628831,\u0022description\u0022:\u0022API Validator Test Transfer (Updated)\u0022,\u0022date\u0022:\u00222026-02-19T00:00:00\u0022,\u0022paid\u0022:true,\u0022amount_cents\u0022:1000,\u0022total_installments\u0022:1,\u0022installment\u0022:1,\u0022recurring\u0022:false,\u0022account_id\u0022:9696531,\u0022account_type\u0022:null,\u0022category_id\u0022:159682762,\u0022contact_id\u0022:null,\u0022notes\u0022:\u0022Updated transfer notes\u0022,\u0022attachments_count\u0022:0,\u0022credit_card_id\u0022:null,\u0022credit_card_invoice_id\u0022:null,\u0022paid_credit_card_id\u0022:null,\u0022paid_credit_card_invoice_id\u0022:null,\u0022oposite_transaction_id\u0022:3148628830,\u0022oposite_account_id\u0022:9696530,\u0022created_at\u0022:\u00222026-02-19T22:10:22-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:10:23-03:00\u0022,\u0022tags\u0022:[]}]",
+      "errorMessage": null
+    },
+    {
+      "service": "Transactions",
+      "method": "POST",
+      "path": "/transactions",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 193,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022id\u0022:3148634922,\u0022description\u0022:\u0022API Validator Test Transaction\u0022,\u0022date\u0022:\u00222026-02-19T00:00:00\u0022,\u0022paid\u0022:true,\u0022amount_cents\u0022:-5000,\u0022total_installments\u0022:1,\u0022installment\u0022:1,\u0022recurring\u0022:false,\u0022account_id\u0022:9696638,\u0022account_type\u0022:null,\u0022category_id\u0022:159690874,\u0022contact_id\u0022:null,\u0022notes\u0022:\u0022Test transaction\u0022,\u0022attachments_count\u0022:0,\u0022credit_card_id\u0022:null,\u0022credit_card_invoice_id\u0022:null,\u0022paid_credit_card_id\u0022:null,\u0022paid_credit_card_invoice_id\u0022:null,\u0022oposite_transaction_id\u0022:null,\u0022oposite_account_id\u0022:null,\u0022created_at\u0022:\u00222026-02-19T22:35:41-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:35:41-03:00\u0022,\u0022tags\u0022:[]}",
+      "errorMessage": null
+    },
+    {
+      "service": "Transactions",
+      "method": "GET",
+      "path": "/transactions/3148634922",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 160,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022id\u0022:3148634922,\u0022description\u0022:\u0022API Validator Test Transaction\u0022,\u0022date\u0022:\u00222026-02-19T00:00:00\u0022,\u0022paid\u0022:true,\u0022amount_cents\u0022:-5000,\u0022total_installments\u0022:1,\u0022installment\u0022:1,\u0022recurring\u0022:false,\u0022account_id\u0022:9696638,\u0022account_type\u0022:null,\u0022category_id\u0022:159690874,\u0022contact_id\u0022:null,\u0022notes\u0022:\u0022Test transaction\u0022,\u0022attachments_count\u0022:0,\u0022credit_card_id\u0022:null,\u0022credit_card_invoice_id\u0022:null,\u0022paid_credit_card_id\u0022:null,\u0022paid_credit_card_invoice_id\u0022:null,\u0022oposite_transaction_id\u0022:null,\u0022oposite_account_id\u0022:null,\u0022created_at\u0022:\u00222026-02-19T22:35:41-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:35:41-03:00\u0022,\u0022tags\u0022:[]}",
+      "errorMessage": null
+    },
+    {
+      "service": "Transactions",
+      "method": "POST",
+      "path": "/transactions (recurring)",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 311,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022id\u0022:3148634924,\u0022description\u0022:\u0022API Validator Recurring\u0022,\u0022date\u0022:\u00222026-02-19T00:00:00\u0022,\u0022paid\u0022:true,\u0022amount_cents\u0022:-1000,\u0022total_installments\u0022:1,\u0022installment\u0022:1,\u0022recurring\u0022:true,\u0022account_id\u0022:9696638,\u0022account_type\u0022:null,\u0022category_id\u0022:159690874,\u0022contact_id\u0022:null,\u0022notes\u0022:null,\u0022attachments_count\u0022:0,\u0022credit_card_id\u0022:null,\u0022credit_card_invoice_id\u0022:null,\u0022paid_credit_card_id\u0022:null,\u0022paid_credit_card_invoice_id\u0022:null,\u0022oposite_transaction_id\u0022:null,\u0022oposite_account_id\u0022:null,\u0022created_at\u0022:\u00222026-02-19T22:35:41-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:35:41-03:00\u0022,\u0022tags\u0022:[]}",
+      "errorMessage": null
+    },
+    {
+      "service": "Transactions",
+      "method": "POST",
+      "path": "/transactions (installments)",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 208,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022id\u0022:3148635052,\u0022description\u0022:\u0022API Validator Installments\u0022,\u0022date\u0022:\u00222026-02-19T00:00:00\u0022,\u0022paid\u0022:true,\u0022amount_cents\u0022:-2000,\u0022total_installments\u0022:3,\u0022installment\u0022:1,\u0022recurring\u0022:false,\u0022account_id\u0022:9696638,\u0022account_type\u0022:null,\u0022category_id\u0022:159690874,\u0022contact_id\u0022:null,\u0022notes\u0022:null,\u0022attachments_count\u0022:0,\u0022credit_card_id\u0022:null,\u0022credit_card_invoice_id\u0022:null,\u0022paid_credit_card_id\u0022:null,\u0022paid_credit_card_invoice_id\u0022:null,\u0022oposite_transaction_id\u0022:null,\u0022oposite_account_id\u0022:null,\u0022created_at\u0022:\u00222026-02-19T22:35:41-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:35:41-03:00\u0022,\u0022tags\u0022:[]}",
+      "errorMessage": null
+    },
+    {
+      "service": "Transfers",
+      "method": "GET",
+      "path": "/transfers",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 174,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "[{\u0022recurrence_id\u0022:null,\u0022attachments\u0022:[],\u0022id\u0022:3148628830,\u0022description\u0022:\u0022API Validator Test Transfer (Updated)\u0022,\u0022date\u0022:\u00222026-02-19T00:00:00\u0022,\u0022paid\u0022:true,\u0022amount_cents\u0022:-1000,\u0022total_installments\u0022:1,\u0022installment\u0022:1,\u0022recurring\u0022:false,\u0022account_id\u0022:9696530,\u0022account_type\u0022:null,\u0022category_id\u0022:159682762,\u0022contact_id\u0022:null,\u0022notes\u0022:\u0022Updated transfer notes\u0022,\u0022attachments_count\u0022:0,\u0022credit_card_id\u0022:null,\u0022credit_card_invoice_id\u0022:null,\u0022paid_credit_card_id\u0022:null,\u0022paid_credit_card_invoice_id\u0022:null,\u0022oposite_transaction_id\u0022:3148628831,\u0022oposite_account_id\u0022:9696531,\u0022created_at\u0022:\u00222026-02-19T22:10:22-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:10:23-03:00\u0022,\u0022tags\u0022:[]},{\u0022recurrence_id\u0022:null,\u0022attachments\u0022:[],\u0022id\u0022:3148628831,\u0022description\u0022:\u0022API Validator Test Transfer (Updated)\u0022,\u0022date\u0022:\u00222026-02-19T00:00:00\u0022,\u0022paid\u0022:true,\u0022amount_cents\u0022:1000,\u0022total_installments\u0022:1,\u0022installment\u0022:1,\u0022recurring\u0022:false,\u0022account_id\u0022:9696531,\u0022account_type\u0022:null,\u0022category_id\u0022:159682762,\u0022contact_id\u0022:null,\u0022notes\u0022:\u0022Updated transfer notes\u0022,\u0022attachments_count\u0022:0,\u0022credit_card_id\u0022:null,\u0022credit_card_invoice_id\u0022:null,\u0022paid_credit_card_id\u0022:null,\u0022paid_credit_card_invoice_id\u0022:null,\u0022oposite_transaction_id\u0022:3148628830,\u0022oposite_account_id\u0022:9696530,\u0022created_at\u0022:\u00222026-02-19T22:10:22-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:10:23-03:00\u0022,\u0022tags\u0022:[]}]",
+      "errorMessage": null
+    },
+    {
+      "service": "Transfers",
+      "method": "POST",
+      "path": "/transfers",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 217,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022recurrence_id\u0022:null,\u0022attachments\u0022:[],\u0022id\u0022:3148635056,\u0022description\u0022:\u0022Transfer\\u00EAncia\u0022,\u0022date\u0022:\u00222026-02-19T00:00:00\u0022,\u0022paid\u0022:true,\u0022amount_cents\u0022:-1000,\u0022total_installments\u0022:1,\u0022installment\u0022:1,\u0022recurring\u0022:false,\u0022account_id\u0022:9696638,\u0022account_type\u0022:null,\u0022category_id\u0022:159682762,\u0022contact_id\u0022:null,\u0022notes\u0022:null,\u0022attachments_count\u0022:0,\u0022credit_card_id\u0022:null,\u0022credit_card_invoice_id\u0022:null,\u0022paid_credit_card_id\u0022:null,\u0022paid_credit_card_invoice_id\u0022:null,\u0022oposite_transaction_id\u0022:3148635057,\u0022oposite_account_id\u0022:9696639,\u0022created_at\u0022:\u00222026-02-19T22:35:42-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:35:42-03:00\u0022,\u0022tags\u0022:[]}",
+      "errorMessage": null
+    },
+    {
+      "service": "Transfers",
+      "method": "GET",
+      "path": "/transfers/3148635056",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 163,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022recurrence_id\u0022:null,\u0022attachments\u0022:[],\u0022id\u0022:3148635056,\u0022description\u0022:\u0022Transfer\\u00EAncia\u0022,\u0022date\u0022:\u00222026-02-19T00:00:00\u0022,\u0022paid\u0022:true,\u0022amount_cents\u0022:-1000,\u0022total_installments\u0022:1,\u0022installment\u0022:1,\u0022recurring\u0022:false,\u0022account_id\u0022:9696638,\u0022account_type\u0022:null,\u0022category_id\u0022:159682762,\u0022contact_id\u0022:null,\u0022notes\u0022:null,\u0022attachments_count\u0022:0,\u0022credit_card_id\u0022:null,\u0022credit_card_invoice_id\u0022:null,\u0022paid_credit_card_id\u0022:null,\u0022paid_credit_card_invoice_id\u0022:null,\u0022oposite_transaction_id\u0022:3148635057,\u0022oposite_account_id\u0022:9696639,\u0022created_at\u0022:\u00222026-02-19T22:35:42-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:35:42-03:00\u0022,\u0022tags\u0022:[]}",
+      "errorMessage": null
+    },
+    {
+      "service": "Accounts",
+      "method": "PUT",
+      "path": "/accounts/9696638",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 169,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022id\u0022:9696638,\u0022name\u0022:\u0022API Validator Test Account (Updated)\u0022,\u0022description\u0022:\u0022Updated by validator\u0022,\u0022archived\u0022:false,\u0022created_at\u0022:\u00222026-02-19T22:35:40-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:35:42-03:00\u0022,\u0022default\u0022:false,\u0022type\u0022:\u0022checking\u0022}",
+      "errorMessage": null
+    },
+    {
+      "service": "Categories",
+      "method": "PUT",
+      "path": "/categories/159690874",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 221,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022id\u0022:159690874,\u0022name\u0022:\u0022API Validator Test Category (Updated)\u0022,\u0022color\u0022:\u002270518c\u0022,\u0022parent_id\u0022:null}",
+      "errorMessage": null
+    },
+    {
+      "service": "CreditCards",
+      "method": "PUT",
+      "path": "/credit_cards/2336191",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 172,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022id\u0022:2336191,\u0022name\u0022:\u0022API Validator Test Card (Updated)\u0022,\u0022description\u0022:null,\u0022card_network\u0022:\u0022visa\u0022,\u0022closing_day\u0022:5,\u0022due_day\u0022:10,\u0022limit_cents\u0022:100000,\u0022type\u0022:\u0022credit_card\u0022,\u0022archived\u0022:false,\u0022default\u0022:false,\u0022created_at\u0022:\u00222026-02-19T22:35:40-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:35:42-03:00\u0022}",
+      "errorMessage": null
+    },
+    {
+      "service": "Transactions",
+      "method": "PUT",
+      "path": "/transactions/3148634922",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 189,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022id\u0022:3148634922,\u0022description\u0022:\u0022API Validator Test Transaction (Updated)\u0022,\u0022date\u0022:\u00222026-02-19T00:00:00\u0022,\u0022paid\u0022:true,\u0022amount_cents\u0022:-5000,\u0022total_installments\u0022:1,\u0022installment\u0022:1,\u0022recurring\u0022:false,\u0022account_id\u0022:9696638,\u0022account_type\u0022:null,\u0022category_id\u0022:159690874,\u0022contact_id\u0022:null,\u0022notes\u0022:\u0022Updated notes\u0022,\u0022attachments_count\u0022:0,\u0022credit_card_id\u0022:null,\u0022credit_card_invoice_id\u0022:null,\u0022paid_credit_card_id\u0022:null,\u0022paid_credit_card_invoice_id\u0022:null,\u0022oposite_transaction_id\u0022:null,\u0022oposite_account_id\u0022:null,\u0022created_at\u0022:\u00222026-02-19T22:35:41-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:35:43-03:00\u0022,\u0022tags\u0022:[]}",
+      "errorMessage": null
+    },
+    {
+      "service": "Transfers",
+      "method": "PUT",
+      "path": "/transfers/3148635056",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 212,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022recurrence_id\u0022:null,\u0022attachments\u0022:[],\u0022id\u0022:3148635056,\u0022description\u0022:\u0022API Validator Test Transfer (Updated)\u0022,\u0022date\u0022:\u00222026-02-19T00:00:00\u0022,\u0022paid\u0022:true,\u0022amount_cents\u0022:-1000,\u0022total_installments\u0022:1,\u0022installment\u0022:1,\u0022recurring\u0022:false,\u0022account_id\u0022:9696638,\u0022account_type\u0022:null,\u0022category_id\u0022:159682762,\u0022contact_id\u0022:null,\u0022notes\u0022:\u0022Updated transfer notes\u0022,\u0022attachments_count\u0022:0,\u0022credit_card_id\u0022:null,\u0022credit_card_invoice_id\u0022:null,\u0022paid_credit_card_id\u0022:null,\u0022paid_credit_card_invoice_id\u0022:null,\u0022oposite_transaction_id\u0022:3148635057,\u0022oposite_account_id\u0022:9696639,\u0022created_at\u0022:\u00222026-02-19T22:35:42-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:35:43-03:00\u0022,\u0022tags\u0022:[]}",
+      "errorMessage": null
+    },
+    {
+      "service": "Invoices",
+      "method": "GET",
+      "path": "/credit_cards/2336191/invoices",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 164,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "[{\u0022id\u0022:312,\u0022date\u0022:\u00222026-01-10T00:00:00\u0022,\u0022starting_date\u0022:\u00222025-12-06T00:00:00\u0022,\u0022closing_date\u0022:\u00222026-01-05T00:00:00\u0022,\u0022amount_cents\u0022:0,\u0022payment_amount_cents\u0022:0,\u0022balance_cents\u0022:0,\u0022previous_balance_cents\u0022:0,\u0022credit_card_id\u0022:2336191},{\u0022id\u0022:313,\u0022date\u0022:\u00222026-02-10T00:00:00\u0022,\u0022starting_date\u0022:\u00222026-01-06T00:00:00\u0022,\u0022closing_date\u0022:\u00222026-02-05T00:00:00\u0022,\u0022amount_cents\u0022:0,\u0022payment_amount_cents\u0022:0,\u0022balance_cents\u0022:0,\u0022previous_balance_cents\u0022:0,\u0022credit_card_id\u0022:2336191},{\u0022id\u0022:314,\u0022date\u0022:\u00222026-03-10T00:00:00\u0022,\u0022starting_date\u0022:\u00222026-02-06T00:00:00\u0022,\u0022closing_date\u0022:\u00222026-03-05T00:00:00\u0022,\u0022amount_cents\u0022:0,\u0022payment_amount_cents\u0022:0,\u0022balance_cents\u0022:0,\u0022previous_balance_cents\u0022:0,\u0022credit_card_id\u0022:2336191},{\u0022id\u0022:315,\u0022date\u0022:\u00222026-04-10T00:00:00\u0022,\u0022starting_date\u0022:\u00222026-03-06T00:00:00\u0022,\u0022closing_date\u0022:\u00222026-04-05T00:00:00\u0022,\u0022amount_cents\u0022:0,\u0022payment_amount_cents\u0022:0,\u0022balance_cents\u0022:0,\u0022previous_balance_cents\u0022:0,\u0022credit_card_id\u0022:2336191},{\u0022id\u0022:316,\u0022date\u0022:\u00222026-05-10T00:00:00\u0022,\u0022starting_date\u0022:\u00222026-04-06T00:00:00\u0022,\u0022closing_date\u0022:\u00222026-05-05T00:00:00\u0022,\u0022amount_cents\u0022:0,\u0022payment_amount_cents\u0022:0,\u0022balance_cents\u0022:0,\u0022previous_balance_cents\u0022:0,\u0022credit_card_id\u0022:2336191},{\u0022id\u0022:317,\u0022date\u0022:\u00222026-06-10T00:00:00\u0022,\u0022starting_date\u0022:\u00222026-05-06T00:00:00\u0022,\u0022closing_date\u0022:\u00222026-06-05T00:00:00\u0022,\u0022amount_cents\u0022:0,\u0022payment_amount_cents\u0022:0,\u0022balance_cents\u0022:0,\u0022previous_balance_cents\u0022:0,\u0022credit_card_id\u0022:2336191},{\u0022id\u0022:318,\u0022date\u0022:\u00222026-07-10T00:00:00\u0022,\u0022starting_date\u0022:\u00222026-06-06T00:00:00\u0022,\u0022closing_date\u0022:\u00222026-07-05T00:00:00\u0022,\u0022amount_cents\u0022:0,\u0022payment_amount_cents\u0022:0,\u0022balance_cents\u0022:0,\u0022previous_balance_cents\u0022:0,\u0022credit_card_id\u0022:2336191},{\u0022id\u0022:319,\u0022date\u0022:\u00222026-08-10T00:00:00\u0022,\u0022starting_date\u0022:\u00222026-07-06T00:00:00\u0022,\u0022closing_date\u0022:\u00222026-08-05T00:00:00\u0022,\u0022amount_cents\u0022:0,\u0022payment_amount_cents\u0022:0,\u0022balance_cents\u0022:0,\u0022previous_balance_cents\u0022:0,\u0022credit_card_id\u0022:2336191},{\u0022id\u0022:320,\u0022date\u0022:\u00222026-09-10T00:00:00\u0022,\u0022starting_date\u0022:\u00222026-08-06T00:00:00\u0022,\u0022closing_date\u0022:\u00222026-09-05T00:00:00\u0022,\u0022amount_cents\u0022:0,\u0022payment_amount_cents\u0022:0,\u0022balance_cents\u0022:0,\u0022previous_balance_cents\u0022:0,\u0022credit_card_id\u0022:2336191},{\u0022id\u0022:321,\u0022date\u0022:\u00222026-10-10T00:00:00\u0022,\u0022starting_date\u0022:\u00222026-09-06T00:00:00\u0022,\u0022closing_date\u0022:\u00222026-10-05T00:00:00\u0022,\u0022amount_cents\u0022:0,\u0022payment_amount_cents\u0022:0,\u0022balance_cents\u0022:0,\u0022previous_balance_cents\u0022:0,\u0022credit_card_id\u0022:2336191},{\u0022id\u0022:322,\u0022date\u0022:\u00222026-11-10T00:00:00\u0022,\u0022starting_date\u0022:\u00222026-10-06T00:00:00\u0022,\u0022closing_date\u0022:\u00222026-11-05T00:00:00\u0022,\u0022amount_cents\u0022:0,\u0022payment_amount_cents\u0022:0,\u0022balance_cents\u0022:0,\u0022previous_balance_cents\u0022:0,\u0022credit_card_id\u0022:2336191},{\u0022id\u0022:323,\u0022date\u0022:\u00222026-12-10T00:00:00\u0022,\u0022starting_date\u0022:\u00222026-11-06T00:00:00\u0022,\u0022closing_date\u0022:\u00222026-12-05T00:00:00\u0022,\u0022amount_cents\u0022:0,\u0022payment_amount_cents\u0022:0,\u0022balance_cents\u0022:0,\u0022previous_balance_cents\u0022:0,\u0022credit_card_id\u0022:2336191}]",
+      "errorMessage": null
+    },
+    {
+      "service": "Invoices",
+      "method": "GET",
+      "path": "/credit_cards/2336191/invoices/312",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 159,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022transactions\u0022:[],\u0022payments\u0022:[],\u0022id\u0022:312,\u0022date\u0022:\u00222026-01-10T00:00:00\u0022,\u0022starting_date\u0022:\u00222025-12-06T00:00:00\u0022,\u0022closing_date\u0022:\u00222026-01-05T00:00:00\u0022,\u0022amount_cents\u0022:0,\u0022payment_amount_cents\u0022:0,\u0022balance_cents\u0022:0,\u0022previous_balance_cents\u0022:0,\u0022credit_card_id\u0022:2336191}",
+      "errorMessage": null
+    },
+    {
+      "service": "Invoices",
+      "method": "GET",
+      "path": "/credit_cards/2336191/invoices/312/payments",
+      "success": false,
+      "attempts": 3,
+      "statusCode": 0,
+      "responseTimeMs": 2255,
+      "validation": {
+        "passed": false,
+        "errors": [
+          "The JSON value could not be converted to NOrganizze.Transactions.Transaction. Path: $ | LineNumber: 0 | BytePositionInLine: 1."
+        ],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": null,
+      "errorMessage": "The JSON value could not be converted to NOrganizze.Transactions.Transaction. Path: $ | LineNumber: 0 | BytePositionInLine: 1."
+    },
+    {
+      "service": "Transactions",
+      "method": "DELETE",
+      "path": "/transactions/3148634922",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 179,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022id\u0022:3148634922,\u0022description\u0022:\u0022API Validator Test Transaction (Updated)\u0022,\u0022date\u0022:\u00222026-02-19T00:00:00\u0022,\u0022paid\u0022:true,\u0022amount_cents\u0022:-5000,\u0022total_installments\u0022:1,\u0022installment\u0022:1,\u0022recurring\u0022:false,\u0022account_id\u0022:9696638,\u0022account_type\u0022:null,\u0022category_id\u0022:159690874,\u0022contact_id\u0022:null,\u0022notes\u0022:\u0022Updated notes\u0022,\u0022attachments_count\u0022:0,\u0022credit_card_id\u0022:null,\u0022credit_card_invoice_id\u0022:null,\u0022paid_credit_card_id\u0022:null,\u0022paid_credit_card_invoice_id\u0022:null,\u0022oposite_transaction_id\u0022:null,\u0022oposite_account_id\u0022:null,\u0022created_at\u0022:\u00222026-02-19T22:35:41-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:35:43-03:00\u0022,\u0022tags\u0022:[]}",
+      "errorMessage": null
+    },
+    {
+      "service": "Transactions",
+      "method": "DELETE",
+      "path": "/transactions/3148634924",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 219,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022id\u0022:3148634924,\u0022description\u0022:\u0022API Validator Recurring\u0022,\u0022date\u0022:\u00222026-02-19T00:00:00\u0022,\u0022paid\u0022:true,\u0022amount_cents\u0022:-1000,\u0022total_installments\u0022:1,\u0022installment\u0022:1,\u0022recurring\u0022:true,\u0022account_id\u0022:9696638,\u0022account_type\u0022:null,\u0022category_id\u0022:159690874,\u0022contact_id\u0022:null,\u0022notes\u0022:null,\u0022attachments_count\u0022:0,\u0022credit_card_id\u0022:null,\u0022credit_card_invoice_id\u0022:null,\u0022paid_credit_card_id\u0022:null,\u0022paid_credit_card_invoice_id\u0022:null,\u0022oposite_transaction_id\u0022:null,\u0022oposite_account_id\u0022:null,\u0022created_at\u0022:\u00222026-02-19T22:35:41-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:35:41-03:00\u0022,\u0022tags\u0022:[]}",
+      "errorMessage": null
+    },
+    {
+      "service": "Transactions",
+      "method": "DELETE",
+      "path": "/transactions/3148635052",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 177,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022id\u0022:3148635052,\u0022description\u0022:\u0022API Validator Installments\u0022,\u0022date\u0022:\u00222026-02-19T00:00:00\u0022,\u0022paid\u0022:true,\u0022amount_cents\u0022:-2000,\u0022total_installments\u0022:3,\u0022installment\u0022:1,\u0022recurring\u0022:false,\u0022account_id\u0022:9696638,\u0022account_type\u0022:null,\u0022category_id\u0022:159690874,\u0022contact_id\u0022:null,\u0022notes\u0022:null,\u0022attachments_count\u0022:0,\u0022credit_card_id\u0022:null,\u0022credit_card_invoice_id\u0022:null,\u0022paid_credit_card_id\u0022:null,\u0022paid_credit_card_invoice_id\u0022:null,\u0022oposite_transaction_id\u0022:null,\u0022oposite_account_id\u0022:null,\u0022created_at\u0022:\u00222026-02-19T22:35:41-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:35:41-03:00\u0022,\u0022tags\u0022:[]}",
+      "errorMessage": null
+    },
+    {
+      "service": "Transfers",
+      "method": "DELETE",
+      "path": "/transfers/3148635056",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 192,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022recurrence_id\u0022:null,\u0022attachments\u0022:[],\u0022id\u0022:3148635056,\u0022description\u0022:\u0022API Validator Test Transfer (Updated)\u0022,\u0022date\u0022:\u00222026-02-19T00:00:00\u0022,\u0022paid\u0022:true,\u0022amount_cents\u0022:-1000,\u0022total_installments\u0022:1,\u0022installment\u0022:1,\u0022recurring\u0022:false,\u0022account_id\u0022:9696638,\u0022account_type\u0022:null,\u0022category_id\u0022:159682762,\u0022contact_id\u0022:null,\u0022notes\u0022:\u0022Updated transfer notes\u0022,\u0022attachments_count\u0022:0,\u0022credit_card_id\u0022:null,\u0022credit_card_invoice_id\u0022:null,\u0022paid_credit_card_id\u0022:null,\u0022paid_credit_card_invoice_id\u0022:null,\u0022oposite_transaction_id\u0022:3148635057,\u0022oposite_account_id\u0022:9696639,\u0022created_at\u0022:\u00222026-02-19T22:35:42-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:35:43-03:00\u0022,\u0022tags\u0022:[]}",
+      "errorMessage": null
+    },
+    {
+      "service": "CreditCards",
+      "method": "DELETE",
+      "path": "/credit_cards/2336191",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 217,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022id\u0022:2336191,\u0022name\u0022:\u0022API Validator Test Card (Updated)\u0022,\u0022description\u0022:null,\u0022card_network\u0022:\u0022visa\u0022,\u0022closing_day\u0022:5,\u0022due_day\u0022:10,\u0022limit_cents\u0022:100000,\u0022type\u0022:\u0022credit_card\u0022,\u0022archived\u0022:false,\u0022default\u0022:false,\u0022created_at\u0022:\u00222026-02-19T22:35:40-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:35:42-03:00\u0022}",
+      "errorMessage": null
+    },
+    {
+      "service": "Categories",
+      "method": "DELETE",
+      "path": "/categories/159690874",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 174,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022id\u0022:159690874,\u0022name\u0022:\u0022API Validator Test Category (Updated)\u0022,\u0022color\u0022:\u002270518c\u0022,\u0022parent_id\u0022:null}",
+      "errorMessage": null
+    },
+    {
+      "service": "Accounts",
+      "method": "DELETE",
+      "path": "/accounts/9696638",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 170,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022id\u0022:9696638,\u0022name\u0022:\u0022API Validator Test Account (Updated)\u0022,\u0022description\u0022:\u0022Updated by validator\u0022,\u0022archived\u0022:false,\u0022created_at\u0022:\u00222026-02-19T22:35:40-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:35:42-03:00\u0022,\u0022default\u0022:false,\u0022type\u0022:\u0022checking\u0022}",
+      "errorMessage": null
+    },
+    {
+      "service": "Accounts",
+      "method": "DELETE",
+      "path": "/accounts/9696639",
+      "success": true,
+      "attempts": 1,
+      "statusCode": 200,
+      "responseTimeMs": 169,
+      "validation": {
+        "passed": true,
+        "errors": [],
+        "discrepancies": []
+      },
+      "rawRequest": null,
+      "rawResponse": "{\u0022id\u0022:9696639,\u0022name\u0022:\u0022API Validator Test Account 2\u0022,\u0022description\u0022:\u0022Created by API validator - safe to delete\u0022,\u0022archived\u0022:false,\u0022created_at\u0022:\u00222026-02-19T22:35:40-03:00\u0022,\u0022updated_at\u0022:\u00222026-02-19T22:35:40-03:00\u0022,\u0022default\u0022:false,\u0022type\u0022:\u0022savings\u0022}",
+      "errorMessage": null
+    }
+  ],
+  "summary": {
+    "total": 38,
+    "succeeded": 36,
+    "failed": 2,
+    "discrepancyCount": 0
+  },
+  "changes": [
+    {
+      "endpoint": "GET /users/{id}",
+      "changeType": "FAILED",
+      "details": [
+        "Endpoint failed: Cannot determine user ID - skipping user endpoint"
+      ]
+    },
+    {
+      "endpoint": "GET /accounts",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "GET /accounts/9696530",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "GET /categories",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "GET /categories/159682739",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "GET /credit_cards",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "GET /credit_cards/2336160",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "GET /budgets",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "GET /budgets/2026",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "GET /budgets/2026/2",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "POST /accounts",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "POST /accounts",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "POST /categories",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "POST /credit_cards",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "GET /transactions",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "POST /transactions",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "GET /transactions/3148634922",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "POST /transactions (recurring)",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "POST /transactions (installments)",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "GET /transfers",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "POST /transfers",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "GET /transfers/3148635056",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "PUT /accounts/9696638",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "PUT /categories/159690874",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "PUT /credit_cards/2336191",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "PUT /transactions/3148634922",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "PUT /transfers/3148635056",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "GET /credit_cards/2336191/invoices",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "GET /credit_cards/2336191/invoices/312",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "GET /credit_cards/2336191/invoices/312/payments",
+      "changeType": "FAILED",
+      "details": [
+        "Endpoint failed: The JSON value could not be converted to NOrganizze.Transactions.Transaction. Path: $ | LineNumber: 0 | BytePositionInLine: 1."
+      ]
+    },
+    {
+      "endpoint": "DELETE /transactions/3148634922",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "DELETE /transactions/3148634924",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "DELETE /transactions/3148635052",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "DELETE /transfers/3148635056",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "DELETE /credit_cards/2336191",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "DELETE /categories/159690874",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "DELETE /accounts/9696638",
+      "changeType": "UNCHANGED",
+      "details": []
+    },
+    {
+      "endpoint": "DELETE /accounts/9696639",
+      "changeType": "UNCHANGED",
+      "details": []
+    }
+  ]
+}
