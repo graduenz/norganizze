@@ -369,95 +369,101 @@ public class ApiTestOrchestrator
         );
 
         // Create simple transaction
-        long? simpleTransactionId = null;
-        await TestEndpoint(
-            GroupTransactions,
-            MethodPost,
-            "/transactions",
-            async () =>
-            {
-                var options = new TransactionCreateOptions
-                {
-                    Description = "API Validator Test Transaction",
-                    Date = DateTime.Today,
-                    AmountCents = -5000,
-                    AccountId = _testAccountId,
-                    CategoryId = _testCategoryId,
-                    Paid = true,
-                    Notes = "Test transaction"
-                };
-                var transaction = await transactionService.CreateAsync(options);
-                simpleTransactionId = transaction.Id;
-                _testTransactionIds.Add(transaction.Id);
-                return (transaction, JsonSerializer.Serialize(transaction));
-            }
-        );
-
-        // Get transaction
-        if (simpleTransactionId.HasValue)
+        if (_testAccountId.HasValue && _testCategoryId.HasValue)
         {
+            long? simpleTransactionId = null;
+            await TestEndpoint(
+                GroupTransactions,
+                MethodPost,
+                "/transactions",
+                async () =>
+                {
+                    var options = new TransactionCreateOptions
+                    {
+                        Description = "API Validator Test Transaction",
+                        Date = DateTime.Today,
+                        AmountCents = -5000,
+                        AccountId = _testAccountId,
+                        CategoryId = _testCategoryId,
+                        Paid = true,
+                        Notes = "Test transaction"
+                    };
+                    var transaction = await transactionService.CreateAsync(options);
+                    simpleTransactionId = transaction.Id;
+                    _testTransactionIds.Add(transaction.Id);
+                    return (transaction, JsonSerializer.Serialize(transaction));
+                }
+            );
+
+            // Get transaction
             await TestEndpoint(
                 GroupTransactions,
                 MethodGet,
-                $"/transactions/{simpleTransactionId}",
+                $"/transactions/{simpleTransactionId!.Value}",
                 async () =>
                 {
-                    var transaction = await transactionService.GetAsync(simpleTransactionId.Value);
+                    var transaction = await transactionService.GetAsync(simpleTransactionId!.Value);
                     return (transaction, JsonSerializer.Serialize(transaction));
                 }
             );
         }
 
         // Create recurring transaction
-        await TestEndpoint(
-            GroupTransactions,
-            MethodPost,
-            "/transactions (recurring)",
-            async () =>
-            {
-                var options = new TransactionCreateOptions
+        if (_testAccountId.HasValue && _testCategoryId.HasValue)
+        {
+            await TestEndpoint(
+                GroupTransactions,
+                MethodPost,
+                "/transactions (recurring)",
+                async () =>
                 {
-                    Description = "API Validator Recurring",
-                    Date = DateTime.Today,
-                    AmountCents = -1000,
-                    AccountId = _testAccountId,
-                    CategoryId = _testCategoryId,
-                    RecurrenceAttributes = new RecurrenceAttributes
+                    var options = new TransactionCreateOptions
                     {
-                        Periodicity = Periodicity.Monthly
-                    }
-                };
-                var transaction = await transactionService.CreateAsync(options);
-                _testTransactionIds.Add(transaction.Id);
-                return (transaction, JsonSerializer.Serialize(transaction));
-            }
-        );
+                        Description = "API Validator Recurring",
+                        Date = DateTime.Today,
+                        AmountCents = -1000,
+                        AccountId = _testAccountId,
+                        CategoryId = _testCategoryId,
+                        RecurrenceAttributes = new RecurrenceAttributes
+                        {
+                            Periodicity = Periodicity.Monthly
+                        }
+                    };
+                    var transaction = await transactionService.CreateAsync(options);
+                    _testTransactionIds.Add(transaction.Id);
+                    return (transaction, JsonSerializer.Serialize(transaction));
+                }
+            );
+        }
 
         // Create installment transaction
-        await TestEndpoint(
-            GroupTransactions,
-            MethodPost,
-            "/transactions (installments)",
-            async () =>
-            {
-                var options = new TransactionCreateOptions
+        if (_testAccountId.HasValue && _testCategoryId.HasValue)
+        {
+            await TestEndpoint(
+                GroupTransactions,
+                MethodPost,
+                "/transactions (installments)",
+                async () =>
                 {
-                    Description = "API Validator Installments",
-                    Date = DateTime.Today,
-                    AmountCents = -6000,
-                    AccountId = _testAccountId,
-                    CategoryId = _testCategoryId,
-                    InstallmentsAttributes = new InstallmentsAttributes
+                    var options = new TransactionCreateOptions
                     {
-                        Periodicity = Periodicity.Monthly,
-                        Total = 3
-                    }
-                };
-                var transaction = await transactionService.CreateAsync(options);
-                _testTransactionIds.Add(transaction.Id);
-                return (transaction, JsonSerializer.Serialize(transaction));
-            }
-        );
+                        Description = "API Validator Installments",
+                        Date = DateTime.Today,
+                        AmountCents = -6000,
+                        AccountId = _testAccountId,
+                        CategoryId = _testCategoryId,
+                        InstallmentsAttributes = new InstallmentsAttributes
+                        {
+                            Periodicity = Periodicity.Monthly,
+                            Total = 3
+                        }
+                    };
+                    var transaction = await transactionService.CreateAsync(options);
+                    _testTransactionIds.Add(transaction.Id);
+                    return (transaction, JsonSerializer.Serialize(transaction));
+                }
+            );
+        }
     }
 
     private async Task TestTransferEndpoints()

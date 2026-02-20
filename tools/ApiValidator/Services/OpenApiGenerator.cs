@@ -136,7 +136,7 @@ public class OpenApiGenerator
         }
     }
 
-    private string NormalizePathToTemplate(string path)
+    private static string NormalizePathToTemplate(string path)
     {
         // Replace numeric IDs with parameters
         var parts = path.Split('/');
@@ -168,7 +168,7 @@ public class OpenApiGenerator
         };
     }
 
-    private List<object> ExtractPathParameters(string path)
+    private static List<object> ExtractPathParameters(string path)
     {
         var parameters = new List<object>();
         var templatePath = NormalizePathToTemplate(path);
@@ -257,7 +257,7 @@ public class OpenApiGenerator
         }
     }
 
-    private Dictionary<string, object> GenerateSchemaFromJToken(JToken jToken, string schemaName)
+    private void GenerateSchemaFromJToken(JToken jToken, string schemaName)
     {
         if (_schemas.ContainsKey(schemaName) && jToken is JObject)
         {
@@ -271,7 +271,7 @@ public class OpenApiGenerator
                 existingProps[kvp.Key] = kvp.Value;
             }
 
-            return existingSchema;
+            return;
         }
 
         var schema = new Dictionary<string, object>
@@ -286,10 +286,9 @@ public class OpenApiGenerator
         }
 
         _schemas[schemaName] = schema;
-        return schema;
     }
 
-    private Dictionary<string, object> GeneratePropertiesFromJObject(JObject jObject)
+    private static Dictionary<string, object> GeneratePropertiesFromJObject(JObject jObject)
     {
         var properties = new Dictionary<string, object>();
 
