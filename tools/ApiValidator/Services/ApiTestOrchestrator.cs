@@ -371,7 +371,7 @@ public class ApiTestOrchestrator
         // Create simple transaction
         if (_testAccountId.HasValue && _testCategoryId.HasValue)
         {
-            long? simpleTransactionId = null;
+            long simpleTransactionId = 0;
             await TestEndpoint(
                 GroupTransactions,
                 MethodPost,
@@ -395,20 +395,17 @@ public class ApiTestOrchestrator
                 }
             );
 
-            // Get transaction (only if creation succeeded)
-            if (simpleTransactionId.HasValue)
-            {
-                await TestEndpoint(
-                    GroupTransactions,
-                    MethodGet,
-                    $"/transactions/{simpleTransactionId.Value}",
-                    async () =>
-                    {
-                        var transaction = await transactionService.GetAsync(simpleTransactionId.Value);
-                        return (transaction, JsonSerializer.Serialize(transaction));
-                    }
-                );
-            }
+            // Get transaction
+            await TestEndpoint(
+                GroupTransactions,
+                MethodGet,
+                $"/transactions/{simpleTransactionId}",
+                async () =>
+                {
+                    var transaction = await transactionService.GetAsync(simpleTransactionId);
+                    return (transaction, JsonSerializer.Serialize(transaction));
+                }
+            );
         }
 
         // Create recurring transaction
