@@ -11,7 +11,7 @@
     <RepositoryUrl>https://github.com/graduenz/norganizze</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>organizze;api;client;financial;finance</PackageTags>
-    <PackageIcon>icon.png</PackageIcon>
+    <PackageIcon>logo-bg-transparent.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
