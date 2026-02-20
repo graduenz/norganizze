@@ -4,8 +4,10 @@ using Microsoft.Extensions.Configuration;
 
 namespace ApiValidator;
 
-class Program
+static class Program
 {
+    private const string Separator = "═══════════════════════════════════════════════════════";
+
     static async Task Main(string[] args)
     {
         Console.WriteLine("╔════════════════════════════════════════════════════════╗");
@@ -15,7 +17,7 @@ class Program
 
         // Load configuration from user secrets
         var configuration = new ConfigurationBuilder()
-            .AddUserSecrets<Program>()
+            .AddUserSecrets(typeof(Program).Assembly)
             .Build();
 
         var email = configuration["Organizze:Email"];
@@ -52,16 +54,15 @@ class Program
             var results = await orchestrator.ExecuteAllTestsAsync();
 
             Console.WriteLine();
-            Console.WriteLine("═══════════════════════════════════════════════════════");
+            Console.WriteLine(Separator);
             Console.WriteLine("Test Execution Complete!");
-            Console.WriteLine("═══════════════════════════════════════════════════════");
+            Console.WriteLine(Separator);
             Console.WriteLine();
 
             // Build report
             var report = BuildReport(results, email, userAgent);
 
             // Generate reports
-            var reportGen = new ReportGenerator();
             var projectRoot = GetProjectRoot();
 
             // Setup output directories under tools/ApiValidator/output
@@ -75,11 +76,11 @@ class Program
 
             // Generate reports
             var markdownPath = Path.Combine(reportsDir, "api-validation-report.md");
-            reportGen.SaveMarkdownReport(report, markdownPath);
+            ReportGenerator.SaveMarkdownReport(report, markdownPath);
             Console.WriteLine($"✅ Markdown report: {markdownPath}");
 
             var jsonPath = Path.Combine(reportsDir, "api-validation-report.json");
-            reportGen.SaveJsonReport(report, jsonPath);
+            ReportGenerator.SaveJsonReport(report, jsonPath);
             Console.WriteLine($"✅ JSON report: {jsonPath}");
 
             Console.WriteLine();
@@ -95,9 +96,9 @@ class Program
             Console.WriteLine();
 
             // Display summary
-            Console.WriteLine("═══════════════════════════════════════════════════════");
+            Console.WriteLine(Separator);
             Console.WriteLine("Summary:");
-            Console.WriteLine("═══════════════════════════════════════════════════════");
+            Console.WriteLine(Separator);
             Console.WriteLine($"Total Endpoints Tested: {report.Summary.Total}");
             Console.WriteLine($"Successful: {report.Summary.Succeeded} ✅");
             Console.WriteLine($"Failed: {report.Summary.Failed} ❌");
@@ -123,9 +124,9 @@ class Program
                 Console.WriteLine();
             }
 
-            Console.WriteLine("═══════════════════════════════════════════════════════");
+            Console.WriteLine(Separator);
             Console.WriteLine("Files Generated:");
-            Console.WriteLine("═══════════════════════════════════════════════════════");
+            Console.WriteLine(Separator);
             Console.WriteLine($"1. tools/ApiValidator/output/reports/{Path.GetFileName(markdownPath)}");
             Console.WriteLine($"   Human-readable validation report");
             Console.WriteLine($"2. tools/ApiValidator/output/reports/{Path.GetFileName(jsonPath)}");
@@ -141,9 +142,9 @@ class Program
         catch (Exception ex)
         {
             Console.WriteLine();
-            Console.WriteLine("═══════════════════════════════════════════════════════");
+            Console.WriteLine(Separator);
             Console.WriteLine("❌ FATAL ERROR");
-            Console.WriteLine("═══════════════════════════════════════════════════════");
+            Console.WriteLine(Separator);
             Console.WriteLine(ex.ToString());
             Console.WriteLine();
             Console.WriteLine("Press any key to exit...");

@@ -5,9 +5,9 @@ using Newtonsoft.Json.Linq;
 
 namespace ApiValidator.Services;
 
-public class ResponseValidator
+public static class ResponseValidator
 {
-    public ValidationResult ValidateResponse<T>(string jsonResponse, T deserializedObject)
+    public static ValidationResult ValidateResponse<T>(string jsonResponse, T deserializedObject)
     {
         var result = new ValidationResult { Passed = true };
 
@@ -43,7 +43,7 @@ public class ResponseValidator
         return result;
     }
 
-    private void ValidateObject(JToken jToken, Type targetType, ValidationResult result, string path)
+    private static void ValidateObject(JToken jToken, Type targetType, ValidationResult result, string path)
     {
         if (jToken is not JObject jObject)
             return;
@@ -51,7 +51,13 @@ public class ResponseValidator
         var properties = targetType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
         var jsonPropertyNames = jObject.Properties().Select(p => p.Name).ToHashSet();
 
-        // Check for properties in C# model
+        ValidateModelProperties(properties, jsonPropertyNames, jObject, path, result);
+        ValidateExtraJsonProperties(jObject, properties, path, result);
+    }
+
+    private static void ValidateModelProperties(PropertyInfo[] properties, HashSet<string> jsonPropertyNames,
+        JObject jObject, string path, ValidationResult result)
+    {
         foreach (var prop in properties)
         {
             var jsonPropertyName = GetJsonPropertyName(prop);
@@ -59,32 +65,42 @@ public class ResponseValidator
 
             if (!jsonPropertyNames.Contains(jsonPropertyName))
             {
-                // Property exists in C# but not in JSON
-                // Only flag it if it's not nullable
-                if (!IsNullableType(prop.PropertyType))
-                {
-                    result.Discrepancies.Add(new PropertyDiscrepancy
-                    {
-                        PropertyName = fullPath,
-                        Issue = "Property exists in C# model but missing in JSON response",
-                        ExpectedType = prop.PropertyType.Name,
-                        ActualType = "missing"
-                    });
-                    result.Passed = false;
-                }
+                HandleMissingProperty(prop, fullPath, result);
             }
             else
             {
-                // Validate type compatibility
-                var jsonValue = jObject[jsonPropertyName];
-                if (jsonValue != null && jsonValue.Type != JTokenType.Null)
-                {
-                    ValidateTypeCompatibility(jsonValue, prop.PropertyType, fullPath, result);
-                }
+                ValidatePropertyValue(jObject[jsonPropertyName], prop.PropertyType, fullPath, result);
             }
         }
+    }
 
-        // Check for extra properties in JSON not in C# model
+    private static void HandleMissingProperty(PropertyInfo prop, string fullPath, ValidationResult result)
+    {
+        // Property exists in C# but not in JSON
+        // Only flag it if it's not nullable
+        if (!IsNullableType(prop.PropertyType))
+        {
+            result.Discrepancies.Add(new PropertyDiscrepancy
+            {
+                PropertyName = fullPath,
+                Issue = "Property exists in C# model but missing in JSON response",
+                ExpectedType = prop.PropertyType.Name,
+                ActualType = "missing"
+            });
+            result.Passed = false;
+        }
+    }
+
+    private static void ValidatePropertyValue(JToken? jsonValue, Type propertyType, string fullPath, ValidationResult result)
+    {
+        if (jsonValue != null && jsonValue.Type != JTokenType.Null)
+        {
+            ValidateTypeCompatibility(jsonValue, propertyType, fullPath, result);
+        }
+    }
+
+    private static void ValidateExtraJsonProperties(JObject jObject, PropertyInfo[] properties, string path, ValidationResult result)
+    {
         foreach (var jsonProp in jObject.Properties())
         {
             var matchingProperty = properties.FirstOrDefault(p =>
@@ -105,7 +121,7 @@ public class ResponseValidator
         }
     }
 
-    private void ValidateTypeCompatibility(JToken jsonValue, Type propertyType, string propertyName, ValidationResult result)
+    private static void ValidateTypeCompatibility(JToken jsonValue, Type propertyType, string propertyName, ValidationResult result)
     {
         var underlyingType = Nullable.GetUnderlyingType(propertyType) ?? propertyType;
 
@@ -148,7 +164,7 @@ public class ResponseValidator
         }
     }
 
-    private string GetJsonPropertyName(PropertyInfo prop)
+    private static string GetJsonPropertyName(PropertyInfo prop)
     {
         // Check for JsonPropertyName attribute first
         var jsonAttr = prop.GetCustomAttribute<System.Text.Json.Serialization.JsonPropertyNameAttribute>();
@@ -164,14 +180,14 @@ public class ResponseValidator
         return ToCamelCase(prop.Name);
     }
 
-    private string ToCamelCase(string str)
+    private static string ToCamelCase(string str)
     {
         if (string.IsNullOrEmpty(str) || char.IsLower(str[0]))
             return str;
         return char.ToLower(str[0]) + str.Substring(1);
     }
 
-    private bool IsNullableType(Type type)
+    private static bool IsNullableType(Type type)
     {
         return !type.IsValueType || Nullable.GetUnderlyingType(type) != null;
     }

@@ -15,8 +15,17 @@ namespace ApiValidator.Services;
 
 public class ApiTestOrchestrator
 {
+    private const string GroupAccounts = "Accounts";
+    private const string GroupCategories = "Categories";
+    private const string GroupCreditCards = "CreditCards";
+    private const string GroupTransactions = "Transactions";
+    private const string GroupTransfers = "Transfers";
+    private const string MethodGet = "GET";
+    private const string MethodPost = "POST";
+    private const string MethodPut = "PUT";
+    private const string MethodDelete = "DELETE";
+
     private readonly NOrganizzeClient _client;
-    private readonly ResponseValidator _validator;
     private readonly List<EndpointResult> _results = new();
 
     // Test data tracking for cleanup
@@ -30,7 +39,6 @@ public class ApiTestOrchestrator
     public ApiTestOrchestrator(string email, string apiToken, string userAgent)
     {
         _client = new NOrganizzeClient(email, apiToken);
-        _validator = new ResponseValidator();
     }
 
     public async Task<List<EndpointResult>> ExecuteAllTestsAsync()
@@ -82,7 +90,7 @@ public class ApiTestOrchestrator
         // The API typically returns user-specific data, so we'll use ID 1 as a placeholder
         await TestEndpoint(
             "Users",
-            "GET",
+            MethodGet,
             "/users/{id}",
             async () =>
             {
@@ -94,7 +102,7 @@ public class ApiTestOrchestrator
                 catch
                 {
                     // If ID 1 doesn't work, we can't test this without knowing the user ID
-                    throw new Exception("Cannot determine user ID - skipping user endpoint");
+                    throw new InvalidOperationException("Cannot determine user ID - skipping user endpoint");
                 }
             }
         );
@@ -109,8 +117,8 @@ public class ApiTestOrchestrator
         // List accounts
         List<Account>? accounts = null;
         await TestEndpoint(
-            "Accounts",
-            "GET",
+            GroupAccounts,
+            MethodGet,
             "/accounts",
             async () =>
             {
@@ -124,8 +132,8 @@ public class ApiTestOrchestrator
         {
             var accountId = accounts[0].Id;
             await TestEndpoint(
-                "Accounts",
-                "GET",
+                GroupAccounts,
+                MethodGet,
                 $"/accounts/{accountId}",
                 async () =>
                 {
@@ -145,8 +153,8 @@ public class ApiTestOrchestrator
         // List categories
         List<Category>? categories = null;
         await TestEndpoint(
-            "Categories",
-            "GET",
+            GroupCategories,
+            MethodGet,
             "/categories",
             async () =>
             {
@@ -160,8 +168,8 @@ public class ApiTestOrchestrator
         {
             var categoryId = categories[0].Id;
             await TestEndpoint(
-                "Categories",
-                "GET",
+                GroupCategories,
+                MethodGet,
                 $"/categories/{categoryId}",
                 async () =>
                 {
@@ -181,8 +189,8 @@ public class ApiTestOrchestrator
         // List credit cards
         List<CreditCard>? creditCards = null;
         await TestEndpoint(
-            "CreditCards",
-            "GET",
+            GroupCreditCards,
+            MethodGet,
             "/credit_cards",
             async () =>
             {
@@ -196,8 +204,8 @@ public class ApiTestOrchestrator
         {
             var cardId = creditCards[0].Id;
             await TestEndpoint(
-                "CreditCards",
-                "GET",
+                GroupCreditCards,
+                MethodGet,
                 $"/credit_cards/{cardId}",
                 async () =>
                 {
@@ -217,7 +225,7 @@ public class ApiTestOrchestrator
         // List current month budgets
         await TestEndpoint(
             "Budgets",
-            "GET",
+            MethodGet,
             "/budgets",
             async () =>
             {
@@ -229,7 +237,7 @@ public class ApiTestOrchestrator
         // List budgets by year
         await TestEndpoint(
             "Budgets",
-            "GET",
+            MethodGet,
             "/budgets/2026",
             async () =>
             {
@@ -241,7 +249,7 @@ public class ApiTestOrchestrator
         // List budgets by month
         await TestEndpoint(
             "Budgets",
-            "GET",
+            MethodGet,
             "/budgets/2026/2",
             async () =>
             {
@@ -261,8 +269,8 @@ public class ApiTestOrchestrator
 
         // Create test account 1
         await TestEndpoint(
-            "Accounts",
-            "POST",
+            GroupAccounts,
+            MethodPost,
             "/accounts",
             async () =>
             {
@@ -280,8 +288,8 @@ public class ApiTestOrchestrator
 
         // Create test account 2 (for transfers)
         await TestEndpoint(
-            "Accounts",
-            "POST",
+            GroupAccounts,
+            MethodPost,
             "/accounts",
             async () =>
             {
@@ -299,8 +307,8 @@ public class ApiTestOrchestrator
 
         // Create test category
         await TestEndpoint(
-            "Categories",
-            "POST",
+            GroupCategories,
+            MethodPost,
             "/categories",
             async () =>
             {
@@ -316,8 +324,8 @@ public class ApiTestOrchestrator
 
         // Create test credit card
         await TestEndpoint(
-            "CreditCards",
-            "POST",
+            GroupCreditCards,
+            MethodPost,
             "/credit_cards",
             async () =>
             {
@@ -345,15 +353,15 @@ public class ApiTestOrchestrator
         // List transactions
         List<Transaction>? transactions = null;
         await TestEndpoint(
-            "Transactions",
-            "GET",
+            GroupTransactions,
+            MethodGet,
             "/transactions",
             async () =>
             {
                 var options = new TransactionListOptions
                 {
-                    StartDate = new DateTime(2026, 2, 1),
-                    EndDate = new DateTime(2026, 2, 28)
+                    StartDate = new DateTime(2026, 2, 1, 0, 0, 0, DateTimeKind.Utc),
+                    EndDate = new DateTime(2026, 2, 28, 0, 0, 0, DateTimeKind.Utc)
                 };
                 transactions = await transactionService.ListAsync(options);
                 return (transactions, JsonSerializer.Serialize(transactions));
@@ -363,8 +371,8 @@ public class ApiTestOrchestrator
         // Create simple transaction
         long? simpleTransactionId = null;
         await TestEndpoint(
-            "Transactions",
-            "POST",
+            GroupTransactions,
+            MethodPost,
             "/transactions",
             async () =>
             {
@@ -389,8 +397,8 @@ public class ApiTestOrchestrator
         if (simpleTransactionId.HasValue)
         {
             await TestEndpoint(
-                "Transactions",
-                "GET",
+                GroupTransactions,
+                MethodGet,
                 $"/transactions/{simpleTransactionId}",
                 async () =>
                 {
@@ -402,8 +410,8 @@ public class ApiTestOrchestrator
 
         // Create recurring transaction
         await TestEndpoint(
-            "Transactions",
-            "POST",
+            GroupTransactions,
+            MethodPost,
             "/transactions (recurring)",
             async () =>
             {
@@ -427,8 +435,8 @@ public class ApiTestOrchestrator
 
         // Create installment transaction
         await TestEndpoint(
-            "Transactions",
-            "POST",
+            GroupTransactions,
+            MethodPost,
             "/transactions (installments)",
             async () =>
             {
@@ -460,8 +468,8 @@ public class ApiTestOrchestrator
 
         // List transfers
         await TestEndpoint(
-            "Transfers",
-            "GET",
+            GroupTransfers,
+            MethodGet,
             "/transfers",
             async () =>
             {
@@ -475,8 +483,8 @@ public class ApiTestOrchestrator
         if (_testAccountId.HasValue && _testAccount2Id.HasValue)
         {
             await TestEndpoint(
-                "Transfers",
-                "POST",
+                GroupTransfers,
+                MethodPost,
                 "/transfers",
                 async () =>
                 {
@@ -499,8 +507,8 @@ public class ApiTestOrchestrator
             if (transferId.HasValue)
             {
                 await TestEndpoint(
-                    "Transfers",
-                    "GET",
+                    GroupTransfers,
+                    MethodGet,
                     $"/transfers/{transferId}",
                     async () =>
                     {
@@ -526,8 +534,8 @@ public class ApiTestOrchestrator
         if (_testAccountId.HasValue)
         {
             await TestEndpoint(
-                "Accounts",
-                "PUT",
+                GroupAccounts,
+                MethodPut,
                 $"/accounts/{_testAccountId}",
                 async () =>
                 {
@@ -546,8 +554,8 @@ public class ApiTestOrchestrator
         if (_testCategoryId.HasValue)
         {
             await TestEndpoint(
-                "Categories",
-                "PUT",
+                GroupCategories,
+                MethodPut,
                 $"/categories/{_testCategoryId}",
                 async () =>
                 {
@@ -565,8 +573,8 @@ public class ApiTestOrchestrator
         if (_testCreditCardId.HasValue)
         {
             await TestEndpoint(
-                "CreditCards",
-                "PUT",
+                GroupCreditCards,
+                MethodPut,
                 $"/credit_cards/{_testCreditCardId}",
                 async () =>
                 {
@@ -584,8 +592,8 @@ public class ApiTestOrchestrator
         if (_testTransactionIds.Count > 0)
         {
             await TestEndpoint(
-                "Transactions",
-                "PUT",
+                GroupTransactions,
+                MethodPut,
                 $"/transactions/{_testTransactionIds[0]}",
                 async () =>
                 {
@@ -604,8 +612,8 @@ public class ApiTestOrchestrator
         if (_testTransferIds.Count > 0)
         {
             await TestEndpoint(
-                "Transfers",
-                "PUT",
+                GroupTransfers,
+                MethodPut,
                 $"/transfers/{_testTransferIds[0]}",
                 async () =>
                 {
@@ -637,14 +645,14 @@ public class ApiTestOrchestrator
         List<Invoice>? invoices = null;
         await TestEndpoint(
             "Invoices",
-            "GET",
+            MethodGet,
             $"/credit_cards/{_testCreditCardId}/invoices",
             async () =>
             {
                 var options = new InvoiceListOptions
                 {
-                    StartDate = new DateTime(2026, 1, 1),
-                    EndDate = new DateTime(2026, 12, 31)
+                    StartDate = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                    EndDate = new DateTime(2026, 12, 31, 0, 0, 0, DateTimeKind.Utc)
                 };
                 invoices = await invoiceService.ListAsync(_testCreditCardId.Value, options);
                 return (invoices, JsonSerializer.Serialize(invoices));
@@ -658,7 +666,7 @@ public class ApiTestOrchestrator
 
             await TestEndpoint(
                 "Invoices",
-                "GET",
+                MethodGet,
                 $"/credit_cards/{_testCreditCardId}/invoices/{invoiceId}",
                 async () =>
                 {
@@ -672,7 +680,7 @@ public class ApiTestOrchestrator
             {
                 await TestEndpoint(
                     "Invoices",
-                    "GET",
+                    MethodGet,
                     $"/credit_cards/{_testCreditCardId}/invoices/{invoiceId}/payments",
                     async () =>
                     {
@@ -702,8 +710,8 @@ public class ApiTestOrchestrator
         foreach (var txId in _testTransactionIds)
         {
             await TestEndpoint(
-                "Transactions",
-                "DELETE",
+                GroupTransactions,
+                MethodDelete,
                 $"/transactions/{txId}",
                 async () =>
                 {
@@ -719,8 +727,8 @@ public class ApiTestOrchestrator
         foreach (var transferId in _testTransferIds)
         {
             await TestEndpoint(
-                "Transfers",
-                "DELETE",
+                GroupTransfers,
+                MethodDelete,
                 $"/transfers/{transferId}",
                 async () =>
                 {
@@ -735,8 +743,8 @@ public class ApiTestOrchestrator
         if (_testCreditCardId.HasValue)
         {
             await TestEndpoint(
-                "CreditCards",
-                "DELETE",
+                GroupCreditCards,
+                MethodDelete,
                 $"/credit_cards/{_testCreditCardId}",
                 async () =>
                 {
@@ -751,8 +759,8 @@ public class ApiTestOrchestrator
         if (_testCategoryId.HasValue)
         {
             await TestEndpoint(
-                "Categories",
-                "DELETE",
+                GroupCategories,
+                MethodDelete,
                 $"/categories/{_testCategoryId}",
                 async () =>
                 {
@@ -768,8 +776,8 @@ public class ApiTestOrchestrator
         if (_testAccountId.HasValue)
         {
             await TestEndpoint(
-                "Accounts",
-                "DELETE",
+                GroupAccounts,
+                MethodDelete,
                 $"/accounts/{_testAccountId}",
                 async () =>
                 {
@@ -783,8 +791,8 @@ public class ApiTestOrchestrator
         if (_testAccount2Id.HasValue)
         {
             await TestEndpoint(
-                "Accounts",
-                "DELETE",
+                GroupAccounts,
+                MethodDelete,
                 $"/accounts/{_testAccount2Id}",
                 async () =>
                 {
@@ -836,7 +844,7 @@ public class ApiTestOrchestrator
             result.RawResponse = apiResult.json;
 
             // Validate response
-            result.Validation = _validator.ValidateResponse(apiResult.json, apiResult.obj);
+            result.Validation = ResponseValidator.ValidateResponse(apiResult.json, apiResult.obj);
 
             if (!isCleanup)
             {

@@ -3,20 +3,36 @@ using ApiValidator.Models;
 
 namespace ApiValidator.Services;
 
-public class ReportGenerator
+public static class ReportGenerator
 {
-    public string GenerateMarkdownReport(ApiValidationReport report)
+    public static string GenerateMarkdownReport(ApiValidationReport report)
     {
         var sb = new StringBuilder();
 
+        AppendHeader(report, sb);
+        AppendExecutiveSummary(report, sb);
+        AppendTestResultsByService(report, sb);
+        AppendValidationDiscrepancies(report, sb);
+        AppendFailedEndpoints(report, sb);
+        AppendOpenApiChanges(report, sb);
+        AppendPerformanceStatistics(report, sb);
+        AppendFooter(sb);
+
+        return sb.ToString();
+    }
+
+    private static void AppendHeader(ApiValidationReport report, StringBuilder sb)
+    {
         sb.AppendLine("# NOrganizze API Validation Report");
         sb.AppendLine();
         sb.AppendLine($"**Generated:** {report.Metadata.Timestamp:yyyy-MM-dd HH:mm:ss} (UTC)");
         sb.AppendLine($"**Email:** {report.Metadata.Email}");
         sb.AppendLine($"**User Agent:** {report.Metadata.UserAgent}");
         sb.AppendLine();
+    }
 
-        // Executive Summary
+    private static void AppendExecutiveSummary(ApiValidationReport report, StringBuilder sb)
+    {
         sb.AppendLine("## Executive Summary");
         sb.AppendLine();
         sb.AppendLine($"- **Total Endpoints Tested:** {report.Summary.Total}");
@@ -30,8 +46,10 @@ public class ReportGenerator
             : 0;
         sb.AppendLine($"**Success Rate:** {successRate:F1}%");
         sb.AppendLine();
+    }
 
-        // Results by Service
+    private static void AppendTestResultsByService(ApiValidationReport report, StringBuilder sb)
+    {
         sb.AppendLine("## Test Results by Service");
         sb.AppendLine();
 
@@ -46,106 +64,116 @@ public class ReportGenerator
             foreach (var endpoint in group.OrderBy(e => e.Path))
             {
                 var status = endpoint.Success ? "✅" : "❌";
-                var validation = endpoint.Validation.Passed ? "✅" :
-                                endpoint.Validation.Discrepancies.Count > 0 ? "⚠️" : "❌";
+                var validation = GetValidationSymbol(endpoint);
                 sb.AppendLine($"| {status} | {endpoint.Method} | `{endpoint.Path}` | {endpoint.Attempts} | {endpoint.ResponseTimeMs} | {validation} |");
             }
 
             sb.AppendLine();
         }
+    }
 
-        // Validation Discrepancies
-        if (report.Summary.DiscrepancyCount > 0)
+    private static string GetValidationSymbol(EndpointResult endpoint)
+    {
+        if (endpoint.Validation.Passed) return "✅";
+        return endpoint.Validation.Discrepancies.Count > 0 ? "⚠️" : "❌";
+    }
+
+    private static void AppendValidationDiscrepancies(ApiValidationReport report, StringBuilder sb)
+    {
+        if (report.Summary.DiscrepancyCount == 0) return;
+
+        sb.AppendLine("## Validation Discrepancies");
+        sb.AppendLine();
+        sb.AppendLine("These are differences between the C# models and the actual API responses:");
+        sb.AppendLine();
+
+        foreach (var endpoint in report.Endpoints.Where(e => e.Validation.Discrepancies.Count > 0))
         {
-            sb.AppendLine("## Validation Discrepancies");
-            sb.AppendLine();
-            sb.AppendLine("These are differences between the C# models and the actual API responses:");
+            sb.AppendLine($"### {endpoint.Method} {endpoint.Path}");
             sb.AppendLine();
 
-            foreach (var endpoint in report.Endpoints.Where(e => e.Validation.Discrepancies.Count > 0))
+            foreach (var discrepancy in endpoint.Validation.Discrepancies)
             {
-                sb.AppendLine($"### {endpoint.Method} {endpoint.Path}");
-                sb.AppendLine();
-
-                foreach (var discrepancy in endpoint.Validation.Discrepancies)
+                sb.AppendLine($"- **{discrepancy.PropertyName}**: {discrepancy.Issue}");
+                if (discrepancy.ExpectedType != null || discrepancy.ActualType != null)
                 {
-                    sb.AppendLine($"- **{discrepancy.PropertyName}**: {discrepancy.Issue}");
-                    if (discrepancy.ExpectedType != null || discrepancy.ActualType != null)
-                    {
-                        sb.AppendLine($"  - Expected: `{discrepancy.ExpectedType ?? "N/A"}`");
-                        sb.AppendLine($"  - Actual: `{discrepancy.ActualType ?? "N/A"}`");
-                    }
+                    sb.AppendLine($"  - Expected: `{discrepancy.ExpectedType ?? "N/A"}`");
+                    sb.AppendLine($"  - Actual: `{discrepancy.ActualType ?? "N/A"}`");
                 }
-
-                sb.AppendLine();
             }
-        }
 
-        // Failed Endpoints
+            sb.AppendLine();
+        }
+    }
+
+    private static void AppendFailedEndpoints(ApiValidationReport report, StringBuilder sb)
+    {
         var failedEndpoints = report.Endpoints.Where(e => !e.Success).ToList();
-        if (failedEndpoints.Count > 0)
+        if (failedEndpoints.Count == 0) return;
+
+        sb.AppendLine("## Failed Endpoints");
+        sb.AppendLine();
+        sb.AppendLine("These endpoints failed to execute successfully:");
+        sb.AppendLine();
+
+        foreach (var endpoint in failedEndpoints)
         {
-            sb.AppendLine("## Failed Endpoints");
+            sb.AppendLine($"### {endpoint.Method} {endpoint.Path}");
             sb.AppendLine();
-            sb.AppendLine("These endpoints failed to execute successfully:");
+            sb.AppendLine($"**Error:** {endpoint.ErrorMessage}");
             sb.AppendLine();
 
-            foreach (var endpoint in failedEndpoints)
+            if (endpoint.Validation.Errors.Count > 0)
             {
-                sb.AppendLine($"### {endpoint.Method} {endpoint.Path}");
-                sb.AppendLine();
-                sb.AppendLine($"**Error:** {endpoint.ErrorMessage}");
-                sb.AppendLine();
-
-                if (endpoint.Validation.Errors.Count > 0)
+                sb.AppendLine("**Validation Errors:**");
+                foreach (var error in endpoint.Validation.Errors)
                 {
-                    sb.AppendLine("**Validation Errors:**");
-                    foreach (var error in endpoint.Validation.Errors)
-                    {
-                        sb.AppendLine($"- {error}");
-                    }
-                    sb.AppendLine();
+                    sb.AppendLine($"- {error}");
                 }
+                sb.AppendLine();
             }
         }
+    }
 
-        // OpenAPI Changes Summary
-        if (report.Changes.Count > 0)
+    private static void AppendOpenApiChanges(ApiValidationReport report, StringBuilder sb)
+    {
+        if (report.Changes.Count == 0) return;
+
+        sb.AppendLine("## OpenAPI Specification Changes");
+        sb.AppendLine();
+        sb.AppendLine("Comparison between documented OpenAPI spec and empirical observations:");
+        sb.AppendLine();
+
+        var unchanged = report.Changes.Count(c => c.ChangeType == "UNCHANGED");
+        var modified = report.Changes.Count(c => c.ChangeType == "MODIFIED");
+        var failed = report.Changes.Count(c => c.ChangeType == "FAILED");
+
+        sb.AppendLine($"- **Unchanged:** {unchanged}");
+        sb.AppendLine($"- **Modified:** {modified}");
+        sb.AppendLine($"- **Failed:** {failed}");
+        sb.AppendLine();
+
+        var modifiedChanges = report.Changes.Where(c => c.ChangeType == "MODIFIED").ToList();
+        if (modifiedChanges.Count > 0)
         {
-            sb.AppendLine("## OpenAPI Specification Changes");
-            sb.AppendLine();
-            sb.AppendLine("Comparison between documented OpenAPI spec and empirical observations:");
+            sb.AppendLine("### Modified Endpoints");
             sb.AppendLine();
 
-            var unchanged = report.Changes.Count(c => c.ChangeType == "UNCHANGED");
-            var modified = report.Changes.Count(c => c.ChangeType == "MODIFIED");
-            var failed = report.Changes.Count(c => c.ChangeType == "FAILED");
-
-            sb.AppendLine($"- **Unchanged:** {unchanged}");
-            sb.AppendLine($"- **Modified:** {modified}");
-            sb.AppendLine($"- **Failed:** {failed}");
-            sb.AppendLine();
-
-            var modifiedChanges = report.Changes.Where(c => c.ChangeType == "MODIFIED").ToList();
-            if (modifiedChanges.Count > 0)
+            foreach (var change in modifiedChanges)
             {
-                sb.AppendLine("### Modified Endpoints");
+                sb.AppendLine($"#### {change.Endpoint}");
                 sb.AppendLine();
-
-                foreach (var change in modifiedChanges)
+                foreach (var detail in change.Details)
                 {
-                    sb.AppendLine($"#### {change.Endpoint}");
-                    sb.AppendLine();
-                    foreach (var detail in change.Details)
-                    {
-                        sb.AppendLine($"- {detail}");
-                    }
-                    sb.AppendLine();
+                    sb.AppendLine($"- {detail}");
                 }
+                sb.AppendLine();
             }
         }
+    }
 
-        // Performance Statistics
+    private static void AppendPerformanceStatistics(ApiValidationReport report, StringBuilder sb)
+    {
         sb.AppendLine("## Performance Statistics");
         sb.AppendLine();
 
@@ -166,20 +194,22 @@ public class ReportGenerator
         }
 
         sb.AppendLine();
+    }
+
+    private static void AppendFooter(StringBuilder sb)
+    {
         sb.AppendLine("---");
         sb.AppendLine();
         sb.AppendLine("*Report generated by NOrganizze API Validator*");
-
-        return sb.ToString();
     }
 
-    public void SaveMarkdownReport(ApiValidationReport report, string filePath)
+    public static void SaveMarkdownReport(ApiValidationReport report, string filePath)
     {
         var markdown = GenerateMarkdownReport(report);
         File.WriteAllText(filePath, markdown);
     }
 
-    public void SaveJsonReport(ApiValidationReport report, string filePath)
+    public static void SaveJsonReport(ApiValidationReport report, string filePath)
     {
         var json = System.Text.Json.JsonSerializer.Serialize(report, new System.Text.Json.JsonSerializerOptions
         {

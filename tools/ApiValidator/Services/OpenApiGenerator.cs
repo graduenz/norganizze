@@ -9,6 +9,10 @@ namespace ApiValidator.Services;
 
 public class OpenApiGenerator
 {
+    private const string KeyDescription = "description";
+    private const string TypeInteger = "integer";
+    private const string TypeFormat = "format";
+
     private readonly Dictionary<string, object> _openApiDoc = new();
     private readonly Dictionary<string, object> _paths = new();
     private readonly Dictionary<string, object> _schemas = new();
@@ -21,14 +25,14 @@ public class OpenApiGenerator
         {
             { "title", "Organizze API" },
             { "version", "2.0.0" },
-            { "description", "Empirically generated OpenAPI specification from actual API responses\n\nGenerated on: " + DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") + " (UTC)" }
+            { KeyDescription, "Empirically generated OpenAPI specification from actual API responses\n\nGenerated on: " + DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture) + " (UTC)" }
         };
         _openApiDoc["servers"] = new List<object>
         {
             new Dictionary<string, object>
             {
                 { "url", "https://api.organizze.com.br/rest/v2" },
-                { "description", "Production server" }
+                { KeyDescription, "Production server" }
             }
         };
         _openApiDoc["security"] = new List<object>
@@ -54,7 +58,7 @@ public class OpenApiGenerator
                         {
                             { "type", "http" },
                             { "scheme", "basic" },
-                            { "description", "Email as username, API token as password" }
+                            { KeyDescription, "Email as username, API token as password" }
                         }
                     }
                 }
@@ -101,7 +105,7 @@ public class OpenApiGenerator
                 var schemaName = GenerateSchemaFromResponse(result);
                 responses[statusCode] = new Dictionary<string, object>
                 {
-                    { "description", "Successful response" },
+                    { KeyDescription, "Successful response" },
                     { "content", new Dictionary<string, object>
                         {
                             { "application/json", new Dictionary<string, object>
@@ -121,7 +125,7 @@ public class OpenApiGenerator
             // Add common error responses
             responses["401"] = new Dictionary<string, object>
             {
-                { "description", "Unauthorized" }
+                { KeyDescription, "Unauthorized" }
             };
 
             pathItem[method] = operation;
@@ -148,7 +152,7 @@ public class OpenApiGenerator
         return string.Join("/", parts);
     }
 
-    private string GetParameterNameFromContext(string context)
+    private static string GetParameterNameFromContext(string context)
     {
         return context switch
         {
@@ -173,7 +177,6 @@ public class OpenApiGenerator
         foreach (Match match in matches)
         {
             var paramName = match.Groups[1].Value;
-            var paramType = paramName == "year" || paramName == "month" ? "integer" : "integer";
 
             parameters.Add(new Dictionary<string, object>
             {
@@ -182,8 +185,8 @@ public class OpenApiGenerator
                 { "required", true },
                 { "schema", new Dictionary<string, object>
                     {
-                        { "type", paramType },
-                        { "format", paramType == "integer" ? "int64" : null }
+                        { "type", TypeInteger },
+                        { TypeFormat, "int64" }
                     }
                 }
             });
@@ -192,7 +195,7 @@ public class OpenApiGenerator
         return parameters;
     }
 
-    private string GenerateSummary(EndpointResult result)
+    private static string GenerateSummary(EndpointResult result)
     {
         var action = result.Method switch
         {
@@ -221,7 +224,7 @@ public class OpenApiGenerator
 
                 if (jArray.Count > 0)
                 {
-                    var itemSchema = GenerateSchemaFromJToken(jArray[0], schemaName.TrimEnd('s'));
+                    GenerateSchemaFromJToken(jArray[0], schemaName.TrimEnd('s'));
                     var arraySchemaName = $"{schemaName}Array";
 
                     if (!_schemas.ContainsKey(arraySchemaName))
@@ -263,12 +266,9 @@ public class OpenApiGenerator
             var existingProps = (Dictionary<string, object>)existingSchema["properties"];
             var newProps = GeneratePropertiesFromJObject((JObject)jToken);
 
-            foreach (var kvp in newProps)
+            foreach (var kvp in newProps.Where(kvp => !existingProps.ContainsKey(kvp.Key)))
             {
-                if (!existingProps.ContainsKey(kvp.Key))
-                {
-                    existingProps[kvp.Key] = kvp.Value;
-                }
+                existingProps[kvp.Key] = kvp.Value;
             }
 
             return existingSchema;
@@ -311,9 +311,9 @@ public class OpenApiGenerator
                 case JTokenType.String:
                     propSchema["type"] = "string";
                     // Check if it looks like a date
-                    if (DateTime.TryParse(value.ToString(), out _))
+                    if (DateTime.TryParse(value.ToString(), System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out _))
                     {
-                        propSchema["format"] = "date-time";
+                        propSchema[TypeFormat] = "date-time";
                     }
                     break;
                 case JTokenType.Boolean:
@@ -344,7 +344,7 @@ public class OpenApiGenerator
         return properties;
     }
 
-    private string MapJTokenTypeToOpenApiType(JTokenType type)
+    private static string MapJTokenTypeToOpenApiType(JTokenType type)
     {
         return type switch
         {
