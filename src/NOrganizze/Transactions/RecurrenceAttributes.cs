@@ -6,8 +6,10 @@ using JsonPropertyAttribute = Newtonsoft.Json.JsonPropertyAttribute;
 
 namespace NOrganizze.Transactions
 {
+    /// <summary>Recurrence configuration for a transaction. Use with <see cref="TransactionCreateOptions.RecurrenceAttributes"/>.</summary>
     public class RecurrenceAttributes
     {
+        /// <summary>Recurrence period (e.g. <see cref="Periodicity.Monthly"/>, <see cref="Periodicity.Weekly"/>).</summary>
         [JsonProperty("periodicity")]
         public string Periodicity { get; set; }
     }

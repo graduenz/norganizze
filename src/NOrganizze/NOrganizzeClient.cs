@@ -16,8 +16,13 @@ using Newtonsoft.Json.Serialization;
 
 namespace NOrganizze
 {
+    /// <summary>
+    /// Strongly-typed .NET client for the Organizze HTTP API. Create with <see cref="HttpClient"/> and credentials (or email + API key).
+    /// Use <see cref="BaseUrl"/> to override the API endpoint when needed (e.g. for testing).
+    /// </summary>
     public class NOrganizzeClient : IDisposable
     {
+        /// <summary>Default base URL for the official Organizze REST v2 API. Can be overridden via constructor parameters.</summary>
         [SuppressMessage("SonarQube", "S1075:URIs should not be hardcoded",
             Justification = "This is a configurable default value for the official Organizze API endpoint. Users can override it via constructor parameters.")]
         public const string OrganizzeRestV2Url = "https://api.organizze.com.br/rest/v2";
@@ -30,18 +35,34 @@ namespace NOrganizze
         private readonly JsonSerializerSettings _jsonSettings;
 #endif
 
+        /// <summary>Provider used to obtain credentials (email + API key) for each request. Set by the constructor.</summary>
         public Func<Credentials> CredentialsProvider { get; }
+        /// <summary>Base URL for Organizze API requests. Defaults to <see cref="OrganizzeRestV2Url"/> unless overridden in the constructor.</summary>
         public string BaseUrl { get; }
 
+        /// <summary>Access user-related API operations.</summary>
         public Users.UserService Users { get; }
+        /// <summary>List, create, update, and delete bank accounts.</summary>
         public Accounts.AccountService Accounts { get; }
+        /// <summary>Manage categories.</summary>
         public Categories.CategoryService Categories { get; }
+        /// <summary>Manage credit cards.</summary>
         public CreditCards.CreditCardService CreditCards { get; }
+        /// <summary>List and inspect credit card invoices and their payment transaction.</summary>
         public Invoices.InvoiceService Invoices { get; }
+        /// <summary>List, create, update, and delete transactions (expenses, incomes). Use <see cref="Transactions.TransactionListOptions"/> to filter by date and account.</summary>
         public Transactions.TransactionService Transactions { get; }
+        /// <summary>Manage transfers between accounts.</summary>
         public Transfers.TransferService Transfers { get; }
+        /// <summary>List budgets by year or month.</summary>
         public Budgets.BudgetService Budgets { get; }
 
+        /// <summary>
+        /// Creates a client using an existing <see cref="HttpClient"/> and a credentials provider. Use this when you manage <see cref="HttpClient"/> yourself (e.g. in ASP.NET Core).
+        /// </summary>
+        /// <param name="httpClient">The HTTP client to use for requests. Not disposed by this client.</param>
+        /// <param name="credentialsProvider">Function that returns the credentials (email + API key) to use for authentication.</param>
+        /// <param name="baseUrl">Optional. Base URL for the API. Defaults to <see cref="OrganizzeRestV2Url"/>.</param>
         public NOrganizzeClient(HttpClient httpClient, Func<Credentials> credentialsProvider, string baseUrl = OrganizzeRestV2Url)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
@@ -77,17 +98,35 @@ namespace NOrganizze
             Budgets = new Budgets.BudgetService(this);
         }
 
+        /// <summary>
+        /// Creates a client using an existing <see cref="HttpClient"/> with email and API key. The client does not dispose the HTTP client.
+        /// </summary>
+        /// <param name="httpClient">The HTTP client to use for requests.</param>
+        /// <param name="email">Organizze account email.</param>
+        /// <param name="apiKey">Organizze API key.</param>
+        /// <param name="baseUrl">Optional. Base URL for the API. Defaults to <see cref="OrganizzeRestV2Url"/>.</param>
         public NOrganizzeClient(HttpClient httpClient, string email, string apiKey, string baseUrl = OrganizzeRestV2Url)
             : this(httpClient, () => new Credentials(email, apiKey), baseUrl)
         {
         }
 
+        /// <summary>
+        /// Creates a client with a credentials provider; the client creates and owns an internal <see cref="HttpClient"/> and will dispose it when <see cref="Dispose()"/> is called.
+        /// </summary>
+        /// <param name="credentialsProvider">Function that returns the credentials to use for authentication.</param>
+        /// <param name="baseUrl">Optional. Base URL for the API. Defaults to <see cref="OrganizzeRestV2Url"/>.</param>
         public NOrganizzeClient(Func<Credentials> credentialsProvider, string baseUrl = OrganizzeRestV2Url)
             : this(new HttpClient(), credentialsProvider, baseUrl)
         {
             _disposeHttpClient = true;
         }
 
+        /// <summary>
+        /// Creates a client with email and API key; the client creates and owns an internal <see cref="HttpClient"/> and will dispose it when <see cref="Dispose()"/> is called.
+        /// </summary>
+        /// <param name="email">Organizze account email.</param>
+        /// <param name="apiKey">Organizze API key.</param>
+        /// <param name="baseUrl">Optional. Base URL for the API. Defaults to <see cref="OrganizzeRestV2Url"/>.</param>
         public NOrganizzeClient(string email, string apiKey, string baseUrl = OrganizzeRestV2Url)
             : this(() => new Credentials(email, apiKey), baseUrl)
         {
@@ -246,12 +285,15 @@ namespace NOrganizze
                 content);
         }
 
+        /// <summary>Releases resources. If the client created its own <see cref="HttpClient"/>, that client is disposed.</summary>
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>Releases managed resources. Override in derived classes to add custom disposal logic.</summary>
+        /// <param name="disposing">True when called from <see cref="Dispose()"/>; false when called from the finalizer.</param>
         protected virtual void Dispose(bool disposing)
         {
             if (!disposing)
