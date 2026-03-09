@@ -1,10 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net8.0;net9.0;net10.0;netstandard2.0;net472</TargetFrameworks>
     <LangVersion>8</LangVersion>
     <PackageId>NOrganizze</PackageId>
-    <Version>0.1.2</Version>
+    <Version>0.2.0</Version>
     <Authors>Guilherme Raduenz</Authors>
     <Description>Strongly-typed .NET client for the Organizze API</Description>
     <PackageProjectUrl>https://github.com/graduenz/norganizze</PackageProjectUrl>
@@ -14,6 +14,7 @@
     <PackageIcon>logo-bg-transparent.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'net472'">
@@ -28,6 +29,7 @@
     <None Include="..\..\README.md" Pack="true" PackagePath=""/>
     <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
     <None Include="..\..\logo\logo-bg-transparent.png" Pack="true" Visible="false" PackagePath="" />
+    <None Include="..\..\USAGE.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>
