@@ -117,6 +117,35 @@ Use `TransactionCreateOptions` with the fields supported by the API:
 - `RecurrenceAttributes` (`RecurrenceAttributes`) – recurrence configuration.
 - `InstallmentsAttributes` (`InstallmentsAttributes`) – installments configuration.
 
+##### Recurrence and installment periodicity
+
+When using `RecurrenceAttributes` or `InstallmentsAttributes`, the `Periodicity` property should use one of the constants in `NOrganizze.Transactions.Periodicity` instead of raw string literals:
+
+- `Periodicity.Daily` = `"daily"` (Diário)
+- `Periodicity.Weekly` = `"weekly"` (Semanal)
+- `Periodicity.Biweekly` = `"biweekly"` (Quinzenal)
+- `Periodicity.Monthly` = `"monthly"` (Mensal)
+- `Periodicity.Bimonthly` = `"bimonthly"` (Bimestral)
+- `Periodicity.Trimonthly` = `"trimonthly"` (Trimestral)
+- `Periodicity.Sixmonthly` = `"sixmonthly"` (Semestral)
+- `Periodicity.Yearly` = `"yearly"` (Anual)
+
+Example – monthly recurring transaction:
+
+```csharp
+var created = client.Transactions.Create(new TransactionCreateOptions
+{
+    Description = "Streaming subscription",
+    Date = new DateTime(2025, 4, 1),
+    AmountCents = 2990,
+    AccountId = 12345,
+    RecurrenceAttributes = new RecurrenceAttributes
+    {
+        Periodicity = Periodicity.Monthly,
+    },
+});
+```
+
 Example:
 
 ```csharp
@@ -191,6 +220,24 @@ Other key methods:
 - `Update` / `UpdateAsync` – update an account with `AccountUpdateOptions`.
 - `Delete` / `DeleteAsync` – delete an account by id.
 
+##### Account types
+
+The `Type` property in `AccountCreateOptions` and `Account.Type` should use one of the constants in `NOrganizze.Accounts.AccountType`:
+
+- `AccountType.Checking` = `"checking"`
+- `AccountType.Savings` = `"savings"`
+- `AccountType.Other` = `"other"`
+
+Example:
+
+```csharp
+var account = client.Accounts.Create(new AccountCreateOptions
+{
+    Name = "Main checking account",
+    Type = AccountType.Checking,
+});
+```
+
 #### 7.2 Categories (`client.Categories`)
 
 - `List` / `ListAsync` – list all categories.
@@ -213,6 +260,8 @@ Other key methods:
 - `ListByYear` / `ListByYearAsync` – list budgets for a specific year.
 - `ListByMonth` / `ListByMonthAsync` – list budgets for a specific year and month.
 
+The `Budget.ActivityType` property is an integer that mirrors Organizze’s own internal activity type classification. This client passes the value through from the API; the authoritative meaning for each value comes from the Organizze application and documentation.
+
 ### 8. Options types quick reference
 
 | Type                         | Used by                                      | Key properties                                      |
@@ -234,4 +283,37 @@ Other key methods:
 | `RequestOptions`             | All service methods with `RequestOptions`   | `BaseUrl`, `CredentialsProvider`, `UserAgent`      |
 
 This guide is designed so both humans and AI agents can quickly see **which options type to pass to which method** and **which properties to set** when integrating with Organizze via this library.
+
+### 9. Catalog values reference
+
+This section summarizes catalog-style values exposed by the client so you can confirm they match the Organizze application.
+
+#### 9.1 Periodicity (`NOrganizze.Transactions.Periodicity`)
+
+| Constant                    | Value        |
+|----------------------------|--------------|
+| `Periodicity.Daily`        | `"daily"` (Diário)       |
+| `Periodicity.Weekly`       | `"weekly"` (Semanal)     |
+| `Periodicity.Biweekly`     | `"biweekly"` (Quinzenal) |
+| `Periodicity.Monthly`      | `"monthly"` (Mensal)      |
+| `Periodicity.Bimonthly`    | `"bimonthly"` (Bimestral)|
+| `Periodicity.Trimonthly`   | `"trimonthly"` (Trimestral) |
+| `Periodicity.Sixmonthly`   | `"sixmonthly"` (Semestral)  |
+| `Periodicity.Yearly`       | `"yearly"` (Anual)        |
+
+Used by `RecurrenceAttributes.Periodicity` and `InstallmentsAttributes.Periodicity` on transactions.
+
+#### 9.2 Account types (`NOrganizze.Accounts.AccountType`)
+
+| Constant                 | Value        |
+|--------------------------|--------------|
+| `AccountType.Checking`   | `"checking"` |
+| `AccountType.Savings`    | `"savings"`  |
+| `AccountType.Other`      | `"other"`    |
+
+Used by `AccountCreateOptions.Type` when creating accounts and `Account.Type` when reading them.
+
+#### 9.3 Budget activity type
+
+`Budget.ActivityType` is an `int` that represents an Organizze-defined activity type. This library does not define named constants for these values; they should be interpreted according to the Organizze application and official documentation.
 
