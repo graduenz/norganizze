@@ -6,8 +6,10 @@ using JsonPropertyAttribute = Newtonsoft.Json.JsonPropertyAttribute;
 
 namespace NOrganizze.Transactions
 {
+    /// <summary>Represents a tag that can be associated with transactions.</summary>
     public class Tag
     {
+        /// <summary>Tag name.</summary>
         [JsonProperty("name")]
         public string Name { get; set; }
     }

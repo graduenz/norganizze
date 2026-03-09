@@ -9,9 +9,13 @@
 
 ---
 
-**NOrganizze** is a strongly-typed .NET client for the Organizze API.
+**NOrganizze** is an unofficial, strongly-typed .NET client for the Organizze API.
 
 [Organizze](https://www.organizze.com.br/) is a personal finance management tool that helps users track their expenses, manage budgets, and gain insights into their financial habits. Their API is documented at [Organizze API Documentation](https://github.com/organizze/api-doc).
+
+## Usage
+
+For detailed API usage, including how to create an `NOrganizzeClient`, filter transactions with `TransactionListOptions`, and use all services and option types, see the [Usage guide](USAGE.md).
 
 ## License
 
