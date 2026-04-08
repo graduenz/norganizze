@@ -6,6 +6,7 @@ using Xunit;
 
 namespace NOrganizze.Tests.Accounts
 {
+    [Trait("Category", "Integration")]
     public class AccountServiceTests
     {
         private const string NewAccountDescription = "New account";

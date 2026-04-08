@@ -5,6 +5,7 @@ using Xunit;
 
 namespace NOrganizze.Tests.Budgets
 {
+    [Trait("Category", "Integration")]
     public class BudgetServiceTests
     {
         private readonly NOrganizzeClientFixture _fixture;

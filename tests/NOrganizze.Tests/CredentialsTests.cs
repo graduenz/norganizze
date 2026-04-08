@@ -3,6 +3,7 @@ using Xunit;
 
 namespace NOrganizze.Tests
 {
+    [Trait("Category", "Integration")]
     public class CredentialsTests
     {
         private const string TestEmail = "test@example.com";

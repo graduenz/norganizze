@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
@@ -8,6 +9,9 @@ namespace NOrganizze.Transactions
     /// <summary>Service for listing, creating, updating, and deleting transactions. Use <see cref="TransactionListOptions"/> with <see cref="List"/> or <see cref="ListAsync"/> to filter by date range and account.</summary>
     public class TransactionService : Service
     {
+        /// <summary>Maximum number of transactions the Organizze API returns per request (server-imposed limit).</summary>
+        public const int MaxTransactionsPerRequest = 500;
+
         private const string Transactions = "transactions";
 
         /// <summary>Initializes a new instance of the <see cref="TransactionService"/> class.</summary>
@@ -15,25 +19,115 @@ namespace NOrganizze.Transactions
         {
         }
 
-        /// <summary>Lists transactions, optionally filtered by date range and account. Pass <paramref name="options"/> with <see cref="TransactionListOptions.StartDate"/>, <see cref="TransactionListOptions.EndDate"/>, and/or <see cref="TransactionListOptions.AccountId"/>.</summary>
+        /// <summary>Lists transactions, optionally filtered by date range and account. Pass <paramref name="options"/> with <see cref="TransactionListOptions.StartDate"/>, <see cref="TransactionListOptions.EndDate"/>, and/or <see cref="TransactionListOptions.AccountId"/>. Unless <see cref="TransactionListOptions.AutoPaginate"/> is explicitly false, the library automatically fetches beyond the <see cref="MaxTransactionsPerRequest"/> limit by advancing the start date and merging results. Missing dates default to the current month.</summary>
         /// <param name="options">Optional. Use <see cref="TransactionListOptions"/> to filter by start date, end date, and account id. Dates are sent as yyyy-MM-dd.</param>
         /// <param name="requestOptions">Optional per-request overrides (base URL, credentials, user agent).</param>
         /// <returns>List of transactions.</returns>
         public List<Transaction> List(TransactionListOptions options = null, RequestOptions requestOptions = null)
         {
+            if (ShouldAutoPaginate(options))
+                return ListWithAutoPagination(options, requestOptions);
+
             var path = BuildListPath(options);
             return Get<List<Transaction>>(path, requestOptions);
         }
 
-        /// <summary>Lists transactions asynchronously, optionally filtered by date range and account. Pass <paramref name="options"/> with <see cref="TransactionListOptions.StartDate"/>, <see cref="TransactionListOptions.EndDate"/>, and/or <see cref="TransactionListOptions.AccountId"/>.</summary>
+        /// <summary>Lists transactions asynchronously, optionally filtered by date range and account. Pass <paramref name="options"/> with <see cref="TransactionListOptions.StartDate"/>, <see cref="TransactionListOptions.EndDate"/>, and/or <see cref="TransactionListOptions.AccountId"/>. Unless <see cref="TransactionListOptions.AutoPaginate"/> is explicitly false, the library automatically fetches beyond the <see cref="MaxTransactionsPerRequest"/> limit by advancing the start date and merging results. Missing dates default to the current month.</summary>
         /// <param name="options">Optional. Use <see cref="TransactionListOptions"/> to filter by start date, end date, and account id.</param>
         /// <param name="requestOptions">Optional per-request overrides.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>List of transactions.</returns>
         public Task<List<Transaction>> ListAsync(TransactionListOptions options = null, RequestOptions requestOptions = null, CancellationToken cancellationToken = default)
         {
+            if (ShouldAutoPaginate(options))
+                return ListWithAutoPaginationAsync(options, requestOptions, cancellationToken);
+
             var path = BuildListPath(options);
             return GetAsync<List<Transaction>>(path, requestOptions, cancellationToken);
+        }
+
+        private static bool ShouldAutoPaginate(TransactionListOptions options)
+        {
+            if (options != null && options.AutoPaginate == false)
+                return false;
+            return true;
+        }
+
+        private static void GetPaginationRange(TransactionListOptions options, out DateTime cursor, out DateTime endDate)
+        {
+            var now = DateTime.UtcNow;
+            cursor = options?.StartDate ?? new DateTime(now.Year, now.Month, 1);
+            endDate = options?.EndDate ?? new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month));
+        }
+
+        private static bool ProcessBatch(
+            List<Transaction> batch,
+            HashSet<long> seen,
+            List<Transaction> result,
+            ref DateTime cursor)
+        {
+            if (batch == null || batch.Count == 0)
+                return false;
+
+            int newCount = 0;
+            var maxDate = DateTime.MinValue;
+            foreach (var tx in batch)
+            {
+                if (seen.Add(tx.Id))
+                {
+                    result.Add(tx);
+                    newCount++;
+                }
+                if (tx.Date > maxDate)
+                    maxDate = tx.Date;
+            }
+
+            if (batch.Count < MaxTransactionsPerRequest)
+                return false;
+            if (maxDate <= cursor)
+                return false;
+            if (newCount == 0)
+                return false;
+
+            cursor = maxDate;
+            return true;
+        }
+
+        private List<Transaction> ListWithAutoPagination(TransactionListOptions options, RequestOptions requestOptions)
+        {
+            GetPaginationRange(options, out var cursor, out var endDate);
+            var seen = new HashSet<long>();
+            var result = new List<Transaction>();
+
+            while (true)
+            {
+                var pageOptions = new TransactionListOptions { StartDate = cursor, EndDate = endDate, AccountId = options?.AccountId, AutoPaginate = false };
+                var batch = Get<List<Transaction>>(BuildListPath(pageOptions), requestOptions);
+                if (!ProcessBatch(batch, seen, result, ref cursor))
+                    break;
+            }
+
+            return result;
+        }
+
+        private async Task<List<Transaction>> ListWithAutoPaginationAsync(
+            TransactionListOptions options,
+            RequestOptions requestOptions,
+            CancellationToken cancellationToken)
+        {
+            GetPaginationRange(options, out var cursor, out var endDate);
+            var seen = new HashSet<long>();
+            var result = new List<Transaction>();
+
+            while (true)
+            {
+                var pageOptions = new TransactionListOptions { StartDate = cursor, EndDate = endDate, AccountId = options?.AccountId, AutoPaginate = false };
+                var batch = await GetAsync<List<Transaction>>(BuildListPath(pageOptions), requestOptions, cancellationToken).ConfigureAwait(false);
+                if (!ProcessBatch(batch, seen, result, ref cursor))
+                    break;
+            }
+
+            return result;
         }
 
         private static string BuildListPath(TransactionListOptions options)

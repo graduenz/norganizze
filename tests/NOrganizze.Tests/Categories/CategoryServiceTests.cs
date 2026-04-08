@@ -6,6 +6,7 @@ using Xunit;
 
 namespace NOrganizze.Tests.Categories
 {
+    [Trait("Category", "Integration")]
     public class CategoryServiceTests
     {
         private readonly NOrganizzeClientFixture _fixture;

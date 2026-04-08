@@ -3,6 +3,7 @@ using Xunit;
 
 namespace NOrganizze.Tests
 {
+    [Trait("Category", "Integration")]
     public class NOrganizzeClientFixtureTests
     {
         private readonly NOrganizzeClientFixture _fixture;
