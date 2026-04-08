@@ -6,6 +6,7 @@ using Xunit;
 
 namespace NOrganizze.Tests.CreditCards
 {
+    [Trait("Category", "Integration")]
     public class CreditCardServiceTests
     {
         private readonly NOrganizzeClientFixture _fixture;

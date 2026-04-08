@@ -8,6 +8,7 @@ using Xunit;
 
 namespace NOrganizze.Tests.Transfers
 {
+    [Trait("Category", "Integration")]
     public class TransferServiceTests
     {
         private const string TemporaryTestAccountDescription = "Temporary test account";

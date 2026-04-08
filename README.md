@@ -17,6 +17,16 @@
 
 For detailed API usage, including how to create an `NOrganizzeClient`, filter transactions with `TransactionListOptions`, and use all services and option types, see the [Usage guide](USAGE.md).
 
+## Known limitations
+
+The Organizze API returns a maximum of **500 transactions per request** (`TransactionService.MaxTransactionsPerRequest`). When listing transactions, NOrganizze automatically paginates by advancing the `start_date` to the latest transaction date from each batch, deduplicating by transaction id, and repeating until fewer than 500 results are returned (controlled by `TransactionListOptions.AutoPaginate`, which defaults to `true`). When `StartDate` or `EndDate` are not provided, the library defaults to the current month boundaries.
+
+If a single **date** contains more than 500 transactions, the API itself truncates the response and there is no known workaround at the API level.
+
+Set `AutoPaginate = false` to opt out and make a single API call (original behavior). See the [Usage guide](USAGE.md) for details and examples.
+
+> **Note on date filtering:** The official Organizze API documentation states that `start_date` and `end_date` are always rounded to full calendar months. Empirical testing shows this is inaccurate -- the API **does respect exact dates** when explicitly provided. The "full month" behavior only applies as a default when these parameters are omitted entirely.
+
 ## License
 
 [Apache-2.0](./LICENSE)

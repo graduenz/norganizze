@@ -80,6 +80,7 @@ Use `TransactionService.List` / `ListAsync` with `TransactionListOptions`:
 - `StartDate` (`DateTime?`) – inclusive start date (sent as `yyyy-MM-dd`).
 - `EndDate` (`DateTime?`) – inclusive end date (sent as `yyyy-MM-dd`).
 - `AccountId` (`long?`) – filter by account id.
+- `AutoPaginate` (`bool?`) – when `true` (the default), automatically fetches beyond the 500-per-request API limit by advancing the start date and merging results. See [Auto-pagination](#auto-pagination) below.
 
 Example: list all transactions for a specific account in March 2025:
 
@@ -95,6 +96,30 @@ var transactions = client.Transactions.List(options);
 ```
 
 If `options` is `null`, all transactions are returned according to Organizze defaults.
+
+##### Auto-pagination
+
+The Organizze API returns at most **500 transactions per request** (`TransactionService.MaxTransactionsPerRequest`). A single API call may silently truncate the results when the date range contains more transactions than this limit.
+
+By default (`AutoPaginate` is `null` or `true`), `List` / `ListAsync` handle this transparently: after each request that returns exactly 500 results, the library advances `StartDate` to the latest `Transaction.Date` in the batch and fetches again, deduplicating by transaction id. This repeats until a batch returns fewer than 500 results.
+
+Auto-pagination is enabled by default for all `List` / `ListAsync` calls, even when `options` is `null`. When `StartDate` or `EndDate` are not provided, the library defaults to the current month boundaries (UTC).
+
+To opt out and make exactly one API call (the original behavior), set `AutoPaginate = false`:
+
+```csharp
+var options = new TransactionListOptions
+{
+    StartDate = new DateTime(2025, 1, 1),
+    EndDate = new DateTime(2025, 12, 31),
+    AutoPaginate = false,
+};
+
+var transactions = client.Transactions.List(options);
+// Single API call; may return at most 500 transactions.
+```
+
+> **Note:** If a single **date** contains more than 500 transactions, the Organizze API itself truncates the response. There is no known workaround at the API level for this edge case.
 
 #### 5.2 Getting a single transaction
 
@@ -266,7 +291,7 @@ The `Budget.ActivityType` property is an integer that mirrors Organizze’s own 
 
 | Type                         | Used by                                      | Key properties                                      |
 |------------------------------|----------------------------------------------|-----------------------------------------------------|
-| `TransactionListOptions`     | `Transactions.List` / `ListAsync`           | `StartDate`, `EndDate`, `AccountId`                |
+| `TransactionListOptions`     | `Transactions.List` / `ListAsync`           | `StartDate`, `EndDate`, `AccountId`, `AutoPaginate`|
 | `TransactionCreateOptions`   | `Transactions.Create` / `CreateAsync`       | `Description`, `Date`, `AmountCents`, `AccountId`  |
 | `TransactionUpdateOptions`   | `Transactions.Update` / `UpdateAsync`       | Updatable transaction fields                        |
 | `TransactionDeleteOptions`   | `Transactions.Delete` / `DeleteAsync`       | Extra delete options (if required by API)          |

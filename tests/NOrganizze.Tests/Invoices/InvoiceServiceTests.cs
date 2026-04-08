@@ -6,6 +6,7 @@ using Xunit;
 
 namespace NOrganizze.Tests.Invoices
 {
+    [Trait("Category", "Integration")]
     public class InvoiceServiceTests
     {
         private readonly NOrganizzeClientFixture _fixture;
