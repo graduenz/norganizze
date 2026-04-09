@@ -4,7 +4,6 @@
     <TargetFrameworks>net8.0;net9.0;net10.0;netstandard2.0;net472</TargetFrameworks>
     <LangVersion>8</LangVersion>
     <PackageId>NOrganizze</PackageId>
-    <Version>0.3.0</Version>
     <Authors>Guilherme Raduenz</Authors>
     <Description>Strongly-typed .NET client for the Organizze API</Description>
     <PackageProjectUrl>https://github.com/graduenz/norganizze</PackageProjectUrl>
@@ -18,7 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'net472'">
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">

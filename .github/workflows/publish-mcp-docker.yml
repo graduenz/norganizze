@@ -1,0 +1,79 @@
+name: Publish MCP Docker image
+
+on:
+  push:
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+*
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    env:
+      IMAGE_NAME: norganizze-mcp
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4
+
+      - name: Extract version and channel from tag
+        id: vars
+        shell: bash
+        run: |
+          if [[ "${GITHUB_REF}" != refs/tags/v* ]]; then
+            echo "This workflow expects a v-prefixed tag." >&2
+            exit 1
+          fi
+
+          VERSION="${GITHUB_REF#refs/tags/v}"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+          if [[ "${VERSION}" == *-* ]]; then
+            echo "is_stable=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "is_stable=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Generate Docker metadata
+        id: meta
+        uses: docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6
+        with:
+          images: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=${{ steps.vars.outputs.version }}
+            type=raw,value=latest,enable=${{ steps.vars.outputs.is_stable == 'true' }}
+          labels: |
+            org.opencontainers.image.title=NOrganizze MCP Server
+            org.opencontainers.image.description=Official Docker image for the NOrganizze MCP server.
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.version=${{ steps.vars.outputs.version }}
+
+      - name: Build and push Docker image
+        id: build
+        uses: docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294 # v7
+        with:
+          context: .
+          file: tools/NOrganizze.Mcp/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          provenance: true
+
+      - name: Print publish summary
+        run: |
+          echo "Published image tags:"
+          echo "${{ steps.meta.outputs.tags }}"
