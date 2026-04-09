@@ -39,10 +39,21 @@ Read tools (`list`, `get`) continue to work.
 
 ## Docker
 
+Published image:
+
+```bash
+docker.io/graduenz/norganizze-mcp
+```
+
+Tag policy:
+
+- Stable release tags (`vX.Y.Z`) publish `X.Y.Z` and `latest`.
+- Prerelease tags (`vX.Y.Z-suffix`) publish only `X.Y.Z-suffix`.
+
 Build image from repository root:
 
 ```bash
-docker build -f tools/NOrganizze.Mcp/Dockerfile -t norganizze-mcp:latest .
+docker build -f tools/NOrganizze.Mcp/Dockerfile -t graduenz/norganizze-mcp:latest .
 ```
 
 Run with workspace-mounted config:
@@ -51,7 +62,7 @@ Run with workspace-mounted config:
 docker run --rm -i \
   -v "$PWD:/workspace" \
   -w /workspace \
-  norganizze-mcp:latest
+  docker.io/graduenz/norganizze-mcp:latest
 ```
 
 ## Cursor MCP configuration (example)
@@ -81,7 +92,7 @@ Use Docker stdio transport:
         "NORGANIZZE_READONLY",
         "-e",
         "NORGANIZZE_BASE_URL",
-        "norganizze-mcp:latest"
+        "docker.io/graduenz/norganizze-mcp:latest"
       ]
     }
   }

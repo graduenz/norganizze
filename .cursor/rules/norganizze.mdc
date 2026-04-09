@@ -105,6 +105,8 @@ Integration tests perform real CRUD; use unique identifiers (e.g. `Guid` in name
 ## CI/CD
 
 - **`.github/workflows/publish-nuget.yml`**: On push of tags matching `v[0-9]+.[0-9]+.[0-9]+*` (or manual `workflow_dispatch`), restores, builds Release, packs `src/NOrganizze/NOrganizze.csproj` with `PackageVersion` from the tag, pushes to NuGet.org via OIDC (`NuGet/login` + `NUGET_USER` secret).
+- **`.github/workflows/publish-mcp-docker.yml`**: On push of tags matching `v[0-9]+.[0-9]+.[0-9]+*` (or manual `workflow_dispatch`), publishes Docker image `docker.io/graduenz/norganizze-mcp` using `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` secrets.
+  - Tag mapping rule: Git tag `vX.Y.Z` publishes Docker tags `X.Y.Z` and `latest`; prerelease tag `vX.Y.Z-suffix` publishes `X.Y.Z-suffix` only (no `latest`).
 
 There is no separate “build-only” workflow in-repo at time of writing; **`dotnet build`** is the usual verification. **`dotnet test`** is optional and manual (requires Organizze credentials).
 
@@ -125,10 +127,12 @@ There is no separate “build-only” workflow in-repo at time of writing; **`do
 - Credentials/config precedence must remain: `.mcp-norganizze.json` first, then `NORGANIZZE_*` environment variables.
 - Never log or echo secrets (`apiKey`, auth headers, full credential payloads) in tool outputs or logs.
 - Keep Docker execution path healthy: `tools/NOrganizze.Mcp/Dockerfile` should continue to build and run with the target runtime expected by the project.
+- Docker Hub canonical repository for MCP image is `docker.io/graduenz/norganizze-mcp`; keep docs and examples aligned with this exact name.
+- Preserve Docker tag/version parity with release tags: `vX.Y.Z` -> image `X.Y.Z` (+ `latest` for stable only); prerelease tags must not move `latest`.
 - When MCP behavior changes, update both `tools/NOrganizze.Mcp/README.md` and root `README.md` MCP notes to keep setup instructions accurate.
 - Validate MCP changes with at least:
   - `dotnet build`
-  - `docker build -f tools/NOrganizze.Mcp/Dockerfile -t norganizze-mcp:latest .`
+  - `docker build -f tools/NOrganizze.Mcp/Dockerfile -t graduenz/norganizze-mcp:latest .`
 
 ## Organizze API Docs
 

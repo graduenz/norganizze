@@ -29,6 +29,7 @@ This repository includes a Docker-friendly MCP server at `tools/NOrganizze.Mcp`.
 
 - Config precedence: `.mcp-norganizze.json` first, then `NORGANIZZE_*` environment variables.
 - `readonly` is enabled by default and blocks all mutating tools (`create`, `update`, `delete`) server-side.
+- Docker Hub image: `docker.io/graduenz/norganizze-mcp` (release tags publish matching image tags).
 
 See the [MCP server guide](tools/NOrganizze.Mcp/README.md) for build/run instructions and a Cursor MCP config example.
 
