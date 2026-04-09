@@ -17,6 +17,15 @@
 
 For detailed API usage, including how to create an `NOrganizzeClient`, filter transactions with `TransactionListOptions`, and use all services and option types, see the [Usage guide](USAGE.md).
 
+## MCP Server
+
+This repository includes a Docker-friendly MCP server at `tools/NOrganizze.Mcp`.
+
+- Config precedence: `.mcp-norganizze.json` first, then `NORGANIZZE_*` environment variables.
+- `readonly` is enabled by default and blocks all mutating tools (`create`, `update`, `delete`) server-side.
+
+See the [MCP server guide](tools/NOrganizze.Mcp/README.md) for build/run instructions and a Cursor MCP config example.
+
 ## Known limitations
 
 The Organizze API returns a maximum of **500 transactions per request** (`TransactionService.MaxTransactionsPerRequest`). When listing transactions, NOrganizze automatically paginates by advancing the `start_date` to the latest transaction date from each batch, deduplicating by transaction id, and repeating until fewer than 500 results are returned (controlled by `TransactionListOptions.AutoPaginate`, which defaults to `true`). When `StartDate` or `EndDate` are not provided, the library defaults to the current month boundaries.

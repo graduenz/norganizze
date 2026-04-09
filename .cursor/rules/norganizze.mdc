@@ -15,6 +15,7 @@ alwaysApply: true
 - **`src/NOrganizze/`** — Main library (`NOrganizze.csproj`).
 - **`tests/NOrganizze.Tests/`** — Integration-style tests against the live API (`NOrganizze.Tests.csproj`, xUnit v3).
 - **`tools/ApiValidator/`** — Validates models and endpoints against the real API; generates empirical OpenAPI and reports.
+- **`tools/NOrganizze.Mcp/`** — MCP server (Docker-distributed, stdio transport) that exposes client operations as MCP tools.
 - **`organizze-api-openapi.yaml`** — OpenAPI reference at repo root.
 - **`README.md`** — Short overview; points to `USAGE.md`.
 - **`USAGE.md`** — Detailed consumer guide (also packed in the NuGet package).
@@ -114,6 +115,20 @@ There is no separate “build-only” workflow in-repo at time of writing; **`do
 - Prefer extending **`Service`** and **`NOrganizzeClient`** rather than ad-hoc HTTP calls from multiple places.
 - After behavioral or contract changes, ensure **`dotnet build`** succeeds. Run **`dotnet test`** or **`tools/ApiValidator`** manually when you have credentials and want to validate against the live API.
 - Do not commit real credentials; use user secrets only.
+
+## MCP server conventions (`tools/NOrganizze.Mcp`)
+
+- The MCP server should remain aligned with the main client API surface. When a new library feature/service method is added (or removed/renamed), add/update/remove an equivalent MCP tool **when it makes sense for agent workflows**.
+- Keep tool names stable and explicit (domain-prefixed), following existing style like `transactions_list`, `accounts_get`, `categories_create`, etc.
+- Enforce readonly behavior server-side: mutating tools (`create`, `update`, `delete`) must always pass through the readonly guard before calling client services.
+- `readonly` defaults to `true`; do not weaken this default unless explicitly requested.
+- Credentials/config precedence must remain: `.mcp-norganizze.json` first, then `NORGANIZZE_*` environment variables.
+- Never log or echo secrets (`apiKey`, auth headers, full credential payloads) in tool outputs or logs.
+- Keep Docker execution path healthy: `tools/NOrganizze.Mcp/Dockerfile` should continue to build and run with the target runtime expected by the project.
+- When MCP behavior changes, update both `tools/NOrganizze.Mcp/README.md` and root `README.md` MCP notes to keep setup instructions accurate.
+- Validate MCP changes with at least:
+  - `dotnet build`
+  - `docker build -f tools/NOrganizze.Mcp/Dockerfile -t norganizze-mcp:latest .`
 
 ## Organizze API Docs
 
