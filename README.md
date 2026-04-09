@@ -4,6 +4,7 @@
 [![NuGet](https://img.shields.io/nuget/dt/NOrganizze?color=blue)](https://www.nuget.org/packages/NOrganizze)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=graduenz_norganizze&metric=bugs)](https://sonarcloud.io/summary/new_code?id=graduenz_norganizze)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=graduenz_norganizze&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=graduenz_norganizze)
+![Docker Image Version](https://img.shields.io/docker/v/graduenz/norganizze-mcp)
 
 <img src="logo/logo-bg-transparent.png" alt="NOrganizze logo" width="100">
 
