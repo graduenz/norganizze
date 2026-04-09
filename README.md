@@ -4,7 +4,6 @@
 [![NuGet](https://img.shields.io/nuget/dt/NOrganizze?color=blue)](https://www.nuget.org/packages/NOrganizze)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=graduenz_norganizze&metric=bugs)](https://sonarcloud.io/summary/new_code?id=graduenz_norganizze)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=graduenz_norganizze&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=graduenz_norganizze)
-![Docker Image Version](https://img.shields.io/docker/v/graduenz/norganizze-mcp)
 
 <img src="logo/logo-bg-transparent.png" alt="NOrganizze logo" width="100">
 
@@ -25,6 +24,8 @@ For detailed API usage, including how to create an `NOrganizzeClient`, filter tr
 - NuGet release versions are tag-driven in CI (`vX.Y.Z...`) and passed during pack.
 
 ## MCP Server
+
+![Docker Image Version](https://img.shields.io/docker/v/graduenz/norganizze-mcp)
 
 This repository includes a Docker-friendly MCP server at `tools/NOrganizze.Mcp`.
 
