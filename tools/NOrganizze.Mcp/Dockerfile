@@ -16,6 +16,7 @@ FROM mcr.microsoft.com/dotnet/runtime:10.0-alpine AS final
 WORKDIR /app
 RUN addgroup -S norganizze && adduser -S norganizze -G norganizze
 COPY --from=build --chown=norganizze:norganizze /app/publish .
+RUN chmod -R u=rwX,go=rX /app
 USER norganizze
 
 ENTRYPOINT ["dotnet", "NOrganizze.Mcp.dll"]
