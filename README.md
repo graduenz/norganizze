@@ -17,6 +17,12 @@
 
 For detailed API usage, including how to create an `NOrganizzeClient`, filter transactions with `TransactionListOptions`, and use all services and option types, see the [Usage guide](USAGE.md).
 
+## Versioning
+
+- Repository-wide project version metadata is centralized in `Directory.Build.props`.
+- Repository-wide NuGet package dependency versions are centralized in `Directory.Packages.props` via Central Package Management.
+- NuGet release versions are tag-driven in CI (`vX.Y.Z...`) and passed during pack.
+
 ## MCP Server
 
 This repository includes a Docker-friendly MCP server at `tools/NOrganizze.Mcp`.
