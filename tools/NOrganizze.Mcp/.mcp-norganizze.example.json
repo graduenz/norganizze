@@ -1,0 +1,7 @@
+{
+  "email": "you@example.com",
+  "apiKey": "your-api-key",
+  "name": "NOrganizze MCP",
+  "readonly": true,
+  "baseUrl": "https://api.organizze.com.br/rest/v2"
+}

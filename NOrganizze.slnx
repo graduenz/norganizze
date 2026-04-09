@@ -11,5 +11,6 @@
   </Folder>
   <Folder Name="/tools/">
     <Project Path="tools/ApiValidator/ApiValidator.csproj" />
+    <Project Path="tools/NOrganizze.Mcp/NOrganizze.Mcp.csproj" />
   </Folder>
 </Solution>
