@@ -1,0 +1,42 @@
+# Testing Rules
+
+> Applies when working within the `tests/` directory.
+
+## Implementing Tests
+
+- All tests should be added to the `NOrganizze.Tests` project and should use xUnit v3 as the test framework.
+- Unit tests should be written using the AAA pattern (including comments), use Moq for mocking, and Bogus for creating test data.
+- Unit tests should always target 100% code coverage.
+- Integration tests: TO BE DEFINED. When asked to implement integration tests, ask the user to update the instructions in this file first.
+- One assertion theme per test (avoid multiple unrelated behaviors in one test).
+- Class-oriented tests: unit tests should have one test class per tested class.
+- Avoid xUnit1051 warning: for async method calls in tests, use `TestContext.Current.CancellationToken` as the cancellation token parameter when possible.
+
+## Test Naming Convention
+
+Pattern: `MethodName_Scenario_ExpectedResult`
+
+- Start with the member under test (`MethodName`).
+- Scenario segment should describe the single condition being tested.
+- Expected segment should describe the observable outcome.
+- Use present tense and behavior-focused wording.
+- Keep controller/integration tests aligned with HTTP intent.
+- For `[Theory]`, keep the method name generic and move variations to `InlineData`.
+
+### Examples
+
+- Unit test: `GetRequiredKeys_UnknownType_ReturnsNull`
+- Unit test with options/input variants: `GetYearRanges_NullReferenceDate_UsesCurrentYear`
+- Integration endpoint test: `Delete_ExistingProvider_ReturnsNoContent`
+- Validation/business rule test: `Validate_MissingMetadata_ReturnsIsFullySetUpFalse`
+
+## Test Verification (Build + Test)
+
+After adding or changing tests, always validate the solution with:
+
+```bash
+dotnet build
+dotnet test --project "tests/NOrganizze.Tests/NOrganizze.Tests.csproj" -- --filter-not-trait "Category=Integration"
+```
+
+The second command ensures only non-integration tests are run, which is intentional. Treat a change as incomplete until both commands succeed. If tests fail, fix the root cause and re-run both commands until green.

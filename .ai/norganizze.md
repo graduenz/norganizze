@@ -1,15 +1,10 @@
----
-description: NOrganizze project context, architecture, and development workflow (Organizze .NET API client)
-alwaysApply: true
----
+# NOrganizze — Project Rules
 
-# NOrganizze
+> **Priority**: Rules in this file take precedence over `.ai/dotnet.md` in case of any conflict.
 
 **NOrganizze** is an unofficial, strongly-typed .NET client for the [Organizze](https://www.organizze.com.br/) REST API. It is published as the NuGet package **NOrganizze**. License: Apache-2.0. Repository: `https://github.com/graduenz/norganizze`. Quality metrics: SonarCloud project `graduenz_norganizze`.
 
-**IMPORTANT!** This `norganizze` rule is preferred over the `dotnet` rule, in case there is any instruction conflict.
-
-## Repository layout
+## Repository Layout
 
 - **`NOrganizze.slnx`** — Solution (XML-based `.slnx`, not `.sln`).
 - **`src/NOrganizze/`** — Main library (`NOrganizze.csproj`).
@@ -21,13 +16,13 @@ alwaysApply: true
 - **`USAGE.md`** — Detailed consumer guide (also packed in the NuGet package).
 - **`.editorconfig`** — Indentation (4 spaces C#, 2 JSON/YAML/csproj), UTF-8, final newline.
 
-## Target frameworks and C# version
+## Target Frameworks and C# Version
 
 - **Library** (`src/NOrganizze/NOrganizze.csproj`): `net8.0;net9.0;net10.0;netstandard2.0;net472`, **LangVersion 8**.
 - **Tests** and **ApiValidator**: `net8.0;net9.0;net10.0;net472` (no `netstandard2.0`), same LangVersion 8.
-- **JSON**: On `net8.0` and above use **System.Text.Json** (camelCase, case-insensitive read, ignore nulls on write). On `netstandard2.0` / `net472` use **Newtonsoft.Json** (package reference on those TFMs only). Use `#if NET8_0_OR_GREATER` (and related patterns) when implementations differ—**do not** break older TFMs.
+- **JSON**: On `net8.0` and above use **System.Text.Json** (camelCase, case-insensitive read, ignore nulls on write). On `netstandard2.0` / `net472` use **Newtonsoft.Json** (package reference on those TFMs only). Use `#if NET8_0_OR_GREATER` (and related patterns) when implementations differ — **do not** break older TFMs.
 
-## Architecture (library)
+## Architecture (Library)
 
 - **`NOrganizzeClient`**: Entry point; owns `HttpClient` (optional disposal), base URL (`OrganizzeRestV2Url` default), credentials, JSON options, and HTTP helpers. Exposes service properties: `Users`, `Accounts`, `Categories`, `CreditCards`, `Invoices`, `Transactions`, `Transfers`, `Budgets`.
 - **`Service`**: Abstract base for feature services; wraps `Get`/`Post`/`Put`/`Delete` (+ async + `CancellationToken`) delegating to `NOrganizzeClient.Request` / `RequestAsync`.
@@ -35,15 +30,15 @@ alwaysApply: true
 - **`Credentials`**: Email + API key; HTTP Basic auth.
 - **`RequestOptions`**: Per-call overrides: `BaseUrl`, `CredentialsProvider`, `UserAgent`.
 - **`NOrganizzeException`**: API failures; includes `HttpStatusCode` and `ResponseContent` when applicable.
-- **Catalog values**: Prefer named constants where the library defines them—e.g. `NOrganizze.Transactions.Periodicity` for recurrence/installments, `NOrganizze.Accounts.AccountType` for accounts. Do not invent magic strings that duplicate API values without aligning with existing types.
+- **Catalog values**: Prefer named constants where the library defines them — e.g. `NOrganizze.Transactions.Periodicity` for recurrence/installments, `NOrganizze.Accounts.AccountType` for accounts. Do not invent magic strings that duplicate API values without aligning with existing types.
 
 When adding or changing API surface, keep **XML doc comments** on public types/members; the project sets `GenerateDocumentationFile`.
 
-## Consumer documentation
+## Consumer Documentation
 
 For method-level usage, options types, and examples, treat **`USAGE.md`** as the canonical extended guide. The README stays minimal.
 
-## Development commands
+## Development Commands
 
 From the repository root, routine work only needs restore and build:
 
@@ -58,7 +53,7 @@ Build the library project alone:
 dotnet build src/NOrganizze/NOrganizze.csproj
 ```
 
-**Tests are not part of the default agent workflow** (see [Tests and secrets](#tests-and-secrets)). To run them locally after configuring user secrets:
+**Tests are not part of the default agent workflow** (see [Tests and Secrets](#tests-and-secrets)). To run them locally after configuring user secrets:
 
 ```bash
 dotnet test tests/NOrganizze.Tests/NOrganizze.Tests.csproj
@@ -76,10 +71,10 @@ dotnet pack src/NOrganizze/NOrganizze.csproj -c Release
 dotnet run --project tools/ApiValidator
 ```
 
-## Tests and secrets
+## Tests and Secrets
 
 - **Organizze email and API key are configured via .NET user secrets** for **`tests/NOrganizze.Tests`** and **`tools/ApiValidator`** (not checked into the repo). Both projects use the **same `UserSecretsId`**, so `dotnet user-secrets set` from either project directory updates the same store for both.
-- **Integration tests run only when you choose to run them manually.** They call the real Organizze API and require those user secrets to be set. Use a **dedicated Organizze test account** if possible so production data is not touched. Because credentials are not available in typical CI or agent environments, **`dotnet test` is not required after every change**—**`dotnet build` is enough** to verify the solution compiles. Run `dotnet test` (and/or ApiValidator) yourself when you have secrets set up and want end-to-end verification.
+- **Integration tests run only when you choose to run them manually.** They call the real Organizze API and require those user secrets to be set. Use a **dedicated Organizze test account** if possible so production data is not touched. Because credentials are not available in typical CI or agent environments, **`dotnet test` is not required after every change** — **`dotnet build` is enough** to verify the solution compiles. Run `dotnet test` (and/or ApiValidator) yourself when you have secrets set up and want end-to-end verification.
 - Tests use **xUnit v3** with **Microsoft.Testing.Platform** (`global.json` sets `"test": { "runner": "Microsoft.Testing.Platform" }`).
 - **`NOrganizzeClientFixture`** is an **assembly fixture** (`[assembly: AssemblyFixture(typeof(NOrganizzeClientFixture))]`). It builds configuration with `AddUserSecrets<NOrganizzeClientFixture>()` and constructs `NOrganizzeClient` with a `Func<Credentials>` provider.
 - Keys (under the shared user-secrets store):
@@ -95,7 +90,7 @@ dotnet user-secrets set "Organizze:ApiKey" "your-api-key"
 
 Integration tests perform real CRUD; use unique identifiers (e.g. `Guid` in names) and clean up where the test creates data.
 
-## ApiValidator tool
+## ApiValidator Tool
 
 - Loads **`Organizze:Email`** and **`Organizze:ApiKey`** from **user secrets** (same mechanism and `UserSecretsId` as the test project).
 - Phased run: READ → CREATE test data → CREATE dependents → UPDATE → READ back → DELETE cleanup.
@@ -108,9 +103,9 @@ Integration tests perform real CRUD; use unique identifiers (e.g. `Guid` in name
 - **`.github/workflows/publish-mcp-docker.yml`**: On push of tags matching `v[0-9]+.[0-9]+.[0-9]+*` (or manual `workflow_dispatch`), publishes Docker image `docker.io/graduenz/norganizze-mcp` using `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` secrets.
   - Tag mapping rule: Git tag `vX.Y.Z` publishes Docker tags `X.Y.Z` and `latest`; prerelease tag `vX.Y.Z-suffix` publishes `X.Y.Z-suffix` only (no `latest`).
 
-There is no separate “build-only” workflow in-repo at time of writing; **`dotnet build`** is the usual verification. **`dotnet test`** is optional and manual (requires Organizze credentials).
+There is no separate "build-only" workflow in-repo at time of writing; **`dotnet build`** is the usual verification. **`dotnet test`** is optional and manual (requires Organizze credentials).
 
-## Conventions for agents and contributors
+## Conventions for Agents and Contributors
 
 - Match existing patterns: sync/async pairs on services, `RequestOptions` as optional last parameters where already used, nullable reference style consistent with the file being edited.
 - Preserve **multi-targeting**: any new serialization or HTTP behavior must work on both STJ and Newtonsoft paths unless the change is explicitly gated by preprocessor symbols.
@@ -118,7 +113,7 @@ There is no separate “build-only” workflow in-repo at time of writing; **`do
 - After behavioral or contract changes, ensure **`dotnet build`** succeeds. Run **`dotnet test`** or **`tools/ApiValidator`** manually when you have credentials and want to validate against the live API.
 - Do not commit real credentials; use user secrets only.
 
-## MCP server conventions (`tools/NOrganizze.Mcp`)
+## MCP Server Conventions (`tools/NOrganizze.Mcp`)
 
 - The MCP server should remain aligned with the main client API surface. When a new library feature/service method is added (or removed/renamed), add/update/remove an equivalent MCP tool **when it makes sense for agent workflows**.
 - Keep tool names stable and explicit (domain-prefixed), following existing style like `transactions_list`, `accounts_get`, `categories_create`, etc.
@@ -134,12 +129,12 @@ There is no separate “build-only” workflow in-repo at time of writing; **`do
   - `dotnet build`
   - `docker build -f tools/NOrganizze.Mcp/Dockerfile -t graduenz/norganizze-mcp:latest .`
 
-## Organizze API Docs
+## Organizze API Documentation
 
-- In order to understand the Organizze API docs, you can https://github.com/organizze/api-doc, an official repository that contains the actual Organizze API documentation.
-- Just be aware that it might have a few discrepancies from the actual API models, that's why the `ApiValidator` tool exists.
+- To understand the Organizze API, refer to <https://github.com/organizze/api-doc> — the official repository containing API documentation.
+- Be aware it may have discrepancies from the actual API models; that is why the `ApiValidator` tool exists.
 
-## Organizze API date filtering behavior
+## Organizze API Date Filtering Behavior
 
 - The official Organizze API documentation claims that `start_date` and `end_date` query parameters are always rounded to full calendar months (`start_date.beginning_of_month` / `end_date.end_of_month`). **Empirical testing confirms this is inaccurate**: the API **respects exact dates** when they are explicitly provided.
 - The "full month" rounding only applies as the **default** when `start_date` / `end_date` are omitted entirely (defaults to the current month for transactions, the current year for credit card invoices).
